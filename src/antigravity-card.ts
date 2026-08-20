@@ -432,7 +432,6 @@ export class AntigravityCard extends LitElement {
     const scrollSpeed = this.config.text_scrolling_speed ?? 10;
     const scrollSpeedVar = `--ag-marquee-speed: ${scrollSpeed}s;`;
 
-    const iconPaddingVar = this.config.icon_padding !== undefined ? `--ag-icon-padding: ${this.config.icon_padding}px;` : '';
     const textPaddingV = this.config.text_padding_vertical ?? this.config.text_padding ?? 0;
     const textPaddingH = this.config.text_padding_horizontal ?? this.config.text_padding ?? 0;
     const textPaddingVar = (this.config.text_padding !== undefined || this.config.text_padding_vertical !== undefined || this.config.text_padding_horizontal !== undefined) ? `--ag-text-padding: ${textPaddingV}px ${textPaddingH}px;` : '';
@@ -453,7 +452,6 @@ export class AntigravityCard extends LitElement {
       cardOpacityStyle,
       transitionStyle,
       cardMarginStyle,
-      iconPaddingVar,
       textPaddingVar,
       featPaddingVar,
       subBtnContainerPaddingVar,
@@ -463,11 +461,8 @@ export class AntigravityCard extends LitElement {
       `--ag-text-spacing: ${this.config.text_spacing ?? 0}px;`,
       `--ag-features-margin: ${this.config.features_margin ?? 4}px;`,
       `--ag-slider-spacing: ${this.config.slider_spacing ?? 4}px;`,
-      `--ag-icon-margin: ${this.config.icon_margin ?? 0}px;`,
       `--ag-sub-button-spacing: ${this.config.sub_button_spacing ?? 8}px;`,
       `--ag-sub-button-padding: ${this.config.sub_button_padding ?? 6}px;`,
-      `--ag-badge-size: ${this.config.badge_size ?? 16}px;`,
-      `--ag-badge-offset: ${this.config.badge_offset ?? -2}px;`,
       `--ag-content-alignment: ${this.config.content_alignment ?? 'flex-start'};`,
       `--ag-text-alignment: ${this.config.text_alignment ?? 'left'};`,
       subBtnAlign,
@@ -2813,10 +2808,6 @@ export class AntigravityCard extends LitElement {
         border: 1px solid #ff007f !important;
         box-shadow: 0 0 15px rgba(255, 0, 127, 0.35), inset 0 0 15px rgba(0, 255, 255, 0.15) !important;
       }
-      .theme-retro_synth .icon-container {
-        border: 1px solid #00ffff !important;
-        box-shadow: 0 0 10px rgba(0, 255, 255, 0.5) !important;
-      }
 
       /* --- HOVER EFFECTS --- */
       .hover-lift:hover {
@@ -3052,7 +3043,6 @@ export class AntigravityCard extends LitElement {
         z-index: 2;
         pointer-events: none;
       }
-      .slider-style-full .icon-container,
       .slider-style-full .collapsible-wrapper {
         position: relative !important;
         z-index: 2 !important;
