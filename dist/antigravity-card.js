@@ -731,8 +731,8 @@ const pt = {
   // Theme and presets
   theme_preset: "default",
   color_type: "card",
-  active_color: "",
-  inactive_color: "",
+  active_color: "#d60000",
+  inactive_color: "#03b500",
   // Slider styling & layer isolation
   use_light_color: !1,
   haptic_feedback: !0,
@@ -740,30 +740,30 @@ const pt = {
   slider_stepped_movement: !1,
   tap_slider_to_toggle: !1,
   slider_style: "circle",
-  full_slider_opacity: 100,
+  full_slider_opacity: 27,
   show_slider_percent: !1,
   slider_color: "",
   slider_track_color: "",
-  slider_height: 14,
-  slider_border_radius: 6,
+  slider_height: 11,
+  slider_border_radius: 5,
   slider_start_offset: 0,
   slider_end_offset: 0,
   slider_spacing: 8,
   show_slider: !1,
   hide_slider_when_off: !0,
   // Light color and temperature sliders
-  show_color_temp: !1,
+  show_color_temp: !0,
   hide_color_temp_when_off: !0,
   color_temp_type: "gradient",
-  color_temp_height: 14,
-  color_temp_border_radius: 6,
+  color_temp_height: 12,
+  color_temp_border_radius: 5,
   color_temp_start_offset: 0,
   color_temp_end_offset: 0,
   show_color_picker: !1,
   hide_color_picker_when_off: !0,
-  show_color_slider: !1,
+  show_color_slider: !0,
   hide_color_slider_when_off: !0,
-  color_slider_height: 14,
+  color_slider_height: 12,
   color_slider_border_radius: 6,
   color_slider_start_offset: 0,
   color_slider_end_offset: 0,
@@ -776,9 +776,9 @@ const pt = {
   show_name: !0,
   show_state: !0,
   fill_container: !1,
-  overflow_hidden: !0,
+  overflow_hidden: !1,
   visibility_state: "always",
-  layout: "default",
+  layout: "horizontal",
   card_layout: "normal",
   primary_info: "name",
   secondary_info: "last-updated",
@@ -818,8 +818,8 @@ const pt = {
   backdrop_blur: 0,
   transition_duration: 1e4,
   // Actions
-  tap_action: { action: "toggle" },
-  hold_action: { action: "more-info" },
+  tap_action: { action: "more-info" },
+  hold_action: { action: "toggle" },
   double_tap_action: { action: "none" },
   // Sub-button 1 defaults
   sub_button_1_entity: "",
@@ -1728,7 +1728,7 @@ var ji = Object.defineProperty, er = Object.getOwnPropertyDescriptor, ce = (n, e
     (a = n[o]) && (r = (i ? a(e, t, r) : a(r)) || r);
   return i && r && ji(e, t, r), r;
 };
-const tr = "115";
+const tr = "116";
 console.info(
   `%c 🚀 ANTIGRAVITY-CARD (NO-ICON) %c v${tr} `,
   "color: white; background: #6200ea; font-weight: 700; padding: 2px 6px; border-radius: 4px 0 0 4px;",
