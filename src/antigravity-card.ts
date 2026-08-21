@@ -20,7 +20,7 @@ declare global {
   }
 }
 
-export const CARD_VERSION = "122";
+export const CARD_VERSION = "123";
 console.info(
   `%c 🚀 ANTIGRAVITY-CARD (NO-ICON) %c v${CARD_VERSION} `,
   'color: white; background: #6200ea; font-weight: 700; padding: 2px 6px; border-radius: 4px 0 0 4px;',
@@ -1181,12 +1181,20 @@ export class AntigravityCard extends LitElement {
     let actionConfig = actionConfigOverride;
     if (!actionConfig) {
       if (actionType === 'double_tap') actionConfig = this.config.double_tap_action;
-      else if (actionType === 'hold') actionConfig = this.config.hold_action;
+      else if (actionType === 'hold') {
+        actionConfig = this.config.hold_action || (isNonToggleable ? { action: 'more-info' } : { action: 'toggle' });
+      }
       else {
-        if (this.config.tap_action) {
-          actionConfig = this.config.tap_action;
+        if (this.config.tap_action && this.config.tap_action.action && this.config.tap_action.action !== 'default') {
+          // If explicit tap_action is toggle on a non-toggleable domain, safely treat as none
+          if (isNonToggleable && this.config.tap_action.action === 'toggle') {
+            actionConfig = { action: 'none' };
+          } else {
+            actionConfig = this.config.tap_action;
+          }
         } else {
-          actionConfig = isNonToggleable ? { action: 'more-info' } : { action: 'toggle' };
+          // Default tap on read-only status sensors (motion, doors) is 'none' to prevent unwanted dialog popups!
+          actionConfig = isNonToggleable ? { action: 'none' } : { action: 'toggle' };
         }
       }
     }
@@ -1207,13 +1215,6 @@ export class AntigravityCard extends LitElement {
 
     if (actionConfig.action === 'toggle' && entity) {
       if (isNonToggleable) {
-        // Safe guard: binary_sensor, sensor, etc. do NOT have a toggle service in Home Assistant.
-        // Fallback to more-info dialog so HA does not show "action binary_sensor.toggle not found".
-        this.dispatchEvent(new CustomEvent('hass-more-info', {
-          detail: { entityId: entity },
-          bubbles: true,
-          composed: true,
-        }));
         return;
       }
       const service = domain === 'lock' ? (this._isEntityActive(this.hass?.states[entity]) ? 'lock' : 'unlock')
@@ -1246,11 +1247,6 @@ export class AntigravityCard extends LitElement {
 
     // Fallback to custom-card-helpers (with non-toggleable guard)
     if (isNonToggleable && (!actionConfig.action || actionConfig.action === 'toggle')) {
-      this.dispatchEvent(new CustomEvent('hass-more-info', {
-        detail: { entityId: entity },
-        bubbles: true,
-        composed: true,
-      }));
       return;
     }
 
@@ -1260,7 +1256,7 @@ export class AntigravityCard extends LitElement {
   private _handleTap(e: Event) {
     e.stopPropagation();
     if (this._isSubElement(e)) return;
-    if (Date.now() - this._mountTime < 650) {
+    if (Date.now() - this._mountTime < 1500) {
       // Ignore startup ghost clicks from Android home screen app launch
       this._pointerDownReceived = false;
       return;
@@ -1314,7 +1310,7 @@ export class AntigravityCard extends LitElement {
 
   private _handleKeyDown(e: KeyboardEvent) {
     if (this._isSubElement(e)) return;
-    if (Date.now() - this._mountTime < 1000) return;
+    if (Date.now() - this._mountTime < 1500) return;
 
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -1326,7 +1322,7 @@ export class AntigravityCard extends LitElement {
   private _handleContextMenu(e: Event) {
     e.preventDefault();
     e.stopPropagation();
-    if (Date.now() - this._mountTime < 650 || this._held) return;
+    if (Date.now() - this._mountTime < 1500 || this._held) return;
     safeForwardHaptic('medium', this.config.haptic_feedback !== false);
     const trigger = this.config.collapse_controls_trigger || 'hold';
     if (trigger === 'hold' && this._hasCollapsible()) {
@@ -1338,7 +1334,7 @@ export class AntigravityCard extends LitElement {
 
   private _handlePointerDown(e: PointerEvent) {
     if (this._isSubElement(e)) return;
-    if (Date.now() - this._mountTime < 650) {
+    if (Date.now() - this._mountTime < 1500) {
       return;
     }
     this._pointerDownReceived = true;

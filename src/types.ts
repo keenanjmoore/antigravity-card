@@ -346,8 +346,8 @@ export const DEFAULT_CARD_CONFIG: Record<string, any> = {
   backdrop_blur: 0,
   transition_duration: 10000,
   // Actions
-  tap_action: { action: "more-info" },
-  hold_action: { action: "toggle" },
+  tap_action: { action: "toggle" },
+  hold_action: { action: "more-info" },
   double_tap_action: { action: "none" },
   // Sub-button 1 defaults
   sub_button_1_entity: "",
