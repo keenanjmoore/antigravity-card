@@ -259,10 +259,10 @@ const gi = (a, e) => {
   let r, o = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", n = ye;
   for (let s = 0; s < t; s++) {
     const l = a[s];
-    let d, h, c = -1, f = 0;
-    for (; f < l.length && (n.lastIndex = f, h = n.exec(l), h !== null); ) f = n.lastIndex, n === ye ? h[1] === "!--" ? n = Rt : h[1] !== void 0 ? n = Nt : h[2] !== void 0 ? (Zt.test(h[2]) && (r = RegExp("</" + h[2], "g")), n = K) : h[3] !== void 0 && (n = K) : n === K ? h[0] === ">" ? (n = r ?? ye, c = -1) : h[1] === void 0 ? c = -2 : (c = n.lastIndex - h[2].length, d = h[1], n = h[3] === void 0 ? K : h[3] === '"' ? Bt : Ht) : n === Bt || n === Ht ? n = K : n === Rt || n === Nt ? n = ye : (n = K, r = void 0);
-    const _ = n === K && a[s + 1].startsWith("/>") ? " " : "";
-    o += n === ye ? l + hi : c >= 0 ? (i.push(d), l.slice(0, c) + Kt + l.slice(c) + V + _) : l + V + (c === -2 ? s : _);
+    let d, h, c = -1, p = 0;
+    for (; p < l.length && (n.lastIndex = p, h = n.exec(l), h !== null); ) p = n.lastIndex, n === ye ? h[1] === "!--" ? n = Rt : h[1] !== void 0 ? n = Nt : h[2] !== void 0 ? (Zt.test(h[2]) && (r = RegExp("</" + h[2], "g")), n = K) : h[3] !== void 0 && (n = K) : n === K ? h[0] === ">" ? (n = r ?? ye, c = -1) : h[1] === void 0 ? c = -2 : (c = n.lastIndex - h[2].length, d = h[1], n = h[3] === void 0 ? K : h[3] === '"' ? Bt : Ht) : n === Bt || n === Ht ? n = K : n === Rt || n === Nt ? n = ye : (n = K, r = void 0);
+    const u = n === K && a[s + 1].startsWith("/>") ? " " : "";
+    o += n === ye ? l + hi : c >= 0 ? (i.push(d), l.slice(0, c) + Kt + l.slice(c) + V + u) : l + V + (c === -2 ? s : u);
   }
   return [Qt(a, o + (a[t] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), i];
 };
@@ -279,15 +279,15 @@ class Te {
     for (; (r = Z.nextNode()) !== null && l.length < s; ) {
       if (r.nodeType === 1) {
         if (r.hasAttributes()) for (const c of r.getAttributeNames()) if (c.endsWith(Kt)) {
-          const f = h[n++], _ = r.getAttribute(c).split(V), b = /([.?@])?(.*)/.exec(f);
-          l.push({ type: 1, index: o, name: b[2], strings: _, ctor: b[1] === "." ? bi : b[1] === "?" ? vi : b[1] === "@" ? yi : it }), r.removeAttribute(c);
+          const p = h[n++], u = r.getAttribute(c).split(V), b = /([.?@])?(.*)/.exec(p);
+          l.push({ type: 1, index: o, name: b[2], strings: u, ctor: b[1] === "." ? bi : b[1] === "?" ? vi : b[1] === "@" ? yi : it }), r.removeAttribute(c);
         } else c.startsWith(V) && (l.push({ type: 6, index: o }), r.removeAttribute(c));
         if (Zt.test(r.tagName)) {
-          const c = r.textContent.split(V), f = c.length - 1;
-          if (f > 0) {
+          const c = r.textContent.split(V), p = c.length - 1;
+          if (p > 0) {
             r.textContent = et ? et.emptyScript : "";
-            for (let _ = 0; _ < f; _++) r.append(c[_], ke()), Z.nextNode(), l.push({ type: 2, index: ++o });
-            r.append(c[f], ke());
+            for (let u = 0; u < p; u++) r.append(c[u], ke()), Z.nextNode(), l.push({ type: 2, index: ++o });
+            r.append(c[p], ke());
           }
         }
       } else if (r.nodeType === 8) if (r.data === Xt) l.push({ type: 2, index: o });
@@ -598,27 +598,27 @@ const Ut = (a, e, t) => {
     const r = Ri(a), { values: o, keys: n } = this.dt(e, t, i);
     if (!Array.isArray(r)) return this.ut = n, o;
     const s = this.ut ??= [], l = [];
-    let d, h, c = 0, f = r.length - 1, _ = 0, b = o.length - 1;
-    for (; c <= f && _ <= b; ) if (r[c] === null) c++;
-    else if (r[f] === null) f--;
-    else if (s[c] === n[_]) l[_] = X(r[c], o[_]), c++, _++;
-    else if (s[f] === n[b]) l[b] = X(r[f], o[b]), f--, b--;
+    let d, h, c = 0, p = r.length - 1, u = 0, b = o.length - 1;
+    for (; c <= p && u <= b; ) if (r[c] === null) c++;
+    else if (r[p] === null) p--;
+    else if (s[c] === n[u]) l[u] = X(r[c], o[u]), c++, u++;
+    else if (s[p] === n[b]) l[b] = X(r[p], o[b]), p--, b--;
     else if (s[c] === n[b]) l[b] = X(r[c], o[b]), xe(a, l[b + 1], r[c]), c++, b--;
-    else if (s[f] === n[_]) l[_] = X(r[f], o[_]), xe(a, r[c], r[f]), f--, _++;
-    else if (d === void 0 && (d = Ut(n, _, b), h = Ut(s, c, f)), d.has(s[c])) if (d.has(s[f])) {
-      const x = h.get(n[_]), S = x !== void 0 ? r[x] : null;
+    else if (s[p] === n[u]) l[u] = X(r[p], o[u]), xe(a, r[c], r[p]), p--, u++;
+    else if (d === void 0 && (d = Ut(n, u, b), h = Ut(s, c, p)), d.has(s[c])) if (d.has(s[p])) {
+      const x = h.get(n[u]), S = x !== void 0 ? r[x] : null;
       if (S === null) {
-        const p = xe(a, r[c]);
-        X(p, o[_]), l[_] = p;
-      } else l[_] = X(S, o[_]), xe(a, r[c], S), r[x] = null;
-      _++;
-    } else ht(r[f]), f--;
+        const f = xe(a, r[c]);
+        X(f, o[u]), l[u] = f;
+      } else l[u] = X(S, o[u]), xe(a, r[c], S), r[x] = null;
+      u++;
+    } else ht(r[p]), p--;
     else ht(r[c]), c++;
-    for (; _ <= b; ) {
+    for (; u <= b; ) {
       const x = xe(a, l[b + 1]);
-      X(x, o[_]), l[_++] = x;
+      X(x, o[u]), l[u++] = x;
     }
-    for (; c <= f; ) {
+    for (; c <= p; ) {
       const x = r[c++];
       x !== null && ht(x);
     }
@@ -1728,7 +1728,7 @@ var tr = Object.defineProperty, ir = Object.getOwnPropertyDescriptor, ue = (a, e
     (n = a[o]) && (r = (i ? n(e, t, r) : n(r)) || r);
   return i && r && tr(e, t, r), r;
 };
-const rr = "126";
+const rr = "127";
 console.info(
   `%c 🚀 ANTIGRAVITY-CARD (NO-ICON) %c v${rr} `,
   "color: white; background: #6200ea; font-weight: 700; padding: 2px 6px; border-radius: 4px 0 0 4px;",
@@ -2027,7 +2027,7 @@ function hr(a) {
 }
 class W extends le {
   constructor() {
-    super(...arguments), this._previousLiveRgb = null, this._currentLiveRgb = null, this._lastTrackedState = null, this.preview = !1, this._collapsed = !0, this._holdTimer = null, this._held = !1, this._moved = !1, this._tapTimer = null, this._throttleMap = /* @__PURE__ */ new Map(), this._startX = 0, this._startY = 0, this._subHoldTimer = null, this._subHeld = !1, this._subMoved = !1, this._subStartX = 0, this._subStartY = 0, this._subTapTimerMap = /* @__PURE__ */ new Map(), this._monitoredEntities = [], this._staticCardStyles = "", this._staticCardClasses = "", this._textOffsetStyle = "", this._featuresOffsetStyle = "", this._mainSliderMarginOffsets = "", this._colorTempMarginOffsets = "", this._colorHueMarginOffsets = "", this._textBoxWidth = "", this._primaryTextStyle = "", this._secondaryTextStyle = "", this._primaryTextOffsetStyle = "", this._secondaryTextOffsetStyle = "", this._fadeStaticConfig = null, this._relativeTimer = null, this._cachedSubButtons = null, this._intersectionObserver = null, this._cachedHasCollapsible = !1, this._mountTime = 0, this._pointerDownReceived = !1, this._pointerDownTime = 0, this._canceled = !1, this._activePointerId = null, this._subCanceled = !1, this._subPointerDownTime = 0, this._sliderStateMap = /* @__PURE__ */ new Map(), this._onSliderPointerDown = (e) => {
+    super(...arguments), this._previousLiveRgb = null, this._currentLiveRgb = null, this._lastTrackedState = null, this.preview = !1, this._collapsed = !0, this._holdTimer = null, this._held = !1, this._moved = !1, this._tapTimer = null, this._throttleMap = /* @__PURE__ */ new Map(), this._startX = 0, this._startY = 0, this._subHoldTimer = null, this._subHeld = !1, this._subMoved = !1, this._subStartX = 0, this._subStartY = 0, this._subTapTimerMap = /* @__PURE__ */ new Map(), this._monitoredEntities = [], this._staticCardStyles = "", this._staticCardClasses = "", this._textOffsetStyle = "", this._featuresOffsetStyle = "", this._mainSliderMarginOffsets = "", this._colorTempMarginOffsets = "", this._colorHueMarginOffsets = "", this._textBoxWidth = "", this._primaryTextStyle = "", this._secondaryTextStyle = "", this._primaryTextOffsetStyle = "", this._secondaryTextOffsetStyle = "", this._fadeStaticConfig = null, this._relativeTimer = null, this._cachedSubButtons = null, this._intersectionObserver = null, this._cachedHasCollapsible = !1, this._mountTime = 0, this._pointerDownReceived = !1, this._pointerDownTime = 0, this._canceled = !1, this._activePointerId = null, this._subCanceled = !1, this._subPointerDownTime = 0, this._sliderStateMap = /* @__PURE__ */ new WeakMap(), this._onSliderPointerDown = (e) => {
       const t = e.currentTarget;
       if (!t) return;
       const r = t.closest(".slider-container, .sub-button-slider-container")?.querySelector(".slider-percent-badge, .sub-slider-pct"), o = Number(t.value) || 0, n = t.style.getPropertyValue("--slider-pct") || "", s = r?.textContent || "";
@@ -2119,10 +2119,10 @@ class W extends le {
   }
   _computeStaticStylesAndClasses() {
     if (!this.config) return;
-    const e = this.config.card_padding ?? 12, t = this.config.card_padding_vertical ?? 4, i = this.config.card_padding_horizontal ?? e, r = this.config.card_padding_top ?? t, o = this.config.card_padding_bottom ?? t, n = this.config.card_padding_left ?? i, s = this.config.card_padding_right ?? i, l = this.config.card_margin, d = this.config.card_margin_vertical ?? l, h = this.config.card_margin_horizontal ?? l, c = this.config.card_margin_top ?? d, f = this.config.card_margin_bottom ?? d, _ = this.config.card_margin_left ?? h, b = this.config.card_margin_right ?? h;
+    const e = this.config.card_padding ?? 12, t = this.config.card_padding_vertical ?? 4, i = this.config.card_padding_horizontal ?? e, r = this.config.card_padding_top ?? t, o = this.config.card_padding_bottom ?? t, n = this.config.card_padding_left ?? i, s = this.config.card_padding_right ?? i, l = this.config.card_margin, d = this.config.card_margin_vertical ?? l, h = this.config.card_margin_horizontal ?? l, c = this.config.card_margin_top ?? d, p = this.config.card_margin_bottom ?? d, u = this.config.card_margin_left ?? h, b = this.config.card_margin_right ?? h;
     let x = "";
-    (c !== void 0 || f !== void 0 || _ !== void 0 || b !== void 0) && (x = `margin: ${c ?? 0}px ${b ?? 0}px ${f ?? 0}px ${_ ?? 0}px;`);
-    const S = this.config.border_radius ?? 12, p = this.config.slider_style === "google", k = this.config.slider_style === "full", g = p ? 42 : k ? 40 : 12, C = this.config.slider_height !== void 0 ? this.config.slider_height : g, v = p ? 21 : k ? 0 : C / 2, $ = this.config.slider_border_radius !== void 0 ? this.config.slider_border_radius : v, T = this.config.card_border_width ?? (this.config.card_border_color ? 1 : 0), u = this.config.card_border_style ?? "solid", m = T > 0 ? `border: ${T}px ${u} ${this._resolveColor(this.config.card_border_color) || "var(--divider-color, rgba(150, 150, 150, 0.2))"};` : "", A = this.config.card_width ? `width: ${this.config.card_width};` : "", O = this.config.card_max_width ? `max-width: ${this.config.card_max_width};` : "", Y = this.config.card_height ? `height: ${this.config.card_height};` : "", j = this.config.card_min_height !== void 0 ? `min-height: ${this.config.card_min_height}px;` : "", q = this.config.fill_container === !0 ? "height: 100%; width: 100%;" : "", _e = this.config.overflow_hidden !== !1 ? "overflow: hidden;" : "overflow: visible;", Pe = this.config.backdrop_blur !== void 0 ? `backdrop-filter: blur(${this.config.backdrop_blur}px); -webkit-backdrop-filter: blur(${this.config.backdrop_blur}px);` : "", Ee = this.config.card_opacity !== void 0 ? `opacity: ${this.config.card_opacity / 100};` : "", Le = this.config.transition_duration !== void 0 ? `transition: all ${this.config.transition_duration}ms ease;` : "", F = this.config.text_padding_vertical ?? this.config.text_padding ?? 0, De = this.config.text_padding_horizontal ?? this.config.text_padding ?? 0, Re = this.config.features_padding_vertical ?? this.config.features_padding ?? 0, Ne = this.config.features_padding_horizontal ?? this.config.features_padding ?? 0, He = this.config.sub_button_padding ?? 0, Be = this.config.sub_button_container_padding ?? 0, Oe = this.config.sub_button_alignment ? `--ag-sub-button-alignment: ${this.config.sub_button_alignment};` : "", at = this.config.text_scrolling_speed ? `--ag-scroll-speed: ${this.config.text_scrolling_speed}s;` : "", st = this.config.full_slider_opacity !== void 0 ? `--ag-full-slider-opacity: ${this.config.full_slider_opacity / 100};` : "";
+    (c !== void 0 || p !== void 0 || u !== void 0 || b !== void 0) && (x = `margin: ${c ?? 0}px ${b ?? 0}px ${p ?? 0}px ${u ?? 0}px;`);
+    const S = this.config.border_radius ?? 12, f = this.config.slider_style === "google", k = this.config.slider_style === "full", g = f ? 42 : k ? 40 : 12, C = this.config.slider_height !== void 0 ? this.config.slider_height : g, v = f ? 21 : k ? 0 : C / 2, $ = this.config.slider_border_radius !== void 0 ? this.config.slider_border_radius : v, T = this.config.card_border_width ?? (this.config.card_border_color ? 1 : 0), _ = this.config.card_border_style ?? "solid", m = T > 0 ? `border: ${T}px ${_} ${this._resolveColor(this.config.card_border_color) || "var(--divider-color, rgba(150, 150, 150, 0.2))"};` : "", A = this.config.card_width ? `width: ${this.config.card_width};` : "", O = this.config.card_max_width ? `max-width: ${this.config.card_max_width};` : "", Y = this.config.card_height ? `height: ${this.config.card_height};` : "", j = this.config.card_min_height !== void 0 ? `min-height: ${this.config.card_min_height}px;` : "", q = this.config.fill_container === !0 ? "height: 100%; width: 100%;" : "", _e = this.config.overflow_hidden !== !1 ? "overflow: hidden;" : "overflow: visible;", Pe = this.config.backdrop_blur !== void 0 ? `backdrop-filter: blur(${this.config.backdrop_blur}px); -webkit-backdrop-filter: blur(${this.config.backdrop_blur}px);` : "", Ee = this.config.card_opacity !== void 0 ? `opacity: ${this.config.card_opacity / 100};` : "", Le = this.config.transition_duration !== void 0 ? `transition: all ${this.config.transition_duration}ms ease;` : "", F = this.config.text_padding_vertical ?? this.config.text_padding ?? 0, De = this.config.text_padding_horizontal ?? this.config.text_padding ?? 0, Re = this.config.features_padding_vertical ?? this.config.features_padding ?? 0, Ne = this.config.features_padding_horizontal ?? this.config.features_padding ?? 0, He = this.config.sub_button_padding ?? 0, Be = this.config.sub_button_container_padding ?? 0, Oe = this.config.sub_button_alignment ? `--ag-sub-button-alignment: ${this.config.sub_button_alignment};` : "", at = this.config.text_scrolling_speed ? `--ag-scroll-speed: ${this.config.text_scrolling_speed}s;` : "", st = this.config.full_slider_opacity !== void 0 ? `--ag-full-slider-opacity: ${this.config.full_slider_opacity / 100};` : "";
     this._staticCardStyles = [
       x,
       `border-radius: ${S}px;`,
@@ -2245,7 +2245,7 @@ class W extends le {
       this._cachedHasCollapsible = !1;
       return;
     }
-    const i = this.config.entity.split(".")[0] === "light", r = e.state === "on", o = this.config.hide_color_temp_when_off !== !1, n = this.config.hide_color_picker_when_off !== !1, s = this.config.hide_color_slider_when_off !== !1, l = e.attributes?.color_temp_kelvin ?? e.attributes?.color_temp, d = i && this.config.show_color_temp === !0 && (l !== void 0 || e.attributes?.supported_color_modes?.some((p) => ["color_temp"].includes(p))) && (!o || r), h = e.attributes?.supported_color_modes, c = Array.isArray(h) && h.some((p) => ["hs", "xy", "rgb", "rgbw", "rgbww"].includes(p)), f = this.config.color_picker_type !== "wheel", _ = i && (this.config.show_color_slider === !0 || this.config.show_color_picker === !0 && f) && c && (!s || r), b = i && this.config.show_color_picker === !0 && !f && c && (!n || r), x = d || _ || b, S = this._getSubButtons();
+    const i = this.config.entity.split(".")[0] === "light", r = e.state === "on", o = this.config.hide_color_temp_when_off !== !1, n = this.config.hide_color_picker_when_off !== !1, s = this.config.hide_color_slider_when_off !== !1, l = e.attributes?.color_temp_kelvin ?? e.attributes?.color_temp, d = i && this.config.show_color_temp === !0 && (l !== void 0 || e.attributes?.supported_color_modes?.some((f) => ["color_temp"].includes(f))) && (!o || r), h = e.attributes?.supported_color_modes, c = Array.isArray(h) && h.some((f) => ["hs", "xy", "rgb", "rgbw", "rgbww"].includes(f)), p = this.config.color_picker_type !== "wheel", u = i && (this.config.show_color_slider === !0 || this.config.show_color_picker === !0 && p) && c && (!s || r), b = i && this.config.show_color_picker === !0 && !p && c && (!n || r), x = d || u || b, S = this._getSubButtons();
     this._cachedHasCollapsible = x || S.length > 0;
   }
   connectedCallback() {
@@ -2266,7 +2266,15 @@ class W extends le {
     }
     const d = l || o || e === "last-changed" || e === "last_changed" || e === "last-updated" || e === "last_updated" || e === "last-triggered" || t === "last-changed" || t === "last_changed" || t === "last-updated" || t === "last_updated" || t === "last-triggered";
     if (d && !this._relativeTimer) {
-      const h = l ? 1e3 : 5e3;
+      let h = l ? 1e3 : 5e3;
+      const c = s?.attributes?.last_triggered || s?.last_changed || s?.last_updated;
+      if (c && !l && !o) {
+        const p = this._parseDate(c);
+        if (p) {
+          const u = Math.max(0, (Date.now() - p.getTime()) / 1e3 | 0);
+          u > 3600 ? h = 6e4 : u > 60 && (h = 15e3);
+        }
+      }
       this._relativeTimer = setInterval(() => {
         if (!this.hasAttribute("offscreen") && this.style.display !== "none") {
           if (l && !this._isFadeActive()) {
@@ -2287,7 +2295,7 @@ class W extends le {
     return i.enabled && i.activeFade && i.progressPct < 100;
   }
   disconnectedCallback() {
-    super.disconnectedCallback(), this._throttleMap.clear(), this._subTapTimerMap.forEach((e) => clearTimeout(e)), this._subTapTimerMap.clear(), this._intersectionObserver && (this._intersectionObserver.disconnect(), this._intersectionObserver = null), this._relativeTimer && (clearInterval(this._relativeTimer), this._relativeTimer = null), this._holdTimer && (clearTimeout(this._holdTimer), this._holdTimer = null), this._tapTimer && (clearTimeout(this._tapTimer), this._tapTimer = null), this._subHoldTimer && (clearTimeout(this._subHoldTimer), this._subHoldTimer = null), this._sliderStateMap.clear();
+    super.disconnectedCallback(), this._throttleMap.clear(), this._subTapTimerMap.forEach((e) => clearTimeout(e)), this._subTapTimerMap.clear(), this._intersectionObserver && (this._intersectionObserver.disconnect(), this._intersectionObserver = null), this._relativeTimer && (clearInterval(this._relativeTimer), this._relativeTimer = null), this._holdTimer && (clearTimeout(this._holdTimer), this._holdTimer = null), this._tapTimer && (clearTimeout(this._tapTimer), this._tapTimer = null), this._subHoldTimer && (clearTimeout(this._subHoldTimer), this._subHoldTimer = null);
   }
   firstUpdated(e) {
     super.firstUpdated(e);
@@ -2332,11 +2340,11 @@ class W extends le {
     const r = this._isEntityActive(e), o = this.config.fade_trigger ?? "on_inactive";
     if (!(o === "on_inactive" && !r || o === "on_active" && r || o === "both"))
       return Qe;
-    const s = r ? this._resolveColor(this.config.inactive_color) || i || "#4caf50" : this._resolveColor(this.config.active_color) || t || "#d60000", l = r ? this._resolveColor(this.config.active_color) || t || "#d60000" : this._resolveColor(this.config.inactive_color) || i || "#03b100", d = B(s) || [214, 0, 0], h = B(l) || [3, 177, 0], c = this._fadeStaticConfig, f = c?.d1 ?? (Number(this.config.fade_stage_1_duration) || 60), _ = c?.d2 ?? (Number(this.config.fade_stage_2_duration) || 600), b = c?.d3 ?? (Number(this.config.fade_stage_3_duration) || 1800), x = c?.totalDuration ?? f + _ + b;
+    const s = r ? this._resolveColor(this.config.inactive_color) || i || "#4caf50" : this._resolveColor(this.config.active_color) || t || "#d60000", l = r ? this._resolveColor(this.config.active_color) || t || "#d60000" : this._resolveColor(this.config.inactive_color) || i || "#03b100", d = B(s) || [214, 0, 0], h = B(l) || [3, 177, 0], c = this._fadeStaticConfig, p = c?.d1 ?? (Number(this.config.fade_stage_1_duration) || 60), u = c?.d2 ?? (Number(this.config.fade_stage_2_duration) || 600), b = c?.d3 ?? (Number(this.config.fade_stage_3_duration) || 1800), x = c?.totalDuration ?? p + u + b;
     if (x <= 0)
       return Qe;
     this._lastTrackedState !== null && this._lastTrackedState !== e.state && this._currentLiveRgb && this.config.fade_smooth_retrigger !== !1 && (this._previousLiveRgb = this._currentLiveRgb), this._lastTrackedState = e.state;
-    const S = this.config.fade_stage_1_pickup !== !1 && this._previousLiveRgb && this.config.fade_smooth_retrigger !== !1 ? this._previousLiveRgb : d, p = c?.c1Rgb ?? (B(this.config.fade_stage_1_color) || [255, 152, 0]), k = this.config.fade_stage_2_pickup !== !1 ? p : d, g = c?.c2Rgb ?? (B(this.config.fade_stage_2_color) || [205, 220, 57]), C = this.config.fade_stage_3_pickup !== !1 ? g : p, v = c?.c3Rgb ?? (B(this.config.fade_stage_3_color) || h), $ = this._parseDate(e.last_changed || e.last_updated);
+    const S = this.config.fade_stage_1_pickup !== !1 && this._previousLiveRgb && this.config.fade_smooth_retrigger !== !1 ? this._previousLiveRgb : d, f = c?.c1Rgb ?? (B(this.config.fade_stage_1_color) || [255, 152, 0]), k = this.config.fade_stage_2_pickup !== !1 ? f : d, g = c?.c2Rgb ?? (B(this.config.fade_stage_2_color) || [205, 220, 57]), C = this.config.fade_stage_3_pickup !== !1 ? g : f, v = c?.c3Rgb ?? (B(this.config.fade_stage_3_color) || h), $ = this._parseDate(e.last_changed || e.last_updated);
     if (!$)
       return Qe;
     const T = Math.max(0, (Date.now() - $.getTime()) / 1e3);
@@ -2350,10 +2358,10 @@ class W extends le {
         currentStage: 0,
         stageLabel: "Resting"
       };
-    let u, m = 1, A = 0;
+    let _, m = 1, A = 0;
     const O = Math.max(0, Math.round(x - T));
-    T < f && f > 0 ? (m = 1, A = T / f, u = ft(S, p, A)) : T < f + _ && _ > 0 ? (m = 2, A = (T - f) / _, u = ft(k, g, A)) : b > 0 ? (m = 3, A = (T - f - _) / b, u = ft(C, v, A)) : (m = 0, u = v), this._currentLiveRgb = u;
-    const Y = Math.min(100, Math.round(T / x * 100)), j = gt(u);
+    T < p && p > 0 ? (m = 1, A = T / p, _ = ft(S, f, A)) : T < p + u && u > 0 ? (m = 2, A = (T - p) / u, _ = ft(k, g, A)) : b > 0 ? (m = 3, A = (T - p - u) / b, _ = ft(C, v, A)) : (m = 0, _ = v), this._currentLiveRgb = _;
+    const Y = Math.min(100, Math.round(T / x * 100)), j = gt(_);
     let q = "";
     return O >= 60 ? q = `${Math.ceil(O / 60)}m left` : q = `${O}s left`, {
       enabled: !0,
@@ -2418,15 +2426,35 @@ class W extends le {
         return this.config.name || t.attributes.friendly_name || this.config.entity || "";
       case "state": {
         const r = (t.entity_id || "").split(".")[0];
-        if (r === "timer" && t.state === "active" && t.attributes?.finishes_at) {
-          const o = Date.parse(t.attributes.finishes_at);
-          if (!isNaN(o)) {
-            const n = Math.max(0, Math.round((o - Date.now()) / 1e3)), s = Math.floor(n / 60), l = n % 60, d = Math.floor(s / 60), h = (s % 60).toString().padStart(2, "0"), c = l.toString().padStart(2, "0");
-            return d > 0 ? `${d}:${h}:${c}` : `${h}:${c}`;
+        if (r === "timer") {
+          if (t.state === "paused")
+            return `${t.attributes?.remaining || "Paused"} (Paused)`;
+          if (t.state === "active" && t.attributes?.finishes_at) {
+            const o = Date.parse(t.attributes.finishes_at);
+            if (!isNaN(o)) {
+              const n = Math.max(0, Math.round((o - Date.now()) / 1e3)), s = Math.floor(n / 60), l = n % 60, d = Math.floor(s / 60), h = (s % 60).toString().padStart(2, "0"), c = l.toString().padStart(2, "0");
+              return d > 0 ? `${d}:${h}:${c}` : `${h}:${c}`;
+            }
           }
         }
         if (r === "binary_sensor")
           return this._formatForDuration(t.last_changed);
+        if (r === "vacuum") {
+          const o = t.state, n = o === "cleaning" ? "Cleaning" : o === "docked" ? "Docked" : o === "returning" ? "Returning" : o, s = t.attributes?.battery_level;
+          return s !== void 0 ? `${n} • 🔋${s}%` : n;
+        }
+        if (r === "weather") {
+          const o = t.attributes?.temperature, n = this.hass.config?.unit_system?.temperature || "°F", s = (t.state || "").replace(/-/g, " ");
+          return o !== void 0 ? `${o}${n} • ${s}` : s;
+        }
+        if (r === "alarm_control_panel") {
+          const o = t.state;
+          if (o === "armed_home") return "🛡️ Armed Home";
+          if (o === "armed_away") return "🛡️ Armed Away";
+          if (o === "disarmed") return "Disarmed";
+          if (o === "triggered") return "⚠️ TRIGGERED";
+          if (o === "pending") return "⏳ Arming Pending";
+        }
         if (r === "lock") {
           if (t.state === "locked") return "Locked";
           if (t.state === "unlocked") return "Unlocked";
@@ -2641,9 +2669,18 @@ class W extends le {
     e.preventDefault(), e.stopPropagation(), !this._subHeld && (L("medium", this.config.haptic_feedback !== !1), this._dispatchAction("hold", i || { action: "more-info" }, t));
   }
   // --- THROTTLED SERVICE CALL HELPER ---
-  _throttledCall(e, t) {
-    const i = Date.now();
-    i - (this._throttleMap.get(e) ?? 0) < 100 || (this._throttleMap.set(e, i), t());
+  _throttledCall(e, t, i = 100) {
+    const r = this._throttleMap.get(e) ?? 0, o = Date.now();
+    if (!(o - r < i)) {
+      this._throttleMap.set(e, o);
+      try {
+        t();
+      } finally {
+        setTimeout(() => {
+          this._throttleMap.get(e) === o && this._throttleMap.delete(e);
+        }, i + 50);
+      }
+    }
   }
   _revertSlider(e, t) {
     e.value = String(t.initialVal), e.style.setProperty("--slider-pct", t.initialPct);
@@ -2657,7 +2694,7 @@ class W extends le {
       this._revertSlider(l, d);
       return;
     }
-    const h = Number(l.value), c = isNaN(h) ? 0 : h, f = n ? n(c) : c;
+    const h = Number(l.value), c = isNaN(h) ? 0 : h, p = n ? n(c) : c;
     if (d) {
       if (d.rafPending) return;
       d.rafPending = !0;
@@ -2667,11 +2704,11 @@ class W extends le {
         this._revertSlider(l, d);
         return;
       }
-      l.style.setProperty("--slider-pct", `${f}%`);
-      const _ = l.closest(".slider-container, .sub-button-slider-container"), b = _?.querySelector(".slider-percent-badge, .sub-slider-pct");
-      if (b && (b.textContent = s ? s(c, f) : `${f}%`), t === "color_hue" && _) {
-        _.style.setProperty("--color-hue-val", `hsl(${c}, 100%, 50%)`);
-        const x = _.querySelector(".color-chip-badge span");
+      l.style.setProperty("--slider-pct", `${p}%`);
+      const u = l.closest(".slider-container, .sub-button-slider-container"), b = u?.querySelector(".slider-percent-badge, .sub-slider-pct");
+      if (b && (b.textContent = s ? s(c, p) : `${p}%`), t === "color_hue" && u) {
+        u.style.setProperty("--color-hue-val", `hsl(${c}, 100%, 50%)`);
+        const x = u.querySelector(".color-chip-badge span");
         x && (x.style.background = `hsl(${c}, 100%, 50%)`);
       }
     }), L("selection", this.config.haptic_feedback !== !1);
@@ -2787,16 +2824,16 @@ class W extends le {
     (!h || this.config.use_light_color) && (n === "light" && l ? h = l : h = s);
     let c = "var(--secondary-background-color, rgba(150, 150, 150, 0.2))";
     n === "light" ? c = "#000000" : (n === "binary_sensor" || n === "lock" || n === "switch") && (c = "#03b500");
-    const f = this._resolveColor(this.config.inactive_color) || c, _ = this.config.show_slider !== !1, b = n === "light", x = n === "cover", S = n === "fan", p = n === "humidifier", k = n === "media_player", g = n === "number" || n === "input_number", C = n === "climate", v = this.config.hide_slider_when_off !== !1, $ = this.config.hide_color_temp_when_off !== !1, T = this.config.hide_color_picker_when_off !== !1, u = this.config.hide_color_slider_when_off !== !1, m = t.attributes?.supported_color_modes;
+    const p = this._resolveColor(this.config.inactive_color) || c, u = this.config.show_slider !== !1, b = n === "light", x = n === "cover", S = n === "fan", f = n === "humidifier", k = n === "media_player", g = n === "number" || n === "input_number", C = n === "climate", v = this.config.hide_slider_when_off !== !1, $ = this.config.hide_color_temp_when_off !== !1, T = this.config.hide_color_picker_when_off !== !1, _ = this.config.hide_color_slider_when_off !== !1, m = t.attributes?.supported_color_modes;
     let A = t.attributes?.brightness !== void 0, O = !1, Y = !1;
     if (Array.isArray(m))
       for (let M = 0; M < m.length; M++) {
         const oe = m[M];
         oe !== "onoff" && (A = !0), oe === "color_temp" && (O = !0), ar.has(oe) && (Y = !0);
       }
-    const j = b && _ && A && (!v || o), q = t.attributes?.color_temp_kelvin ?? t.attributes?.color_temp, _e = b && this.config.show_color_temp === !0 && (q !== void 0 || O) && (!$ || o), Pe = this.config.color_picker_type !== "wheel", Ee = b && (this.config.show_color_slider === !0 || this.config.show_color_picker === !0 && Pe) && Y && (!u || o), Le = b && this.config.show_color_picker === !0 && !Pe && Y && (!T || o), F = t.state !== "unavailable" && t.state !== "unknown", De = x && F && _ && t.attributes?.current_position !== void 0, Re = S && F && o && _ && t.attributes?.percentage !== void 0, Ne = p && F && o && _ && (t.attributes?.humidity !== void 0 || t.attributes?.target_humidity !== void 0), He = k && F && o && _ && t.attributes?.volume_level !== void 0, Be = g && F && _, Oe = C && F && o && _ && (t.attributes?.temperature !== void 0 || t.attributes?.target_temp_high !== void 0), at = (this.config.bg_opacity ?? 10) / 100, st = this.config.slider_color ? `--slider-color: ${this._resolveColor(this.config.slider_color)};` : d && o && !this.config.use_light_color ? "--slider-color: rgba(255, 255, 255, 0.95);" : `--slider-color: ${h};`, ze = this.config.slider_track_color ? `--slider-track-color: ${this._resolveColor(this.config.slider_track_color)};` : d && o ? "--slider-track-color: rgba(0, 0, 0, 0.25);" : "", D = this._calculateMultiStageFade(t, s, f), G = this.config.fade_target ?? "card", he = this._resolveColor(this.config.bg_color);
+    const j = b && u && A && (!v || o), q = t.attributes?.color_temp_kelvin ?? t.attributes?.color_temp, _e = b && this.config.show_color_temp === !0 && (q !== void 0 || O) && (!$ || o), Pe = this.config.color_picker_type !== "wheel", Ee = b && (this.config.show_color_slider === !0 || this.config.show_color_picker === !0 && Pe) && Y && (!_ || o), Le = b && this.config.show_color_picker === !0 && !Pe && Y && (!T || o), F = t.state !== "unavailable" && t.state !== "unknown", De = x && F && u && t.attributes?.current_position !== void 0, Re = S && F && o && u && t.attributes?.percentage !== void 0, Ne = f && F && o && u && (t.attributes?.humidity !== void 0 || t.attributes?.target_humidity !== void 0), He = k && F && o && u && t.attributes?.volume_level !== void 0, Be = g && F && u, Oe = C && F && o && u && (t.attributes?.temperature !== void 0 || t.attributes?.target_temp_high !== void 0), at = (this.config.bg_opacity ?? 10) / 100, st = this.config.slider_color ? `--slider-color: ${this._resolveColor(this.config.slider_color)};` : d && o && !this.config.use_light_color ? "--slider-color: rgba(255, 255, 255, 0.95);" : `--slider-color: ${h};`, ze = this.config.slider_track_color ? `--slider-track-color: ${this._resolveColor(this.config.slider_track_color)};` : d && o ? "--slider-track-color: rgba(0, 0, 0, 0.25);" : "", D = this._calculateMultiStageFade(t, s, p), G = this.config.fade_target ?? "card", he = this._resolveColor(this.config.bg_color);
     let N;
-    D.activeFade && (G === "card" || G === "all" || d) ? N = D.currentColor : d ? n === "light" ? N = o ? l || h : this.config.inactive_color ? f : "#000000" : N = o ? h : f : he ? N = he : n === "light" && !o ? N = "#000000" : N = `rgba(150, 150, 150, ${at})`;
+    D.activeFade && (G === "card" || G === "all" || d) ? N = D.currentColor : d ? n === "light" ? N = o ? l || h : this.config.inactive_color ? p : "#000000" : N = o ? h : p : he ? N = he : n === "light" && !o ? N = "#000000" : N = `rgba(150, 150, 150, ${at})`;
     let pe = this._resolveColor(this.config.active_color) || (n === "light" && l ? l : h) || "var(--primary-color)";
     D.activeFade && (G === "all" || this.config.active_glow === !0) && (pe = D.currentColor);
     let ee = "";
@@ -2889,15 +2926,15 @@ class W extends le {
     `;
   }
   // --- GENERIC SLIDER COMPONENT HELPER ---
-  _renderGenericSlider(e, t, i, r, o, n, s, l, d, h, c, f, _ = "", b = "", x) {
-    const S = this.config.slider_style === "google", p = S && this.config.show_slider_percent !== !1 || this.config.show_slider_percent === !0, k = f ? f(n, s) : `${s}%`, g = x !== void 0 ? x : k, C = this.config.slider_stepped_movement === !1 ? "any" : o, v = e !== "color_temp" && e !== "color_hue", $ = this.config.slider_style === "full", T = v && $ ? "main-slider-full" : "";
-    let u = "";
+  _renderGenericSlider(e, t, i, r, o, n, s, l, d, h, c, p, u = "", b = "", x) {
+    const S = this.config.slider_style === "google", f = S && this.config.show_slider_percent !== !1 || this.config.show_slider_percent === !0, k = p ? p(n, s) : `${s}%`, g = x !== void 0 ? x : k, C = this.config.slider_stepped_movement === !1 ? "any" : o, v = e !== "color_temp" && e !== "color_hue", $ = this.config.slider_style === "full", T = v && $ ? "main-slider-full" : "";
+    let _ = "";
     if (v && $) {
       const m = Number(this.config.slider_start_offset) || 0, A = Number(this.config.slider_end_offset) || 0;
-      u = `left: ${m}px !important; right: ${A}px !important; width: calc(100% - ${m + A}px) !important;`;
-    } else e === "color_temp" ? u = this._colorTempMarginOffsets : e === "color_hue" ? u = this._colorHueMarginOffsets : u = this._mainSliderMarginOffsets;
+      _ = `left: ${m}px !important; right: ${A}px !important; width: calc(100% - ${m + A}px) !important;`;
+    } else e === "color_temp" ? _ = this._colorTempMarginOffsets : e === "color_hue" ? _ = this._colorHueMarginOffsets : _ = this._mainSliderMarginOffsets;
     return w`
-      <div class="slider-container ${_} ${T} ${S ? "slider-google-wrap" : ""}" style="${u} ${b}">
+      <div class="slider-container ${u} ${T} ${S ? "slider-google-wrap" : ""}" style="${_} ${b}">
         <input type="range" min=${i} max=${r} step=${C} .value=${n}
                aria-label="${t}"
                style="--slider-pct: ${s}%;"
@@ -2905,9 +2942,9 @@ class W extends le {
                @pointermove=${this._onSliderPointerMove}
                @pointerup=${this._onSliderPointerUp}
                @pointercancel=${this._onSliderPointerCancel}
-               @input=${(m) => this._sliderInput(m, e, l, d, h, c, f)}
+               @input=${(m) => this._sliderInput(m, e, l, d, h, c, p)}
                @change=${(m) => this._sliderChange(m, l, d, h)} />
-        ${p && g ? w`<span class="slider-percent-badge">${g}</span>` : y}
+        ${f && g ? w`<span class="slider-percent-badge">${g}</span>` : y}
       </div>
     `;
   }
@@ -2932,16 +2969,16 @@ class W extends le {
     );
   }
   _renderColorTempSlider(e) {
-    const t = this.config.color_temp_type || "gradient", i = e.attributes.color_temp_kelvin !== void 0 || e.attributes.min_color_temp_kelvin !== void 0 || e.attributes.max_color_temp_kelvin !== void 0, r = i ? e.attributes.min_color_temp_kelvin || 2e3 : e.attributes.min_mireds || 153, o = i ? e.attributes.max_color_temp_kelvin || 6500 : e.attributes.max_mireds || 500, n = i ? e.attributes.color_temp_kelvin || 3e3 : e.attributes.color_temp || 300, s = o - r, l = s > 0 ? Math.max(0, Math.min(100, Math.round((n - r) / s * 100))) : 0, d = i ? "color_temp_kelvin" : "color_temp", h = t === "google" || t === "gradient" && this.config.slider_style === "google", c = h ? 42 : t === "thin" ? 6 : 12, f = h ? 21 : t === "thin" ? 3 : 6, _ = this.config.color_temp_height !== void 0 ? this.config.color_temp_height : this.config.slider_height ?? c, b = this.config.color_temp_border_radius !== void 0 ? this.config.color_temp_border_radius : this.config.slider_border_radius ?? f, x = i ? `${n} K` : `${n} mireds`;
+    const t = this.config.color_temp_type || "gradient", i = e.attributes.color_temp_kelvin !== void 0 || e.attributes.min_color_temp_kelvin !== void 0 || e.attributes.max_color_temp_kelvin !== void 0, r = i ? e.attributes.min_color_temp_kelvin || 2e3 : e.attributes.min_mireds || 153, o = i ? e.attributes.max_color_temp_kelvin || 6500 : e.attributes.max_mireds || 500, n = i ? e.attributes.color_temp_kelvin || 3e3 : e.attributes.color_temp || 300, s = o - r, l = s > 0 ? Math.max(0, Math.min(100, Math.round((n - r) / s * 100))) : 0, d = i ? "color_temp_kelvin" : "color_temp", h = t === "google" || t === "gradient" && this.config.slider_style === "google", c = h ? 42 : t === "thin" ? 6 : 12, p = h ? 21 : t === "thin" ? 3 : 6, u = this.config.color_temp_height !== void 0 ? this.config.color_temp_height : this.config.slider_height ?? c, b = this.config.color_temp_border_radius !== void 0 ? this.config.color_temp_border_radius : this.config.slider_border_radius ?? p, x = i ? `${n} K` : `${n} mireds`;
     if (t === "presets") {
-      const S = Number(this.config.color_temp_start_offset) || 0, p = Number(this.config.color_temp_end_offset) || 0, k = [
+      const S = Number(this.config.color_temp_start_offset) || 0, f = Number(this.config.color_temp_end_offset) || 0, k = [
         S ? `margin-left: ${S}px;` : "",
-        p ? `margin-right: ${p}px;` : ""
+        f ? `margin-right: ${f}px;` : ""
       ].filter(Boolean).join(" ");
       return w`
         <div class="presets-row" style="display: flex; gap: 6px; overflow-x: auto; padding: 2px 0; ${k}">
           ${dr.map((g) => {
-        const [C, v, $] = g.rgb, T = Math.abs(n - g.k) < 200, u = () => {
+        const [C, v, $] = g.rgb, T = Math.abs(n - g.k) < 200, _ = () => {
           L("light", this.config.haptic_feedback !== !1), this.hass?.callService("light", "turn_on", { entity_id: this.config.entity, [d]: g.k });
         };
         return w`
@@ -2951,12 +2988,12 @@ class W extends le {
                 aria-label="Color temperature preset: ${g.label}"
                 tabindex="0"
                 class="temp-preset-chip"
-                style="flex: 1; min-width: 48px; height: ${_}px; border-radius: ${b}px; border: ${T ? "2px solid #ffffff" : "1px solid rgba(150, 150, 150, 0.3)"}; background: rgba(${C}, ${v}, ${$}, 0.2); color: var(--primary-text-color); font-size: 11px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; box-shadow: ${T ? "0 0 8px rgba(" + C + "," + v + "," + $ + ", 0.8)" : "none"};"
+                style="flex: 1; min-width: 48px; height: ${u}px; border-radius: ${b}px; border: ${T ? "2px solid #ffffff" : "1px solid rgba(150, 150, 150, 0.3)"}; background: rgba(${C}, ${v}, ${$}, 0.2); color: var(--primary-text-color); font-size: 11px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; box-shadow: ${T ? "0 0 8px rgba(" + C + "," + v + "," + $ + ", 0.8)" : "none"};"
                 @keydown=${(m) => {
-          (m.key === "Enter" || m.key === " ") && (m.preventDefault(), m.stopPropagation(), u());
+          (m.key === "Enter" || m.key === " ") && (m.preventDefault(), m.stopPropagation(), _());
         }}
                 @click=${(m) => {
-          m.stopPropagation(), u();
+          m.stopPropagation(), _();
         }}>
                 <span style="width: 8px; height: 8px; border-radius: 50%; background: rgb(${C}, ${v}, ${$}); display: inline-block;"></span>
                 ${g.label}
@@ -2980,7 +3017,7 @@ class W extends le {
       (S) => s > 0 ? Math.round((S - r) / s * 100) : 0,
       (S) => i ? `${S} K` : `${S} mireds`,
       `color-temp ${i ? "kelvin" : "mireds"} ${h ? "slider-google-wrap" : ""}`,
-      `--ag-slider-height: ${_}px; --ag-slider-radius: ${b}px;`,
+      `--ag-slider-height: ${u}px; --ag-slider-radius: ${b}px;`,
       x
     );
   }
@@ -2989,14 +3026,14 @@ class W extends le {
     if (t === "wheel")
       return this._renderColorPicker(e);
     if (t === "swatches") {
-      const f = this._getLiveHex(e).toLowerCase(), _ = this.config.color_slider_height !== void 0 ? this.config.color_slider_height : 32, b = this.config.color_slider_border_radius !== void 0 ? this.config.color_slider_border_radius : 8, x = Number(this.config.color_slider_start_offset) || 0, S = Number(this.config.color_slider_end_offset) || 0, p = [
+      const p = this._getLiveHex(e).toLowerCase(), u = this.config.color_slider_height !== void 0 ? this.config.color_slider_height : 32, b = this.config.color_slider_border_radius !== void 0 ? this.config.color_slider_border_radius : 8, x = Number(this.config.color_slider_start_offset) || 0, S = Number(this.config.color_slider_end_offset) || 0, f = [
         x ? `margin-left: ${x}px;` : "",
         S ? `margin-right: ${S}px;` : ""
       ].filter(Boolean).join(" ");
       return w`
-        <div class="swatches-palette-row" style="display: flex; gap: 6px; overflow-x: auto; padding: 2px 0; ${p}">
+        <div class="swatches-palette-row" style="display: flex; gap: 6px; overflow-x: auto; padding: 2px 0; ${f}">
           ${bt.map((k) => {
-        const g = f === k.hex.toLowerCase(), C = () => {
+        const g = p === k.hex.toLowerCase(), C = () => {
           L("light", this.config.haptic_feedback !== !1), this.hass?.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: k.rgb });
         };
         return w`
@@ -3007,7 +3044,7 @@ class W extends le {
                 tabindex="0"
                 class="color-swatch-chip"
                 title="${k.label}"
-                style="flex: 1; min-width: 28px; height: ${_}px; border-radius: ${b}px; background: ${k.hex}; border: ${g ? "2px solid #ffffff" : "1px solid rgba(0,0,0,0.2)"}; cursor: pointer; box-shadow: ${g ? "0 0 10px " + k.hex : "0 1px 3px rgba(0,0,0,0.3)"}; transition: transform 0.15s ease;"
+                style="flex: 1; min-width: 28px; height: ${u}px; border-radius: ${b}px; background: ${k.hex}; border: ${g ? "2px solid #ffffff" : "1px solid rgba(0,0,0,0.2)"}; cursor: pointer; box-shadow: ${g ? "0 0 10px " + k.hex : "0 1px 3px rgba(0,0,0,0.3)"}; transition: transform 0.15s ease;"
                 @keydown=${(v) => {
           (v.key === "Enter" || v.key === " ") && (v.preventDefault(), v.stopPropagation(), C());
         }}
@@ -3036,12 +3073,12 @@ class W extends le {
       r,
       "light",
       "turn_on",
-      (f) => {
-        const [_, b, x] = pt(f, 100);
-        return { rgb_color: [_, b, x] };
+      (p) => {
+        const [u, b, x] = pt(p, 100);
+        return { rgb_color: [u, b, x] };
       },
-      (f) => Math.round(f / 360 * 100),
-      (f) => `${f}°`,
+      (p) => Math.round(p / 360 * 100),
+      (p) => `${p}°`,
       `color-hue ${o ? "slider-google-wrap" : ""}`,
       `--ag-slider-height: ${l}px; --ag-slider-radius: ${d}px; --color-hue-val: ${h};`,
       c
@@ -3088,30 +3125,36 @@ class W extends le {
       t,
       "fan",
       "set_percentage",
-      (r) => ({ percentage: r }),
+      (r) => {
+        const o = i > 1 ? Math.round(r / i) * i : r;
+        return { percentage: Math.min(100, Math.max(0, o)) };
+      },
       (r) => r,
       (r, o) => `${o}%`
     );
   }
   _renderMediaSlider(e) {
-    const t = Math.round((e.attributes.volume_level ?? 0) * 100);
+    const t = e.attributes.is_volume_muted === !0, i = t ? 0 : Math.round((e.attributes.volume_level ?? 0) * 100), r = t ? "Muted (0%)" : void 0;
     return this._renderGenericSlider(
       "media",
       "Volume",
       0,
       100,
       1,
-      t,
-      t,
+      i,
+      i,
       "media_player",
       "volume_set",
-      (i) => ({ volume_level: i / 100 }),
-      (i) => i,
-      (i, r) => `${r}%`
+      (o) => ({ volume_level: o / 100 }),
+      (o) => o,
+      (o, n) => t ? "Muted" : `${n}%`,
+      "media",
+      "",
+      r
     );
   }
   _renderNumberSlider(e) {
-    const t = Number(e.attributes.min ?? 0), i = Number(e.attributes.max ?? 100), r = Number(e.attributes.step ?? 1), o = Number(e.state), n = isNaN(o) ? t : o, s = i - t, l = s > 0 ? Math.max(0, Math.min(100, Math.round((n - t) / s * 100))) : 0, d = (this.config.entity || "number").split(".")[0], h = e.attributes.unit_of_measurement ? ` ${e.attributes.unit_of_measurement}` : "";
+    const t = Number(e.attributes.min ?? 0), i = Number(e.attributes.max ?? 100), r = Number(e.attributes.step ?? 1), o = Number(e.state), n = isNaN(o) ? t : o, s = i - t, l = s > 0 ? Math.max(0, Math.min(100, Math.round((n - t) / s * 100))) : 0, d = (this.config.entity || "number").split(".")[0], h = e.attributes.unit_of_measurement ? ` ${e.attributes.unit_of_measurement}` : "", c = r.toString(), p = c.includes(".") ? c.split(".")[1].length : 0;
     return this._renderGenericSlider(
       "number",
       "Value",
@@ -3122,13 +3165,13 @@ class W extends le {
       l,
       d,
       "set_value",
-      (c) => ({ value: c }),
-      (c) => s > 0 ? Math.round((c - t) / s * 100) : 0,
-      (c) => `${r < 1 ? Number(c).toFixed(1) : c}${h}`
+      (u) => ({ value: p > 0 ? Number(u.toFixed(p)) : Math.round(u) }),
+      (u) => s > 0 ? Math.round((u - t) / s * 100) : 0,
+      (u) => `${p > 0 ? Number(u).toFixed(p) : Math.round(Number(u))}${h}`
     );
   }
   _renderClimateSlider(e) {
-    const t = this.hass.config?.unit_system?.temperature === "°F" || this.hass.config?.unit_system?.temperature === "F", i = t ? "°F" : "°C", r = t ? 60 : 16, o = t ? 85 : 30, n = e.attributes.min_temp ?? r, s = e.attributes.max_temp ?? o, l = e.attributes.target_temp_step ?? e.attributes.target_temperature_step ?? (t ? 1 : 0.5), d = e.attributes.target_temp_low !== void 0 && e.attributes.target_temp_high !== void 0, h = e.attributes.temperature ?? e.attributes.target_temp_low ?? e.attributes.target_temp_high ?? n, c = s - n, f = c > 0 ? Math.max(0, Math.min(100, Math.round((h - n) / c * 100))) : 0;
+    const t = this.hass.config?.unit_system?.temperature === "°F" || this.hass.config?.unit_system?.temperature === "F", i = t ? "°F" : "°C", r = t ? 60 : 16, o = t ? 85 : 30, n = e.attributes.min_temp ?? r, s = e.attributes.max_temp ?? o, l = e.attributes.target_temp_step ?? e.attributes.target_temperature_step ?? (t ? 1 : 0.5), d = e.attributes.target_temp_low !== void 0 && e.attributes.target_temp_high !== void 0, h = e.attributes.temperature ?? e.attributes.target_temp_low ?? e.attributes.target_temp_high ?? n, c = s - n, p = c > 0 ? Math.max(0, Math.min(100, Math.round((h - n) / c * 100))) : 0;
     return this._renderGenericSlider(
       "climate",
       "Temperature",
@@ -3136,12 +3179,12 @@ class W extends le {
       s,
       l,
       h,
-      f,
+      p,
       "climate",
       "set_temperature",
-      (_) => d ? { target_temp_low: _, target_temp_high: Math.min(s, _ + (t ? 4 : 2)) } : { temperature: _ },
-      (_) => c > 0 ? Math.round((_ - n) / c * 100) : 0,
-      (_) => `${_}${i}`,
+      (u) => d ? { target_temp_low: u, target_temp_high: Math.min(s, u + (t ? 4 : 2)) } : { temperature: u },
+      (u) => c > 0 ? Math.round((u - n) / c * 100) : 0,
+      (u) => `${u}${i}`,
       "climate-temp",
       "",
       `${h}${i}`
@@ -3167,58 +3210,58 @@ class W extends le {
   // --- EXTRACTED SUB-BUTTON RENDERERS ---
   _renderSubSlider(e, t, i, r, o) {
     const n = t || this.hass.states[this.config.entity || ""], s = e || this.config.entity || "", l = n?.attributes?.volume_level !== void 0 || n?.entity_id?.startsWith("media_player."), d = n?.attributes?.percentage !== void 0 || n?.entity_id?.startsWith("fan."), h = n?.attributes?.current_position !== void 0 || n?.entity_id?.startsWith("cover.");
-    let c = 0, f = 0, _ = 255, b = "1", x = "turn_on", S = "light", p = "brightness";
-    l ? (c = n?.attributes?.volume_level ?? 0, _ = 1, b = "0.01", x = "set_volume_level", S = "media_player", p = "volume_level") : d ? (c = n?.attributes?.percentage ?? 0, _ = 100, b = "1", x = "set_percentage", S = "fan", p = "percentage") : h ? (c = n?.attributes?.current_position ?? 0, _ = 100, b = "1", x = "set_cover_position", S = "cover", p = "position") : c = n?.attributes?.brightness ?? 0;
-    const k = Math.round(_ === 1 ? c * 100 : _ === 100 ? c : c / 255 * 100);
+    let c = 0, p = 0, u = 255, b = "1", x = "turn_on", S = "light", f = "brightness";
+    l ? (c = n?.attributes?.volume_level ?? 0, u = 1, b = "0.01", x = "set_volume_level", S = "media_player", f = "volume_level") : d ? (c = n?.attributes?.percentage ?? 0, u = 100, b = "1", x = "set_percentage", S = "fan", f = "percentage") : h ? (c = n?.attributes?.current_position ?? 0, u = 100, b = "1", x = "set_cover_position", S = "cover", f = "position") : c = n?.attributes?.brightness ?? 0;
+    const k = Math.round(u === 1 ? c * 100 : u === 100 ? c : c / 255 * 100);
     return i === "slider" ? w`
         <div class="sub-button-slider-container ${o}" style="${r}" title="Level: ${k}%">
           <input type="range" 
-                 min="${f}" 
-                 max=${_} 
+                 min="${p}" 
+                 max=${u} 
                  step=${b} 
                  .value=${c}
                  @pointerdown=${(g) => g.stopPropagation()}
                  @input=${(g) => {
       g.stopPropagation();
-      const C = parseFloat(g.target.value), v = Math.round(_ === 1 ? C * 100 : _ === 100 ? C : C / 255 * 100), $ = g.target.closest(".sub-button-slider-container");
+      const C = parseFloat(g.target.value), v = Math.round(u === 1 ? C * 100 : u === 100 ? C : C / 255 * 100), $ = g.target.closest(".sub-button-slider-container");
       $ && $.setAttribute("title", `Level: ${v}%`), this._throttledCall("sub_slider_" + s, () => {
-        this.hass?.callService(S, x, { entity_id: s, [p]: C });
+        this.hass?.callService(S, x, { entity_id: s, [f]: C });
       });
     }}
                  @change=${(g) => {
       g.stopPropagation();
       const C = parseFloat(g.target.value);
-      this.hass?.callService(S, x, { entity_id: s, [p]: C });
+      this.hass?.callService(S, x, { entity_id: s, [f]: C });
     }} />
         </div>
       ` : w`
         <div class="sub-button-google-slider ${o}" style="${r} --slider-pct: ${k}%;" title="Level: ${k}%">
           <input type="range" 
-                 min="${f}" 
-                 max=${_} 
+                 min="${p}" 
+                 max=${u} 
                  step=${b} 
                  .value=${c}
                  style="--slider-pct: ${k}%;"
                  @pointerdown=${(g) => g.stopPropagation()}
                  @input=${(g) => {
       g.stopPropagation();
-      const C = parseFloat(g.target.value), v = Math.round(_ === 1 ? C * 100 : _ === 100 ? C : C / 255 * 100), $ = g.target;
+      const C = parseFloat(g.target.value), v = Math.round(u === 1 ? C * 100 : u === 100 ? C : C / 255 * 100), $ = g.target;
       requestAnimationFrame(() => {
         $.style.setProperty("--slider-pct", `${v}%`);
         const T = $.closest(".sub-button-google-slider");
         if (T) {
           T.style.setProperty("--slider-pct", `${v}%`), T.setAttribute("title", `Level: ${v}%`);
-          const u = T.querySelector(".sub-slider-pct");
-          u && (u.textContent = `${v}%`);
+          const _ = T.querySelector(".sub-slider-pct");
+          _ && (_.textContent = `${v}%`);
         }
       }), this._throttledCall("sub_slider_" + s, () => {
-        this.hass?.callService(S, x, { entity_id: s, [p]: C });
+        this.hass?.callService(S, x, { entity_id: s, [f]: C });
       });
     }}
                  @change=${(g) => {
       g.stopPropagation();
       const C = parseFloat(g.target.value);
-      this.hass?.callService(S, x, { entity_id: s, [p]: C });
+      this.hass?.callService(S, x, { entity_id: s, [f]: C });
     }} />
           <span class="sub-slider-pct">${k}%</span>
         </div>
@@ -3253,156 +3296,156 @@ class W extends le {
           <ha-icon icon="mdi:alert-circle-outline"></ha-icon>
         </div>
       `;
-    const f = c ? this._isEntityActive(c) : !1;
-    let _ = this._resolveColor(i);
-    !_ && f && c?.attributes?.rgb_color && Array.isArray(c.attributes.rgb_color) && (_ = `rgb(${c.attributes.rgb_color.join(",")})`);
-    const b = _ ? `color: ${_};` : "", x = r ? "" : "no-bg", S = h && c ? this._getInfoContent("state", c) : "";
+    const p = c ? this._isEntityActive(c) : !1;
+    let u = this._resolveColor(i);
+    !u && p && c?.attributes?.rgb_color && Array.isArray(c.attributes.rgb_color) && (u = `rgb(${c.attributes.rgb_color.join(",")})`);
+    const b = u ? `color: ${u};` : "", x = r ? "" : "no-bg", S = h && c ? this._getInfoContent("state", c) : "";
     if (l === "slider" || l === "google_slider")
       return this._renderSubSlider(e, c, l, b, x);
     if (l === "color_picker")
       return this._renderSubColorPicker(e, c, b, x, o, S);
-    let p = t, k = f, g = o || "", C = "", v = o, $;
+    let f = t, k = p, g = o || "", C = "", v = o, $;
     if (n && n.action && n.action !== "none" && n.action !== "default")
-      p || (p = c?.attributes?.icon || "mdi:checkbox-blank-circle");
+      f || (f = c?.attributes?.icon || "mdi:checkbox-blank-circle");
     else
       switch (l) {
         case "play_pause": {
-          const u = c?.state === "playing";
-          k = u, p || (p = u ? "mdi:pause" : "mdi:play"), g = u ? "Pause" : "Play", $ = () => {
+          const _ = c?.state === "playing";
+          k = _, f || (f = _ ? "mdi:pause" : "mdi:play"), g = _ ? "Pause" : "Play", $ = () => {
             this.hass?.callService("media_player", "media_play_pause", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "next": {
-          p || (p = "mdi:skip-next"), g = "Next Track", $ = () => {
+          f || (f = "mdi:skip-next"), g = "Next Track", $ = () => {
             this.hass?.callService("media_player", "media_next_track", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "previous": {
-          p || (p = "mdi:skip-previous"), g = "Previous Track", $ = () => {
+          f || (f = "mdi:skip-previous"), g = "Previous Track", $ = () => {
             this.hass?.callService("media_player", "media_previous_track", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "open_close": {
-          const u = c?.state === "open" || c?.state === "on" || c?.attributes?.current_position !== void 0 && c.attributes.current_position > 0;
-          k = u, p || (p = u ? "mdi:window-shutter-open" : "mdi:window-shutter"), g = u ? "Close" : "Open", $ = () => {
+          const _ = c?.state === "open" || c?.state === "on" || c?.attributes?.current_position !== void 0 && c.attributes.current_position > 0;
+          k = _, f || (f = _ ? "mdi:window-shutter-open" : "mdi:window-shutter"), g = _ ? "Close" : "Open", $ = () => {
             this.hass?.callService("cover", "toggle", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "stop": {
-          p || (p = "mdi:stop"), g = "Stop", $ = () => {
+          f || (f = "mdi:stop"), g = "Stop", $ = () => {
             this.hass?.callService("cover", "stop_cover", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "lock_unlock": {
-          const u = c?.state === "locked";
-          k = !u, p || (p = u ? "mdi:lock" : "mdi:lock-open-variant"), g = u ? "Unlock" : "Lock", $ = () => {
-            this.hass?.callService("lock", u ? "unlock" : "lock", { entity_id: e || this.config.entity });
+          const _ = c?.state === "locked";
+          k = !_, f || (f = _ ? "mdi:lock" : "mdi:lock-open-variant"), g = _ ? "Unlock" : "Lock", $ = () => {
+            this.hass?.callService("lock", _ ? "unlock" : "lock", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "fan_speed": {
-          const u = c?.attributes?.percentage ?? 0;
-          p || (p = "mdi:fan"), f && (C = "anim-spin"), g = `Speed: ${u}%`, v || (v = u > 0 ? `${u}%` : "Off"), $ = () => {
+          const _ = c?.attributes?.percentage ?? 0;
+          f || (f = "mdi:fan"), p && (C = "anim-spin"), g = `Speed: ${_}%`, v || (v = _ > 0 ? `${_}%` : "Off"), $ = () => {
             let m = 33;
-            u >= 90 ? m = 0 : u >= 60 ? m = 100 : u >= 30 && (m = 66), this.hass?.callService("fan", "set_percentage", { entity_id: e || this.config.entity, percentage: m });
+            _ >= 90 ? m = 0 : _ >= 60 ? m = 100 : _ >= 30 && (m = 66), this.hass?.callService("fan", "set_percentage", { entity_id: e || this.config.entity, percentage: m });
           };
           break;
         }
         case "clean": {
-          const u = c?.state === "cleaning";
-          k = u, p || (p = u ? "mdi:pause" : "mdi:robot-vacuum"), g = u ? "Pause Vacuum" : "Start Vacuum", $ = () => {
-            this.hass?.callService("vacuum", u ? "pause" : "start", { entity_id: e || this.config.entity });
+          const _ = c?.state === "cleaning";
+          k = _, f || (f = _ ? "mdi:pause" : "mdi:robot-vacuum"), g = _ ? "Pause Vacuum" : "Start Vacuum", $ = () => {
+            this.hass?.callService("vacuum", _ ? "pause" : "start", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "dock": {
-          p || (p = "mdi:home-import-outline"), g = "Return to Dock", $ = () => {
+          f || (f = "mdi:home-import-outline"), g = "Return to Dock", $ = () => {
             this.hass?.callService("vacuum", "return_to_base", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "locate": {
-          p || (p = "mdi:map-marker-question-outline"), g = "Locate", $ = () => {
+          f || (f = "mdi:map-marker-question-outline"), g = "Locate", $ = () => {
             this.hass?.callService("vacuum", "locate", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "hvac_mode": {
-          const u = c?.state || "off", m = c?.attributes?.hvac_modes || ["off", "heat", "cool", "auto"], A = m[(m.indexOf(u) + 1) % m.length] || "auto";
-          k = u !== "off", p || (u === "heat" ? p = "mdi:fire" : u === "cool" ? p = "mdi:snowflake" : u === "dry" ? p = "mdi:water-percent" : u === "fan_only" ? p = "mdi:fan" : u === "auto" ? p = "mdi:thermostat-auto" : p = "mdi:power"), g = `Mode: ${u} -> Next: ${A}`, v || (v = u), $ = () => {
+          const _ = c?.state || "off", m = c?.attributes?.hvac_modes || ["off", "heat", "cool", "auto"], A = m[(m.indexOf(_) + 1) % m.length] || "auto";
+          k = _ !== "off", f || (_ === "heat" ? f = "mdi:fire" : _ === "cool" ? f = "mdi:snowflake" : _ === "dry" ? f = "mdi:water-percent" : _ === "fan_only" ? f = "mdi:fan" : _ === "auto" ? f = "mdi:thermostat-auto" : f = "mdi:power"), g = `Mode: ${_} -> Next: ${A}`, v || (v = _), $ = () => {
             this.hass?.callService("climate", "set_hvac_mode", { entity_id: e || this.config.entity, hvac_mode: A });
           };
           break;
         }
         case "light_effect": {
-          const u = c?.attributes?.effect_list || [], m = c?.attributes?.effect || "None", A = u.length > 0 ? u[(u.indexOf(m) + 1) % u.length] || u[0] : "None";
-          p || (p = "mdi:creation"), k = m !== "None" && m !== "off" && f, g = `Effect: ${m} -> Next: ${A}`, v || (v = m !== "None" ? m : "Effect"), $ = () => {
-            u.length > 0 && this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, effect: A });
+          const _ = c?.attributes?.effect_list || [], m = c?.attributes?.effect || "None", A = _.length > 0 ? _[(_.indexOf(m) + 1) % _.length] || _[0] : "None";
+          f || (f = "mdi:creation"), k = m !== "None" && m !== "off" && p, g = `Effect: ${m} -> Next: ${A}`, v || (v = m !== "None" ? m : "Effect"), $ = () => {
+            _.length > 0 && this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, effect: A });
           };
           break;
         }
         case "brightness": {
-          const u = c?.attributes?.brightness, m = u !== void 0 ? Math.round(u / 255 * 100) : 0;
-          p || (p = "mdi:brightness-6"), g = `Brightness: ${m}%`, v || (v = `${m}%`), $ = () => {
+          const _ = c?.attributes?.brightness, m = _ !== void 0 ? Math.round(_ / 255 * 100) : 0;
+          f || (f = "mdi:brightness-6"), g = `Brightness: ${m}%`, v || (v = `${m}%`), $ = () => {
             let A = 255;
             m >= 85 ? A = 76 : m >= 50 ? A = 255 : A = 178, this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, brightness: A });
           };
           break;
         }
         case "garage_toggle": {
-          const u = c?.state === "open" || c?.state === "opening";
-          k = u, p || (p = u ? "mdi:garage-open" : "mdi:garage"), g = u ? "Close Garage" : "Open Garage", $ = () => {
+          const _ = c?.state === "open" || c?.state === "opening";
+          k = _, f || (f = _ ? "mdi:garage-open" : "mdi:garage"), g = _ ? "Close Garage" : "Open Garage", $ = () => {
             this.hass?.callService("cover", "toggle", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "dim_up": {
-          const u = c?.attributes?.brightness ?? 0, m = Math.min(255, u + 26);
-          p || (p = "mdi:brightness-5"), g = "Brightness +10%", v || (v = "+10%"), $ = () => {
+          const _ = c?.attributes?.brightness ?? 0, m = Math.min(255, _ + 26);
+          f || (f = "mdi:brightness-5"), g = "Brightness +10%", v || (v = "+10%"), $ = () => {
             this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, brightness: m });
           };
           break;
         }
         case "dim_down": {
-          const u = c?.attributes?.brightness ?? 0, m = Math.max(1, u - 26);
-          p || (p = "mdi:brightness-4"), g = "Brightness -10%", v || (v = "-10%"), $ = () => {
+          const _ = c?.attributes?.brightness ?? 0, m = Math.max(1, _ - 26);
+          f || (f = "mdi:brightness-4"), g = "Brightness -10%", v || (v = "-10%"), $ = () => {
             this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, brightness: m });
           };
           break;
         }
         case "temp_warm": {
-          p || (p = "mdi:weather-sunny"), g = "Warm White (2700K)", v || (v = "2700K"), $ = () => {
+          f || (f = "mdi:weather-sunny"), g = "Warm White (2700K)", v || (v = "2700K"), $ = () => {
             this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, color_temp_kelvin: 2700 });
           };
           break;
         }
         case "temp_cool": {
-          p || (p = "mdi:weather-sunset-up"), g = "Cool Daylight (6000K)", v || (v = "6000K"), $ = () => {
+          f || (f = "mdi:weather-sunset-up"), g = "Cool Daylight (6000K)", v || (v = "6000K"), $ = () => {
             this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, color_temp_kelvin: 6e3 });
           };
           break;
         }
         case "color_temp": {
-          p || (p = "mdi:palette-swatch-outline"), g = "Color Temperature", v || (v = "Temp"), $ = () => {
-            const u = c?.attributes?.color_temp_kelvin || 3e3;
+          f || (f = "mdi:palette-swatch-outline"), g = "Color Temperature", v || (v = "Temp"), $ = () => {
+            const _ = c?.attributes?.color_temp_kelvin || 3e3;
             let m = 2700;
-            u < 3300 ? m = 4e3 : u < 5e3 ? m = 6e3 : m = 2700, this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, color_temp_kelvin: m });
+            _ < 3300 ? m = 4e3 : _ < 5e3 ? m = 6e3 : m = 2700, this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, color_temp_kelvin: m });
           };
           break;
         }
         case "button":
         default: {
-          p || (p = c?.attributes?.icon || "mdi:checkbox-blank-circle"), g = o || (c?.attributes?.friendly_name ?? "");
+          f || (f = c?.attributes?.icon || "mdi:checkbox-blank-circle"), g = o || (c?.attributes?.friendly_name ?? "");
           break;
         }
       }
-    const T = (u) => {
-      this._handleSubTap(u, e, n, d, $);
+    const T = (_) => {
+      this._handleSubTap(_, e, n, d, $);
     };
     return w`
       <div 
@@ -3410,19 +3453,19 @@ class W extends le {
         data-ag-sub
         class="sub-button ${x}" 
         ?active=${k} 
-        style="${b} ${k && _ && r ? `background: ${_}; color: #fff;` : ""}"
+        style="${b} ${k && u && r ? `background: ${u}; color: #fff;` : ""}"
         title="${g}"
         @click=${T}
-        @dblclick=${(u) => u.stopPropagation()}
-        @keydown=${(u) => {
-      (u.key === "Enter" || u.key === " ") && (u.preventDefault(), u.stopPropagation(), T(u));
+        @dblclick=${(_) => _.stopPropagation()}
+        @keydown=${(_) => {
+      (_.key === "Enter" || _.key === " ") && (_.preventDefault(), _.stopPropagation(), T(_));
     }}
-        @pointerdown=${(u) => this._handleSubPointerDown(u, e, s)}
+        @pointerdown=${(_) => this._handleSubPointerDown(_, e, s)}
         @pointermove=${this._handleSubPointerMove}
         @pointerup=${this._handleSubPointerUp}
         @pointercancel=${this._handleSubPointerCancel}
-        @contextmenu=${(u) => this._handleSubContextMenu(u, e, s)}>
-        <ha-icon .icon=${p} class="${C}"></ha-icon>
+        @contextmenu=${(_) => this._handleSubContextMenu(_, e, s)}>
+        <ha-icon .icon=${f} class="${C}"></ha-icon>
         ${v ? w`<span class="sub-button-label">${v}</span>` : y}
         ${S ? w`<span class="sub-button-state">${S}</span>` : y}
       </div>
@@ -3462,7 +3505,7 @@ class W extends le {
         cursor: pointer;
         box-sizing: border-box;
         overflow: hidden;
-        contain: layout style;
+        contain: layout paint style;
         -webkit-tap-highlight-color: transparent;
         -webkit-touch-callout: none;
         user-select: none;
@@ -3482,7 +3525,11 @@ class W extends le {
         transform: translate3d(0, 0, 0);
         backface-visibility: hidden;
       }
-      .sub-button:hover, .sub-button:active {
+      .sub-button:hover {
+        will-change: transform, background, color;
+      }
+      .sub-button:active {
+        transform: scale(0.93) translate3d(0, 0, 0) !important;
         will-change: transform, background, color;
       }
       .warning-card {
