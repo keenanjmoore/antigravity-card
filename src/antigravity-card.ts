@@ -20,7 +20,7 @@ declare global {
   }
 }
 
-export const CARD_VERSION = "127";
+export const CARD_VERSION = "128";
 console.info(
   `%c 🚀 ANTIGRAVITY-CARD (NO-ICON) %c v${CARD_VERSION} `,
   'color: white; background: #6200ea; font-weight: 700; padding: 2px 6px; border-radius: 4px 0 0 4px;',
@@ -131,6 +131,11 @@ function kelvinToRgb(kelvin: number): [number, number, number] {
   KELVIN_CACHE.set(clampedKelvin, result);
   return result;
 }
+
+// Pre-populate standard temperature presets for instant O(1) lookup
+[2000, 2200, 2500, 2700, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500].forEach(k => {
+  kelvinToRgb(k);
+});
 
 function rgbToHex(rgb: any): string {
   if (!Array.isArray(rgb) || rgb.length < 3) return "#ffffff";
@@ -1157,8 +1162,14 @@ export class AntigravityCard extends LitElement {
           }
         }
 
-        // 2. Binary Sensor Smart State Elapsed ("for xx min/hour/sec")
+        // 2. Binary Sensor Smart State Elapsed ("for xx min/hour/sec") & Safety Alerts
         if (domain === 'binary_sensor') {
+          const devClass = stateObj.attributes?.device_class;
+          if (devClass === 'tamper' && stateObj.state === 'on') return '⚠️ Tamper Detected';
+          if (devClass === 'problem' && stateObj.state === 'on') return '⚠️ Problem Detected';
+          if (devClass === 'smoke' && stateObj.state === 'on') return '🔥 Smoke Detected!';
+          if (devClass === 'gas' && stateObj.state === 'on') return '⚠️ Gas Detected!';
+          if (devClass === 'moisture' && stateObj.state === 'on') return '💧 Moisture Detected!';
           return this._formatForDuration(stateObj.last_changed);
         }
 
@@ -1178,7 +1189,25 @@ export class AntigravityCard extends LitElement {
           return temp !== undefined ? `${temp}${uom} • ${cond}` : cond;
         }
 
-        // 5. Alarm Control Panel Status
+        // 5. Climate Domain Preset & Action Status
+        if (domain === 'climate') {
+          const mode = stateObj.state || '';
+          const preset = stateObj.attributes?.preset_mode;
+          const act = stateObj.attributes?.hvac_action;
+          const extras = [act, preset].filter(Boolean).join(' • ');
+          return extras ? `${mode} (${extras})` : mode;
+        }
+
+        // 6. Fan Domain Status with Speed, Oscillation & Direction
+        if (domain === 'fan') {
+          const pct = stateObj.attributes?.percentage;
+          const osc = stateObj.attributes?.oscillating ? '∿ Oscillating' : '';
+          const dir = stateObj.attributes?.direction === 'reverse' ? '⟲ Reverse' : '';
+          const details = [pct !== undefined ? `${pct}%` : stateObj.state, osc, dir].filter(Boolean).join(' • ');
+          return details;
+        }
+
+        // 7. Alarm Control Panel Status
         if (domain === 'alarm_control_panel') {
           const aState = stateObj.state;
           if (aState === 'armed_home') return '🛡️ Armed Home';
@@ -1188,7 +1217,7 @@ export class AntigravityCard extends LitElement {
           if (aState === 'pending') return '⏳ Arming Pending';
         }
 
-        // 6. Lock Domain Status
+        // 8. Lock Domain Status
         if (domain === 'lock') {
           if (stateObj.state === 'locked') return 'Locked';
           if (stateObj.state === 'unlocked') return 'Unlocked';
@@ -1197,7 +1226,7 @@ export class AntigravityCard extends LitElement {
           if (stateObj.state === 'unlocking') return 'Unlocking...';
         }
 
-        // 7. Light Domain Status with Color Temp / Mode
+        // 9. Light Domain Status with Color Temp / Mode
         if (domain === 'light' && stateObj.state === 'on') {
           const b = stateObj.attributes?.brightness;
           const pct = b !== undefined ? Math.round((b / 255) * 100) : 100;
@@ -2441,24 +2470,31 @@ export class AntigravityCard extends LitElement {
       `;
     }
 
-    const hue = this._getLiveHue(stateObj);
-    const pct = Math.max(0, Math.min(100, Math.round((hue / 360) * 100)));
-    const isGoogle = pickerType === 'google' || this.config.slider_style === 'google';
-    const defaultSliderHeight = isGoogle ? 42 : 12;
-    const defaultSliderRadius = isGoogle ? 21 : 6;
-    const csHeight = this.config.color_slider_height !== undefined ? this.config.color_slider_height : (this.config.slider_height ?? defaultSliderHeight);
-    const csRadius = this.config.color_slider_border_radius !== undefined ? this.config.color_slider_border_radius : (this.config.slider_border_radius ?? defaultSliderRadius);
-    const currentColor = `hsl(${hue}, 100%, 50%)`;
+    const isGoogle = this.config.slider_style === 'google';
+    const csHeight = this.config.color_slider_height !== undefined ? this.config.color_slider_height : (this.config.slider_height ?? (isGoogle ? 42 : 36));
+    const csRadius = this.config.color_slider_border_radius !== undefined ? this.config.color_slider_border_radius : (this.config.slider_border_radius ?? (isGoogle ? 21 : 8));
+    const currentHue = this._getLiveHue(stateObj);
+    const currentColor = `hsl(${currentHue}, 100%, 50%)`;
+    const pct = Math.round((currentHue / 360) * 100);
 
-    const badgeContent = html`
-      <span class="color-chip-badge" style="display: flex; align-items: center; gap: 6px;">
-        <span style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: ${currentColor}; border: 1.5px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.4);"></span>
-        ${hue}°
-      </span>
-    `;
+    let badgeContent: TemplateResult | undefined;
+    if (this.config.color_swatch_presets !== false) {
+      badgeContent = html`
+        <div class="color-swatch-chips">
+          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Red Color" style="background: #f44336;" @click=${(e: Event) => { e.stopPropagation(); this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: [244, 67, 54] }); }} @keydown=${(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: [244, 67, 54] }); } }}></span>
+          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Orange Color" style="background: #ff9800;" @click=${(e: Event) => { e.stopPropagation(); this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: [255, 152, 0] }); }} @keydown=${(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: [255, 152, 0] }); } }}></span>
+          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Yellow Color" style="background: #ffeb3b;" @click=${(e: Event) => { e.stopPropagation(); this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: [255, 235, 59] }); }} @keydown=${(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: [255, 235, 59] }); } }}></span>
+          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Green Color" style="background: #4caf50;" @click=${(e: Event) => { e.stopPropagation(); this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: [76, 175, 80] }); }} @keydown=${(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: [76, 175, 80] }); } }}></span>
+          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Cyan Color" style="background: #00bcd4;" @click=${(e: Event) => { e.stopPropagation(); this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: [0, 188, 212] }); }} @keydown=${(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: [0, 188, 212] }); } }}></span>
+          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Blue Color" style="background: #2196f3;" @click=${(e: Event) => { e.stopPropagation(); this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: [33, 150, 243] }); }} @keydown=${(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: [33, 150, 243] }); } }}></span>
+          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Purple Color" style="background: #9c27b0;" @click=${(e: Event) => { e.stopPropagation(); this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: [156, 39, 176] }); }} @keydown=${(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: [156, 39, 176] }); } }}></span>
+          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Pink Color" style="background: #e91e63;" @click=${(e: Event) => { e.stopPropagation(); this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: [233, 30, 99] }); }} @keydown=${(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: [233, 30, 99] }); } }}></span>
+        </div>
+      `;
+    }
 
     return this._renderGenericSlider(
-      'color_hue', 'Color Hue', 0, 360, 1, hue, pct, 'light', 'turn_on',
+      'color_hue', 'Light Color Hue', 0, 360, 1, currentHue, pct, 'light', 'turn_on',
       (v) => {
         const [r, g, b] = hsToRgb(v, 100);
         return { rgb_color: [r, g, b] };
@@ -2518,7 +2554,8 @@ export class AntigravityCard extends LitElement {
 
   private _renderNumberSlider(stateObj: any) {
     const min = Number(stateObj.attributes.min ?? 0);
-    const max = Number(stateObj.attributes.max ?? 100);
+    let max = Number(stateObj.attributes.max ?? 100);
+    if (min >= max) max = min + 100;
     const step = Number(stateObj.attributes.step ?? 1);
     const numVal = Number(stateObj.state);
     const val = !isNaN(numVal) ? numVal : min;
@@ -2799,7 +2836,20 @@ export class AntigravityCard extends LitElement {
         case 'open_close': {
           const isDoorOpen = stateObj?.state === 'open' || stateObj?.state === 'on' || (stateObj?.attributes?.current_position !== undefined && stateObj.attributes.current_position > 0);
           subIsActive = isDoorOpen;
-          if (!subIcon) subIcon = isDoorOpen ? 'mdi:window-shutter-open' : 'mdi:window-shutter';
+          const devClass = stateObj?.attributes?.device_class;
+          if (!subIcon) {
+            if (devClass === 'garage' || devClass === 'garage_door') {
+              subIcon = isDoorOpen ? 'mdi:garage-open' : 'mdi:garage';
+            } else if (devClass === 'blind' || devClass === 'shade') {
+              subIcon = isDoorOpen ? 'mdi:blinds-open' : 'mdi:blinds';
+            } else if (devClass === 'curtain') {
+              subIcon = isDoorOpen ? 'mdi:curtains-open' : 'mdi:curtains';
+            } else if (devClass === 'damper') {
+              subIcon = isDoorOpen ? 'mdi:circle-slice-8' : 'mdi:circle-outline';
+            } else {
+              subIcon = isDoorOpen ? 'mdi:window-shutter-open' : 'mdi:window-shutter';
+            }
+          }
           subTitle = isDoorOpen ? 'Close' : 'Open';
           defaultAction = () => {
             this.hass?.callService('cover', 'toggle', { entity_id: entityId || this.config.entity });
@@ -2816,9 +2866,11 @@ export class AntigravityCard extends LitElement {
         }
         case 'lock_unlock': {
           const isLocked = stateObj?.state === 'locked';
+          const isJammed = stateObj?.state === 'jammed';
           subIsActive = !isLocked;
-          if (!subIcon) subIcon = isLocked ? 'mdi:lock' : 'mdi:lock-open-variant';
-          subTitle = isLocked ? 'Unlock' : 'Lock';
+          if (isJammed) subAnimClass = 'lock-jammed';
+          if (!subIcon) subIcon = isJammed ? 'mdi:lock-alert' : (isLocked ? 'mdi:lock' : 'mdi:lock-open-variant');
+          subTitle = isJammed ? 'Jammed (Alert!)' : (isLocked ? 'Unlock' : 'Lock');
           defaultAction = () => {
             this.hass?.callService('lock', isLocked ? 'unlock' : 'lock', { entity_id: entityId || this.config.entity });
           };
@@ -2907,11 +2959,16 @@ export class AntigravityCard extends LitElement {
           subTitle = `Brightness: ${pct}%`;
           if (!subLabel) subLabel = `${pct}%`;
           defaultAction = () => {
-            let nextB = 255;
-            if (pct >= 85) nextB = 76;
-            else if (pct >= 50) nextB = 255;
-            else nextB = 178;
-            this.hass?.callService('light', 'turn_on', { entity_id: entityId || this.config.entity, brightness: nextB });
+            let nextPct = 25;
+            if (pct >= 85) nextPct = 0;
+            else if (pct >= 60) nextPct = 100;
+            else if (pct >= 35) nextPct = 75;
+            else if (pct >= 10) nextPct = 50;
+            if (nextPct === 0) {
+              this.hass?.callService('light', 'turn_off', { entity_id: entityId || this.config.entity });
+            } else {
+              this.hass?.callService('light', 'turn_on', { entity_id: entityId || this.config.entity, brightness_pct: nextPct });
+            }
           };
           break;
         }
@@ -2926,25 +2983,53 @@ export class AntigravityCard extends LitElement {
           break;
         }
         case 'dim_up': {
-          const curB = stateObj?.attributes?.brightness ?? 0;
-          const nextB = Math.min(255, curB + 26);
-          if (!subIcon) subIcon = 'mdi:brightness-5';
-          subTitle = 'Brightness +10%';
-          if (!subLabel) subLabel = '+10%';
-          defaultAction = () => {
-            this.hass?.callService('light', 'turn_on', { entity_id: entityId || this.config.entity, brightness: nextB });
-          };
+          const subDomain = (entityId || this.config.entity || '').split('.')[0];
+          if (subDomain === 'number' || subDomain === 'input_number') {
+            const curVal = Number(stateObj?.state) || 0;
+            const stepVal = Number(stateObj?.attributes?.step) || 1;
+            const maxVal = Number(stateObj?.attributes?.max) || 100;
+            const nextVal = Math.min(maxVal, curVal + stepVal);
+            if (!subIcon) subIcon = 'mdi:plus-circle-outline';
+            subTitle = `Value +${stepVal}`;
+            if (!subLabel) subLabel = `+${stepVal}`;
+            defaultAction = () => {
+              this.hass?.callService(subDomain, 'set_value', { entity_id: entityId || this.config.entity, value: nextVal });
+            };
+          } else {
+            const curB = stateObj?.attributes?.brightness ?? 0;
+            const nextB = Math.min(255, curB + 26);
+            if (!subIcon) subIcon = 'mdi:brightness-5';
+            subTitle = 'Brightness +10%';
+            if (!subLabel) subLabel = '+10%';
+            defaultAction = () => {
+              this.hass?.callService('light', 'turn_on', { entity_id: entityId || this.config.entity, brightness: nextB });
+            };
+          }
           break;
         }
         case 'dim_down': {
-          const curB = stateObj?.attributes?.brightness ?? 0;
-          const nextB = Math.max(1, curB - 26);
-          if (!subIcon) subIcon = 'mdi:brightness-4';
-          subTitle = 'Brightness -10%';
-          if (!subLabel) subLabel = '-10%';
-          defaultAction = () => {
-            this.hass?.callService('light', 'turn_on', { entity_id: entityId || this.config.entity, brightness: nextB });
-          };
+          const subDomain = (entityId || this.config.entity || '').split('.')[0];
+          if (subDomain === 'number' || subDomain === 'input_number') {
+            const curVal = Number(stateObj?.state) || 0;
+            const stepVal = Number(stateObj?.attributes?.step) || 1;
+            const minVal = Number(stateObj?.attributes?.min) || 0;
+            const nextVal = Math.max(minVal, curVal - stepVal);
+            if (!subIcon) subIcon = 'mdi:minus-circle-outline';
+            subTitle = `Value -${stepVal}`;
+            if (!subLabel) subLabel = `-${stepVal}`;
+            defaultAction = () => {
+              this.hass?.callService(subDomain, 'set_value', { entity_id: entityId || this.config.entity, value: nextVal });
+            };
+          } else {
+            const curB = stateObj?.attributes?.brightness ?? 0;
+            const nextB = Math.max(1, curB - 26);
+            if (!subIcon) subIcon = 'mdi:brightness-4';
+            subTitle = 'Brightness -10%';
+            if (!subLabel) subLabel = '-10%';
+            defaultAction = () => {
+              this.hass?.callService('light', 'turn_on', { entity_id: entityId || this.config.entity, brightness: nextB });
+            };
+          }
           break;
         }
         case 'temp_warm': {
@@ -3210,23 +3295,24 @@ export class AntigravityCard extends LitElement {
 
       /* --- COLLAPSIBLE CONTROLS ACCORDION --- */
       .collapsible-wrapper {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-rows: 1fr;
         gap: var(--ag-features-margin, 4px);
-        max-height: 500px;
         opacity: 1;
         overflow: hidden;
-        /* Removed static will-change to avoid permanent compositor layer promotion.
-           The browser's transition engine handles this efficiently. */
         transform: translateZ(0);
-        transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, margin 0.35s ease;
+        transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, margin 0.35s ease;
       }
       .collapsible-wrapper.collapsed {
-        max-height: 0 !important;
+        grid-template-rows: 0fr !important;
         opacity: 0 !important;
         margin: 0 !important;
         padding: 0 !important;
         pointer-events: none !important;
+      }
+      .collapsible-wrapper > div {
+        overflow: hidden;
+        min-height: 0;
       }
       .inline-sliders.collapsed {
         display: none !important;
@@ -3886,6 +3972,77 @@ export class AntigravityCard extends LitElement {
         pointer-events: none;
         z-index: 3;
         text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      }
+
+      /* --- DECAY / COOLDOWN SLIDER --- */
+      .decay-slider-container {
+        width: 100%;
+        margin-bottom: 2px;
+      }
+      .decay-slider-track {
+        width: 100%;
+        position: relative;
+        background: rgba(140, 140, 140, 0.15);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+      }
+      .decay-slider-fill {
+        height: 100%;
+        width: var(--decay-pct, 0%);
+        transition: width 0.3s linear;
+      }
+      .decay-slider-badge {
+        position: absolute;
+        right: 8px;
+        font-size: 10px;
+        font-weight: 700;
+        color: #ffffff;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+        pointer-events: none;
+      }
+
+      /* --- COLOR TEMP & SWATCH CHIP PRESS ANIMATIONS --- */
+      .color-temp-chips, .color-swatch-chips {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .temp-chip, .color-swatch-chip {
+        cursor: pointer;
+        outline: none;
+        transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), filter 0.15s ease;
+      }
+      .temp-chip {
+        font-size: 10px;
+        padding: 2px 6px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+        font-weight: 600;
+      }
+      .temp-chip:hover, .color-swatch-chip:hover {
+        filter: brightness(1.2);
+      }
+      .temp-chip:active, .color-swatch-chip:active {
+        transform: scale(0.9) translate3d(0, 0, 0) !important;
+      }
+      .color-swatch-chip {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 1.5px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      }
+
+      /* --- LOCK JAMMED SHAKE ANIMATION --- */
+      .lock-jammed {
+        animation: ag-shake 0.5s ease-in-out infinite;
+      }
+      @keyframes ag-shake {
+        0%, 100% { transform: translateX(0); }
+        20%, 60% { transform: translateX(-3px); }
+        40%, 80% { transform: translateX(3px); }
       }
     `;
   }
