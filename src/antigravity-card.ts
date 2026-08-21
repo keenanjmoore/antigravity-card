@@ -20,7 +20,7 @@ declare global {
   }
 }
 
-export const CARD_VERSION = "125";
+export const CARD_VERSION = "126";
 console.info(
   `%c 🚀 ANTIGRAVITY-CARD (NO-ICON) %c v${CARD_VERSION} `,
   'color: white; background: #6200ea; font-weight: 700; padding: 2px 6px; border-radius: 4px 0 0 4px;',
@@ -64,7 +64,8 @@ const ACTIVE_STATES = new Set([
   'triggered', 'pending', 'arming',
   'cleaning', 'returning',
   'above_horizon',
-  'active', 'electric', 'gas', 'heat_pump'
+  'active', 'electric', 'gas', 'heat_pump',
+  'running', 'detected', 'motion', 'occupied', 'present'
 ]);
 
 // ---- HA Named Colors (Module-Level Constant for Performance) ----
@@ -215,23 +216,20 @@ function parseColorToRgb(str: string | undefined): [number, number, number] | nu
 }
 
 function _parseColorToRgbInternal(clean: string): [number, number, number] | null {
-
-  // Hex format
-  if (clean.startsWith('#')) {
+  // Fast Bitwise Hex parsing
+  if (clean.charCodeAt(0) === 35 /* '#' */) {
     const hex = clean.slice(1);
-    if (hex.length === 3) {
-      return [
-        parseInt(hex[0] + hex[0], 16),
-        parseInt(hex[1] + hex[1], 16),
-        parseInt(hex[2] + hex[2], 16),
-      ];
+    if (hex.length === 6) {
+      const num = parseInt(hex, 16);
+      if (!isNaN(num)) {
+        return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
+      }
     }
-    if (hex.length >= 6) {
-      return [
-        parseInt(hex.slice(0, 2), 16),
-        parseInt(hex.slice(2, 4), 16),
-        parseInt(hex.slice(4, 6), 16),
-      ];
+    if (hex.length === 3) {
+      const r = parseInt(hex[0] + hex[0], 16);
+      const g = parseInt(hex[1] + hex[1], 16);
+      const b = parseInt(hex[2] + hex[2], 16);
+      return [r, g, b];
     }
   }
 
@@ -762,7 +760,7 @@ export class AntigravityCard extends LitElement {
           this.removeAttribute('offscreen');
         }
       }
-    }, { threshold: 0 });
+    }, { rootMargin: '200px 0px', threshold: 0 });
     this._intersectionObserver.observe(this);
   }
 
@@ -1091,21 +1089,21 @@ export class AntigravityCard extends LitElement {
     const date = this._parseDate(dateInput);
     if (!date) return "";
 
-    const diffSec = Math.max(0, Math.round(((nowMs ?? Date.now()) - date.getTime()) / 1000));
-    if (diffSec < 5) return compact ? "< 5 sec" : "just now";
-    if (diffSec < 60) return compact ? `${diffSec} sec` : `${diffSec} seconds ago`;
-    const diffMin = Math.round(diffSec / 60);
-    if (diffMin < 60) return compact ? `${diffMin} ${diffMin === 1 ? 'min' : 'mins'}` : `${diffMin} ${diffMin === 1 ? 'minute' : 'minutes'} ago`;
-    const diffHours = Math.round(diffMin / 60);
-    if (diffHours < 24) return `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'}${compact ? '' : ' ago'}`;
-    const diffDays = Math.round(diffHours / 24);
-    if (diffDays < 7) return `${diffDays} ${diffDays === 1 ? 'day' : 'days'}${compact ? '' : ' ago'}`;
-    const diffWeeks = Math.round(diffDays / 7);
-    if (diffWeeks < 4) return `${diffWeeks} ${diffWeeks === 1 ? 'week' : 'weeks'}${compact ? '' : ' ago'}`;
-    const diffMonths = Math.round(diffDays / 30);
-    if (diffMonths < 12) return `${diffMonths} ${diffMonths === 1 ? 'month' : 'months'}${compact ? '' : ' ago'}`;
-    const diffYears = Math.round(diffDays / 365);
-    return `${diffYears} ${diffYears === 1 ? 'year' : 'years'}${compact ? '' : ' ago'}`;
+    const diffSec = Math.max(0, (((nowMs ?? Date.now()) - date.getTime()) / 1000) | 0);
+    if (diffSec < 5) return compact ? "< 5s" : "just now";
+    if (diffSec < 60) return compact ? `${diffSec}s` : `${diffSec} seconds ago`;
+    const diffMin = (diffSec / 60) | 0;
+    if (diffMin < 60) return compact ? `${diffMin}m` : `${diffMin} ${diffMin === 1 ? 'minute' : 'minutes'} ago`;
+    const diffHours = (diffMin / 60) | 0;
+    if (diffHours < 24) return `${diffHours}h${compact ? '' : ' ago'}`;
+    const diffDays = (diffHours / 24) | 0;
+    if (diffDays < 7) return `${diffDays}d${compact ? '' : ' ago'}`;
+    const diffWeeks = (diffDays / 7) | 0;
+    if (diffWeeks < 4) return `${diffWeeks}w${compact ? '' : ' ago'}`;
+    const diffMonths = (diffDays / 30) | 0;
+    if (diffMonths < 12) return `${diffMonths}mo${compact ? '' : ' ago'}`;
+    const diffYears = (diffDays / 365) | 0;
+    return `${diffYears}y${compact ? '' : ' ago'}`;
   }
 
   private _formatRelativeTime(dateInput: string | Date | number | undefined, nowMs?: number): string {
@@ -1398,11 +1396,17 @@ export class AntigravityCard extends LitElement {
     }
   }
 
+  private _activePointerId: number | null = null;
+
   private _handlePointerDown(e: PointerEvent) {
     if (this._isSubElement(e)) return;
     if (Date.now() - this._mountTime < 1500 || Date.now() - LAST_APP_RESUME_TIME < 800) {
       return;
     }
+    if (this._activePointerId !== null && this._activePointerId !== e.pointerId) {
+      return; // Ignore secondary simultaneous multi-touch touches on the same card
+    }
+    this._activePointerId = e.pointerId;
     this._pointerDownReceived = true;
     this._pointerDownTime = Date.now();
     this._held = false;
@@ -1431,6 +1435,7 @@ export class AntigravityCard extends LitElement {
   @eventOptions({ passive: true })
   private _handlePointerMove(e: PointerEvent) {
     if (this._isSubElement(e)) return;
+    if (this._activePointerId !== null && this._activePointerId !== e.pointerId) return;
     const dx = e.clientX - this._startX;
     const dy = e.clientY - this._startY;
     const dist = Math.hypot(dx, dy);
@@ -1446,16 +1451,18 @@ export class AntigravityCard extends LitElement {
     }
   }
 
-  private _handlePointerUp(e: Event) {
+  private _handlePointerUp(e: PointerEvent | Event) {
     if (this._isSubElement(e)) return;
+    this._activePointerId = null;
     if (this._holdTimer) {
       clearTimeout(this._holdTimer);
       this._holdTimer = null;
     }
   }
 
-  private _handlePointerCancel(e: Event) {
+  private _handlePointerCancel(e: PointerEvent | Event) {
     if (this._isSubElement(e)) return;
+    this._activePointerId = null;
     this._canceled = true;
     this._moved = true;
     this._pointerDownReceived = false;
@@ -2286,16 +2293,28 @@ export class AntigravityCard extends LitElement {
           ${COLOR_TEMP_PRESETS.map(p => {
             const [r, g, b] = p.rgb;
             const isSelected = Math.abs(val - p.k) < 200;
+            const applyPreset = () => {
+              safeForwardHaptic('light', this.config.haptic_feedback !== false);
+              this.hass?.callService('light', 'turn_on', { entity_id: this.config.entity, [paramKey]: p.k });
+            };
             return html`
               <button 
                 type="button"
+                role="button"
+                aria-label="Color temperature preset: ${p.label}"
                 tabindex="0"
                 class="temp-preset-chip"
                 style="flex: 1; min-width: 48px; height: ${ctHeight}px; border-radius: ${ctRadius}px; border: ${isSelected ? '2px solid #ffffff' : '1px solid rgba(150, 150, 150, 0.3)'}; background: rgba(${r}, ${g}, ${b}, 0.2); color: var(--primary-text-color); font-size: 11px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; box-shadow: ${isSelected ? '0 0 8px rgba(' + r + ',' + g + ',' + b + ', 0.8)' : 'none'};"
+                @keydown=${(e: KeyboardEvent) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    applyPreset();
+                  }
+                }}
                 @click=${(e: Event) => {
                   e.stopPropagation();
-                  safeForwardHaptic('light', this.config.haptic_feedback !== false);
-                  this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, [paramKey]: p.k });
+                  applyPreset();
                 }}>
                 <span style="width: 8px; height: 8px; border-radius: 50%; background: rgb(${r}, ${g}, ${b}); display: inline-block;"></span>
                 ${p.label}
@@ -2337,17 +2356,29 @@ export class AntigravityCard extends LitElement {
         <div class="swatches-palette-row" style="display: flex; gap: 6px; overflow-x: auto; padding: 2px 0; ${csMarginOffsets}">
           ${COLOR_SWATCHES.map(s => {
             const isSelected = curHex === s.hex.toLowerCase();
+            const applySwatch = () => {
+              safeForwardHaptic('light', this.config.haptic_feedback !== false);
+              this.hass?.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: s.rgb });
+            };
             return html`
               <button 
                 type="button"
+                role="button"
+                aria-label="Color preset: ${s.label}"
                 tabindex="0"
                 class="color-swatch-chip"
                 title="${s.label}"
                 style="flex: 1; min-width: 28px; height: ${csHeight}px; border-radius: ${csRadius}px; background: ${s.hex}; border: ${isSelected ? '2px solid #ffffff' : '1px solid rgba(0,0,0,0.2)'}; cursor: pointer; box-shadow: ${isSelected ? '0 0 10px ' + s.hex : '0 1px 3px rgba(0,0,0,0.3)'}; transition: transform 0.15s ease;"
+                @keydown=${(e: KeyboardEvent) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    applySwatch();
+                  }
+                }}
                 @click=${(e: Event) => {
                   e.stopPropagation();
-                  safeForwardHaptic('light', this.config.haptic_feedback !== false);
-                  this.hass.callService('light', 'turn_on', { entity_id: this.config.entity, rgb_color: s.rgb });
+                  applySwatch();
                 }}>
               </button>
             `;
@@ -2450,12 +2481,14 @@ export class AntigravityCard extends LitElement {
     const min = stateObj.attributes.min_temp ?? defaultMin;
     const max = stateObj.attributes.max_temp ?? defaultMax;
     const step = stateObj.attributes.target_temp_step ?? stateObj.attributes.target_temperature_step ?? (isFahrenheit ? 1 : 0.5);
+    const hasDualTargets = stateObj.attributes.target_temp_low !== undefined && stateObj.attributes.target_temp_high !== undefined;
     const val = stateObj.attributes.temperature ?? stateObj.attributes.target_temp_low ?? stateObj.attributes.target_temp_high ?? min;
     const range = max - min;
     const pct = range > 0 ? Math.max(0, Math.min(100, Math.round(((val - min) / range) * 100))) : 0;
     return this._renderGenericSlider(
       'climate', 'Temperature', min, max, step, val, pct, 'climate', 'set_temperature',
-      (v) => ({ temperature: v }), (v) => range > 0 ? Math.round(((v - min) / range) * 100) : 0,
+      (v) => (hasDualTargets ? { target_temp_low: v, target_temp_high: Math.min(max, v + (isFahrenheit ? 4 : 2)) } : { temperature: v }),
+      (v) => range > 0 ? Math.round(((v - min) / range) * 100) : 0,
       (v) => `${v}${unit}`,
       'climate-temp',
       '', `${val}${unit}`
@@ -2968,13 +3001,16 @@ export class AntigravityCard extends LitElement {
         --ha-card-border-width: 0;
         position: relative;
         outline: none;
+        transform: translate3d(0, 0, 0);
+        backface-visibility: hidden;
       }
       ha-card:focus-visible {
         outline: 2px solid var(--primary-color);
         outline-offset: 2px;
       }
       .sub-button {
-        transform: translateZ(0);
+        transform: translate3d(0, 0, 0);
+        backface-visibility: hidden;
       }
       .sub-button:hover, .sub-button:active {
         will-change: transform, background, color;
