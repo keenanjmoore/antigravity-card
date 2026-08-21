@@ -135,6 +135,14 @@ export interface AntigravityCardConfig extends LovelaceCardConfig {
   content_alignment?: 'flex-start' | 'center' | 'flex-end' | 'space-between' | 'space-around';
   text_offset_x?: number;
   text_offset_y?: number;
+  primary_text_offset_x?: number;
+  primary_text_offset_y?: number;
+  primary_text_start_offset?: number;
+  primary_text_end_offset?: number;
+  secondary_text_offset_x?: number;
+  secondary_text_offset_y?: number;
+  secondary_text_start_offset?: number;
+  secondary_text_end_offset?: number;
   features_offset_x?: number;
   features_offset_y?: number;
 
@@ -323,6 +331,14 @@ export const DEFAULT_CARD_CONFIG: Record<string, any> = {
   sub_button_alignment: "flex-end",
   text_offset_x: 0,
   text_offset_y: 0,
+  primary_text_offset_x: 0,
+  primary_text_offset_y: 0,
+  primary_text_start_offset: 0,
+  primary_text_end_offset: 0,
+  secondary_text_offset_x: 0,
+  secondary_text_offset_y: 0,
+  secondary_text_start_offset: 0,
+  secondary_text_end_offset: 0,
   features_offset_x: 0,
   features_offset_y: 0,
   // Box shadow and blur
