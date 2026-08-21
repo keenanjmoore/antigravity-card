@@ -20,7 +20,7 @@ declare global {
   }
 }
 
-export const CARD_VERSION = "123";
+export const CARD_VERSION = "124";
 console.info(
   `%c 🚀 ANTIGRAVITY-CARD (NO-ICON) %c v${CARD_VERSION} `,
   'color: white; background: #6200ea; font-weight: 700; padding: 2px 6px; border-radius: 4px 0 0 4px;',
@@ -41,6 +41,18 @@ window.customCards.push({
   preview: true,
   description: "Default Antigravity Card (No Icon)"
 });
+
+// ---- Global Resume & Gesture Debounce State ----
+let LAST_APP_RESUME_TIME = Date.now();
+if (typeof window !== 'undefined' && !(window as any).__AG_RESUME_LISTENER_ATTACHED__) {
+  (window as any).__AG_RESUME_LISTENER_ATTACHED__ = true;
+  window.addEventListener('focus', () => { LAST_APP_RESUME_TIME = Date.now(); }, { passive: true });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      LAST_APP_RESUME_TIME = Date.now();
+    }
+  }, { passive: true });
+}
 
 // ---- Active States (Domain-Aware) ----
 const ACTIVE_STATES = new Set([
@@ -1170,8 +1182,8 @@ export class AntigravityCard extends LitElement {
 
   private _mountTime = 0;
   private _pointerDownReceived = false;
+  private _pointerDownTime = 0;
   private _canceled = false;
-  // _pointerDownTime: reserved for future gesture duration checks
 
   private _dispatchAction(actionType: 'tap' | 'hold' | 'double_tap', actionConfigOverride?: any, entityOverride?: string) {
     const entity = entityOverride || this.config.entity;
@@ -1256,12 +1268,12 @@ export class AntigravityCard extends LitElement {
   private _handleTap(e: Event) {
     e.stopPropagation();
     if (this._isSubElement(e)) return;
-    if (Date.now() - this._mountTime < 1500) {
-      // Ignore startup ghost clicks from Android home screen app launch
+    if (Date.now() - this._mountTime < 1500 || Date.now() - LAST_APP_RESUME_TIME < 800) {
+      // Ignore startup / app resume ghost clicks from Android swipe-up gestures
       this._pointerDownReceived = false;
       return;
     }
-    if (!this._pointerDownReceived && e instanceof MouseEvent && (e as any).pointerType !== 'mouse') {
+    if (!this._pointerDownReceived) {
       return;
     }
     this._pointerDownReceived = false;
@@ -1272,6 +1284,9 @@ export class AntigravityCard extends LitElement {
     }
     if (this._held) {
       this._held = false;
+      return;
+    }
+    if (this._pointerDownTime && (Date.now() - this._pointerDownTime > 600)) {
       return;
     }
 
@@ -1310,7 +1325,7 @@ export class AntigravityCard extends LitElement {
 
   private _handleKeyDown(e: KeyboardEvent) {
     if (this._isSubElement(e)) return;
-    if (Date.now() - this._mountTime < 1500) return;
+    if (Date.now() - this._mountTime < 1500 || Date.now() - LAST_APP_RESUME_TIME < 800) return;
 
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -1322,7 +1337,7 @@ export class AntigravityCard extends LitElement {
   private _handleContextMenu(e: Event) {
     e.preventDefault();
     e.stopPropagation();
-    if (Date.now() - this._mountTime < 1500 || this._held) return;
+    if (Date.now() - this._mountTime < 1500 || Date.now() - LAST_APP_RESUME_TIME < 800 || this._held) return;
     safeForwardHaptic('medium', this.config.haptic_feedback !== false);
     const trigger = this.config.collapse_controls_trigger || 'hold';
     if (trigger === 'hold' && this._hasCollapsible()) {
@@ -1334,10 +1349,11 @@ export class AntigravityCard extends LitElement {
 
   private _handlePointerDown(e: PointerEvent) {
     if (this._isSubElement(e)) return;
-    if (Date.now() - this._mountTime < 1500) {
+    if (Date.now() - this._mountTime < 1500 || Date.now() - LAST_APP_RESUME_TIME < 800) {
       return;
     }
     this._pointerDownReceived = true;
+    this._pointerDownTime = Date.now();
     this._held = false;
     this._moved = false;
     this._canceled = false;
@@ -1366,6 +1382,7 @@ export class AntigravityCard extends LitElement {
     if (this._isSubElement(e)) return;
     if (Math.hypot(e.clientX - this._startX, e.clientY - this._startY) > 8) {
       this._moved = true;
+      this._pointerDownReceived = false;
       if (this._holdTimer) {
         clearTimeout(this._holdTimer);
         this._holdTimer = null;
@@ -1385,6 +1402,7 @@ export class AntigravityCard extends LitElement {
     if (this._isSubElement(e)) return;
     this._canceled = true;
     this._moved = true;
+    this._pointerDownReceived = false;
     if (this._holdTimer) {
       clearTimeout(this._holdTimer);
       this._holdTimer = null;
