@@ -20,7 +20,7 @@ declare global {
   }
 }
 
-export const CARD_VERSION = "110";
+export const CARD_VERSION = "111";
 console.info(
   `%c 🚀 ANTIGRAVITY-CARD (NO-ICON) %c v${CARD_VERSION} `,
   'color: white; background: #6200ea; font-weight: 700; padding: 2px 6px; border-radius: 4px 0 0 4px;',
@@ -166,11 +166,27 @@ const COLOR_TEMP_PRESETS = [
   { k: 6500, label: '6500K', rgb: kelvinToRgb(6500) },
 ];
 
-// ---- Color Parsing & Linear Interpolation for Multi-Stage Fading ----
+// ---- Color Parsing Cache (O(1) Lookup, LRU Eviction) ----
+const PARSE_COLOR_CACHE = new Map<string, [number, number, number] | null>();
+const PARSE_COLOR_CACHE_MAX = 200;
+
 function parseColorToRgb(str: string | undefined): [number, number, number] | null {
   if (!str) return null;
   const clean = str.trim().toLowerCase();
   if (!clean) return null;
+  const cached = PARSE_COLOR_CACHE.get(clean);
+  if (cached !== undefined) return cached;
+
+  const result = _parseColorToRgbInternal(clean);
+  if (PARSE_COLOR_CACHE.size >= PARSE_COLOR_CACHE_MAX) {
+    const firstKey = PARSE_COLOR_CACHE.keys().next().value;
+    if (firstKey) PARSE_COLOR_CACHE.delete(firstKey);
+  }
+  PARSE_COLOR_CACHE.set(clean, result);
+  return result;
+}
+
+function _parseColorToRgbInternal(clean: string): [number, number, number] | null {
 
   // Hex format
   if (clean.startsWith('#')) {
@@ -692,6 +708,7 @@ export class AntigravityCard extends LitElement {
       clearTimeout(this._subHoldTimer);
       this._subHoldTimer = null;
     }
+    this._sliderStateMap.clear();
   }
 
   protected firstUpdated(changedProperties: PropertyValues) {
@@ -909,6 +926,10 @@ export class AntigravityCard extends LitElement {
       return isNaN(d.getTime()) ? null : d;
     }
     if (typeof dateInput === 'string') {
+      const parsedMs = Date.parse(dateInput);
+      if (!isNaN(parsedMs)) {
+        return new Date(parsedMs);
+      }
       let clean = dateInput.trim();
       if (clean.includes(' ') && !clean.includes('T')) {
         clean = clean.replace(' ', 'T');
@@ -1509,7 +1530,13 @@ export class AntigravityCard extends LitElement {
     const value = isNaN(rawVal) ? 0 : rawVal;
     const pct = pctCalc ? pctCalc(value) : value;
     
+    if (state) {
+      if (state.rafPending) return;
+      state.rafPending = true;
+    }
+
     requestAnimationFrame(() => {
+      if (state) state.rafPending = false;
       if (state?.isScrolling) {
         this._revertSlider(input, state);
         return;
