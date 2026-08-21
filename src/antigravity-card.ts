@@ -1,5 +1,5 @@
 import { LitElement, html, css, PropertyValues, nothing, TemplateResult } from 'lit';
-import { customElement, property, state, eventOptions } from 'lit/decorators.js';
+import { property, state, eventOptions } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import type { HomeAssistant } from 'custom-card-helpers';
 import { handleAction, forwardHaptic } from 'custom-card-helpers';
@@ -20,7 +20,7 @@ declare global {
   }
 }
 
-export const CARD_VERSION = "105";
+export const CARD_VERSION = "109";
 console.info(
   `%c 🚀 ANTIGRAVITY-CARD (NO-ICON) %c v${CARD_VERSION} `,
   'color: white; background: #6200ea; font-weight: 700; padding: 2px 6px; border-radius: 4px 0 0 4px;',
@@ -299,7 +299,6 @@ function resolveColorCached(colorStr: string | undefined): string {
   return res;
 }
 
-@customElement('antigravity-card')
 export class AntigravityCard extends LitElement {
   private _previousLiveRgb: [number, number, number] | null = null;
   private _currentLiveRgb: [number, number, number] | null = null;
@@ -1792,7 +1791,9 @@ export class AntigravityCard extends LitElement {
     // Typography
     const primaryWeight = this.config.font_weight_primary ?? 'bold';
     let overrideTextVars = '';
-    if (this.config.text_color_primary) {
+    if (this.config.text_color_mode === 'active_accent' && isActive) {
+      overrideTextVars += `--primary-text-color: ${activeColor}; `;
+    } else if (this.config.text_color_primary) {
       overrideTextVars += `--primary-text-color: ${this._resolveColor(this.config.text_color_primary)}; `;
     } else if (colorTypeIsCard && isActive) {
       overrideTextVars += `--primary-text-color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.4); `;
@@ -1955,8 +1956,9 @@ export class AntigravityCard extends LitElement {
     badgeContent?: TemplateResult | string
   ) {
     const isGoogle = this.config.slider_style === 'google';
-    const showPercent = isGoogle || this.config.show_slider_percent === true;
+    const showPercent = (isGoogle && this.config.show_slider_percent !== false) || this.config.show_slider_percent === true;
     const defaultBadgeText = labelFormatter ? labelFormatter(val, pct) : `${pct}%`;
+    const finalBadge = badgeContent !== undefined ? badgeContent : defaultBadgeText;
 
     const effectiveStep = (this.config.slider_stepped_movement === false) ? 'any' : step;
 
@@ -1998,7 +2000,7 @@ export class AntigravityCard extends LitElement {
                @pointercancel=${this._onSliderPointerCancel}
                @input=${(e: Event) => this._sliderInput(e, key, domain, service, dataFn, pctCalc, labelFormatter)}
                @change=${(e: Event) => this._sliderChange(e, domain, service, dataFn)} />
-        ${showPercent ? html`<span class="slider-percent-badge">${badgeContent || defaultBadgeText}</span>` : nothing}
+        ${showPercent && finalBadge ? html`<span class="slider-percent-badge">${finalBadge}</span>` : nothing}
       </div>
     `;
   }
@@ -2006,13 +2008,14 @@ export class AntigravityCard extends LitElement {
   // --- MULTI-DOMAIN SLIDER RENDERERS ---
 
   private _renderLightSlider(stateObj: any) {
+    const isActive = this._isEntityActive(stateObj);
     const val = stateObj.attributes.brightness ?? 0;
     const pct = Math.max(0, Math.min(100, Math.round((val / 255) * 100)));
     const liveColor = this._getLightLiveColor(stateObj);
     const sliderColorStyle = (this.config.use_light_color !== false || !this.config.slider_color) && liveColor ? `--slider-color: ${liveColor};` : '';
     return this._renderGenericSlider(
       'brightness', 'Brightness', 0, 255, 1, val, pct, 'light', 'turn_on',
-      (v) => ({ brightness: v }), (v) => Math.round((v / 255) * 100), (_, p) => (p <= 1 ? 'Off' : `${p}%`),
+      (v) => ({ brightness: v }), (v) => Math.round((v / 255) * 100), (_, p) => (!isActive || p <= 0 ? '' : `${p}%`),
       '', sliderColorStyle
     );
   }
@@ -2703,6 +2706,9 @@ export class AntigravityCard extends LitElement {
         user-select: none;
         -webkit-user-select: none;
         -webkit-touch-callout: none;
+      }
+      :host([hidden]) {
+        display: none !important;
       }
       input[type="range"] {
         touch-action: pan-y;
@@ -3543,4 +3549,8 @@ export class AntigravityCard extends LitElement {
 if (!customElements.get('antigravity-no-icon-card')) {
   customElements.define('antigravity-no-icon-card', AntigravityCard);
 }
+if (!customElements.get('antigravity-card')) {
+  customElements.define('antigravity-card', AntigravityCard);
+}
+
 
