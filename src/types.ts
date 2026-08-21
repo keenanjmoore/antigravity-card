@@ -259,8 +259,8 @@ export const DEFAULT_CARD_CONFIG: Record<string, any> = {
   // Theme and presets
   theme_preset: "default",
   color_type: "card",
-  active_color: "#d60000",
-  inactive_color: "#03b500",
+  active_color: "",
+  inactive_color: "",
   // Slider styling & layer isolation
   use_light_color: false,
   haptic_feedback: true,
