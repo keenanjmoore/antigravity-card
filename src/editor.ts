@@ -412,7 +412,6 @@ function cssToRgbArray(color: any): number[] | undefined {
 }
 
 @customElement('antigravity-card-editor')
-@customElement('antigravity-no-icon-card-editor')
 export class AntigravityCardEditor extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
   @state() private _config!: AntigravityCardConfig;
@@ -909,3 +908,8 @@ export class AntigravityCardEditor extends LitElement {
     `;
   }
 }
+
+if (!customElements.get('antigravity-no-icon-card-editor')) {
+  customElements.define('antigravity-no-icon-card-editor', AntigravityCardEditor);
+}
+

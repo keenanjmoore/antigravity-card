@@ -20,7 +20,7 @@ declare global {
   }
 }
 
-export const CARD_VERSION = "104";
+export const CARD_VERSION = "105";
 console.info(
   `%c 🚀 ANTIGRAVITY-CARD (NO-ICON) %c v${CARD_VERSION} `,
   'color: white; background: #6200ea; font-weight: 700; padding: 2px 6px; border-radius: 4px 0 0 4px;',
@@ -300,7 +300,6 @@ function resolveColorCached(colorStr: string | undefined): string {
 }
 
 @customElement('antigravity-card')
-@customElement('antigravity-no-icon-card')
 export class AntigravityCard extends LitElement {
   private _previousLiveRgb: [number, number, number] | null = null;
   private _currentLiveRgb: [number, number, number] | null = null;
@@ -325,7 +324,7 @@ export class AntigravityCard extends LitElement {
   }
 
   public static async getConfigElement() {
-    return document.createElement("antigravity-card-editor");
+    return document.createElement("antigravity-no-icon-card-editor");
   }
 
   @property({ attribute: false }) public hass!: HomeAssistant;
@@ -3540,3 +3539,8 @@ export class AntigravityCard extends LitElement {
     `;
   }
 }
+
+if (!customElements.get('antigravity-no-icon-card')) {
+  customElements.define('antigravity-no-icon-card', AntigravityCard);
+}
+
