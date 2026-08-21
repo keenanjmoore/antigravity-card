@@ -749,7 +749,7 @@ const pt = {
   slider_start_offset: 0,
   slider_end_offset: 0,
   slider_spacing: 8,
-  show_slider: !0,
+  show_slider: !1,
   hide_slider_when_off: !0,
   // Light color and temperature sliders
   show_color_temp: !1,
@@ -781,16 +781,16 @@ const pt = {
   layout: "default",
   card_layout: "normal",
   primary_info: "name",
-  secondary_info: "state",
+  secondary_info: "last-updated",
   font_size_primary: 14,
-  font_size_secondary: 12,
-  font_weight_primary: "bold",
-  text_color_primary: "",
-  text_color_secondary: "",
+  font_size_secondary: 15,
+  font_weight_primary: "800",
+  text_color_primary: "rgb(255, 255, 255)",
+  text_color_secondary: "rgb(255, 255, 255)",
   text_scrolling_primary: "none",
   text_scrolling_secondary: "none",
   text_scrolling_speed: 10,
-  text_transform_primary: "none",
+  text_transform_primary: "capitalize",
   text_transform_secondary: "capitalize",
   letter_spacing: -0.5,
   line_height: 1.1,
@@ -801,22 +801,22 @@ const pt = {
   sub_button_spacing: -4,
   sub_button_padding: 6,
   sub_button_alignment: "flex-end",
-  text_offset_x: 0,
-  text_offset_y: 0,
+  text_offset_x: -28,
+  text_offset_y: 2,
   primary_text_offset_x: 0,
   primary_text_offset_y: 0,
-  primary_text_start_offset: 0,
-  primary_text_end_offset: 0,
+  primary_text_start_offset: 8,
+  primary_text_end_offset: 250,
   secondary_text_offset_x: 0,
   secondary_text_offset_y: 0,
-  secondary_text_start_offset: 0,
-  secondary_text_end_offset: 0,
+  secondary_text_start_offset: 8,
+  secondary_text_end_offset: 250,
   features_offset_x: 0,
   features_offset_y: 0,
   // Box shadow and blur
   box_shadow: "none",
   backdrop_blur: 0,
-  transition_duration: 300,
+  transition_duration: 1e4,
   // Actions
   tap_action: { action: "toggle" },
   hold_action: { action: "more-info" },
@@ -843,6 +843,7 @@ const pt = {
   sub_button_2_tap_action: { action: "toggle" },
   sub_button_2_hold_action: { action: "none" },
   sub_button_2_double_tap_action: { action: "none" },
+  // Sub-button 3 defaults
   sub_button_3_entity: "",
   sub_button_3_type: "button",
   sub_button_3_icon: "",
@@ -853,6 +854,7 @@ const pt = {
   sub_button_3_tap_action: { action: "toggle" },
   sub_button_3_hold_action: { action: "none" },
   sub_button_3_double_tap_action: { action: "none" },
+  // Sub-button 4 defaults
   sub_button_4_entity: "",
   sub_button_4_type: "button",
   sub_button_4_icon: "",
@@ -863,7 +865,27 @@ const pt = {
   sub_button_4_tap_action: { action: "toggle" },
   sub_button_4_hold_action: { action: "none" },
   sub_button_4_double_tap_action: { action: "none" },
-  // Miscellaneous
+  // Miscellaneous & Icons
+  show_icon: !1,
+  icon: "",
+  icon_type: "none",
+  icon_color: "var(--primary-color)",
+  icon_shape: "circle",
+  icon_animation: "none",
+  icon_opacity: 100,
+  icon_rotate: 0,
+  icon_size: 16,
+  icon_margin: -11,
+  icon_container_size: 20,
+  active_pulse: !1,
+  text_alignment: "left",
+  content_alignment: "flex-start",
+  icon_offset_x: 0,
+  icon_offset_y: 0,
+  badge_icon: "",
+  badge_color: "",
+  badge_size: 16,
+  badge_offset: -2,
   custom_styles: ""
 };
 var Ui = Object.defineProperty, $t = (n, e, t, i) => {
@@ -1706,7 +1728,7 @@ var ji = Object.defineProperty, er = Object.getOwnPropertyDescriptor, ce = (n, e
     (a = n[o]) && (r = (i ? a(e, t, r) : a(r)) || r);
   return i && r && ji(e, t, r), r;
 };
-const tr = "114";
+const tr = "115";
 console.info(
   `%c 🚀 ANTIGRAVITY-CARD (NO-ICON) %c v${tr} `,
   "color: white; background: #6200ea; font-weight: 700; padding: 2px 6px; border-radius: 4px 0 0 4px;",
@@ -2112,8 +2134,8 @@ class V extends ae {
       _e ? `margin-left: ${_e}px !important;` : "",
       he ? `margin-right: ${he}px !important;` : ""
     ].filter(Boolean).join(" "), this._textBoxWidth = this.config.text_box_width ? `max-width: ${this.config.text_box_width}; width: ${this.config.text_box_width};` : "width: 100%; max-width: 100%;";
-    const Fe = this.config.text_transform_primary && this.config.text_transform_primary !== "none" ? `text-transform: ${this.config.text_transform_primary};` : "", pe = `text-transform: ${this.config.text_transform_secondary ?? "capitalize"};`, Ge = this.config.letter_spacing ? `letter-spacing: ${this.config.letter_spacing}px;` : "", re = this.config.line_height ? `line-height: ${this.config.line_height};` : "", M = this.config.font_weight_primary ?? "bold";
-    this._primaryTextStyle = `font-size: ${this.config.font_size_primary ?? 14}px; font-weight: ${M}; ${Fe} ${Ge} ${re}`, this._secondaryTextStyle = `font-size: ${this.config.font_size_secondary ?? 12}px; ${pe} ${Ge} ${re}`;
+    const Fe = this.config.text_transform_primary && this.config.text_transform_primary !== "none" ? `text-transform: ${this.config.text_transform_primary};` : "", pe = `text-transform: ${this.config.text_transform_secondary ?? "capitalize"};`, Ge = this.config.letter_spacing ? `letter-spacing: ${this.config.letter_spacing}px;` : "", re = this.config.line_height ? `line-height: ${this.config.line_height};` : "", M = this.config.font_weight_primary ?? "800";
+    this._primaryTextStyle = `font-size: ${this.config.font_size_primary ?? 14}px; font-weight: ${M}; ${Fe} ${Ge} ${re}`, this._secondaryTextStyle = `font-size: ${this.config.font_size_secondary ?? 15}px; ${pe} ${Ge} ${re}`;
     const ge = this.config.entity, wt = [];
     for (let P = 1; P <= 4; P++) {
       const fe = this.config[`sub_button_${P}_entity`], be = this.config[`sub_button_${P}_icon`], We = this.config[`sub_button_${P}_name`], st = this.config[`sub_button_${P}_tap_action`], me = this.config[`sub_button_${P}_hold_action`], jt = this.config[`sub_button_${P}_double_tap_action`], lt = this.config[`sub_button_${P}_type`], ei = this.config[`sub_button_${P}_color`], ti = this.config[`sub_button_${P}_show_background`], St = this.config[`sub_button_${P}_show_state`];
