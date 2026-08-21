@@ -268,7 +268,7 @@ export const DEFAULT_CARD_CONFIG: Record<string, any> = {
   slider_stepped_movement: false,
   tap_slider_to_toggle: false,
   slider_style: "circle",
-  full_slider_opacity: 27,
+  full_slider_opacity: 100,
   show_slider_percent: false,
   slider_color: "",
   slider_track_color: "",
