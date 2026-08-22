@@ -5,6 +5,8 @@
 
 import { html, nothing, TemplateResult } from 'lit';
 
+const STOP_PROPAGATION = (e: Event) => e.stopPropagation();
+
 export interface SubButtonResolution {
   icon?: string;
   title: string;
@@ -828,7 +830,7 @@ export class SubButtonController {
         style="${colorStyle} ${dynamicBgStyle}"
         title="${subTitle}"
         @click=${clickHandler}
-        @dblclick=${(e: Event) => e.stopPropagation()}
+        @dblclick=${STOP_PROPAGATION}
         @keydown=${(e: KeyboardEvent) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
@@ -837,9 +839,9 @@ export class SubButtonController {
           }
         }}
         @pointerdown=${(e: PointerEvent) => callbacks?.onPointerDown(e, entityId, holdAction)}
-        @pointermove=${(e: PointerEvent) => callbacks?.onPointerMove(e)}
-        @pointerup=${(e: Event) => callbacks?.onPointerUp(e)}
-        @pointercancel=${(e: Event) => callbacks?.onPointerCancel(e)}
+        @pointermove=${callbacks?.onPointerMove}
+        @pointerup=${callbacks?.onPointerUp}
+        @pointercancel=${callbacks?.onPointerCancel}
         @contextmenu=${(e: Event) => callbacks?.onContextMenu(e, entityId, holdAction)}>
         <ha-icon .icon=${subIcon} class="${subAnimClass}"></ha-icon>
         ${subLabel ? html`<span class="sub-button-label">${subLabel}</span>` : nothing}

@@ -7,6 +7,7 @@ import type { HomeAssistant } from 'custom-card-helpers';
 import { handleAction } from 'custom-card-helpers';
 import { NON_TOGGLEABLE_DOMAINS, TAP_THRESHOLD_MS, HOLD_THRESHOLD_MS, TAP_SLOP_PX } from '../constants';
 import { safeForwardHaptic } from '../color-converter';
+import { EntityController } from './entity-controller';
 
 let LAST_APP_RESUME_TIME = 0;
 if (typeof document !== 'undefined') {
@@ -59,7 +60,7 @@ export class InteractionController {
   ) {
     if (!hass) return;
     const entity = entityOverride || config.entity;
-    const domain = entity ? entity.split('.')[0] : '';
+    const domain = EntityController.getDomain(entity);
     const isNonToggleable = NON_TOGGLEABLE_DOMAINS.has(domain);
 
     let actionConfig = actionConfigOverride;
@@ -120,7 +121,9 @@ export class InteractionController {
     }
 
     if (actionConfig.action === 'call-service' && actionConfig.service) {
-      const [sDomain, sName] = actionConfig.service.split('.', 2);
+      const dot = actionConfig.service.indexOf('.');
+      const sDomain = dot === -1 ? 'homeassistant' : actionConfig.service.slice(0, dot);
+      const sName = dot === -1 ? actionConfig.service : actionConfig.service.slice(dot + 1);
       hass.callService(sDomain, sName, actionConfig.data || actionConfig.service_data || {}, actionConfig.target);
       return;
     }
