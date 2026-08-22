@@ -1130,4 +1130,30 @@ if (!customElements.get('antigravity-card')) {
   customElements.define('antigravity-card', AntigravityCard);
 }
 
+// Register on Home Assistant Card Picker
+declare global {
+  interface Window {
+    customCards?: any[];
+  }
+}
+window.customCards = window.customCards || [];
+if (!window.customCards.some((c: any) => c.type === 'antigravity-card')) {
+  window.customCards.push({
+    type: 'antigravity-card',
+    name: 'Antigravity Card',
+    preview: true,
+    description: 'Advanced glassmorphic slider card with multi-domain controls, GPU acceleration, and zero-allocation rendering.',
+    documentationURL: 'https://github.com/keenanjmoore/antigravity-card',
+  });
+}
+if (!window.customCards.some((c: any) => c.type === 'antigravity-no-icon-card')) {
+  window.customCards.push({
+    type: 'antigravity-no-icon-card',
+    name: 'Antigravity Card (No Icon)',
+    preview: true,
+    description: 'Streamlined no-icon Antigravity slider card optimized for ultra-clean accordion headers and stacks.',
+    documentationURL: 'https://github.com/keenanjmoore/antigravity-card',
+  });
+}
+
 

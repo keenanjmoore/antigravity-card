@@ -5653,6 +5653,21 @@ at([
 ], ve.prototype, "_collapsed");
 customElements.get("antigravity-no-icon-card") || customElements.define("antigravity-no-icon-card", ve);
 customElements.get("antigravity-card") || customElements.define("antigravity-card", ve);
+window.customCards = window.customCards || [];
+window.customCards.some((l) => l.type === "antigravity-card") || window.customCards.push({
+  type: "antigravity-card",
+  name: "Antigravity Card",
+  preview: !0,
+  description: "Advanced glassmorphic slider card with multi-domain controls, GPU acceleration, and zero-allocation rendering.",
+  documentationURL: "https://github.com/keenanjmoore/antigravity-card"
+});
+window.customCards.some((l) => l.type === "antigravity-no-icon-card") || window.customCards.push({
+  type: "antigravity-no-icon-card",
+  name: "Antigravity Card (No Icon)",
+  preview: !0,
+  description: "Streamlined no-icon Antigravity slider card optimized for ultra-clean accordion headers and stacks.",
+  documentationURL: "https://github.com/keenanjmoore/antigravity-card"
+});
 export {
   ve as AntigravityCard,
   yo as CARD_VERSION
