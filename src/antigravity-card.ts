@@ -1091,7 +1091,7 @@ export class AntigravityCard extends LitElement {
       liveStateText = this._getInfoContent('state', stateObj);
     }
 
-    const domain = (entityId || this.config.entity || '').split('.')[0];
+    const domain = EntityController.getDomain(entityId || this.config.entity);
     if (subType === 'color_picker' && (domain === 'light' || (!entityId && this.config.entity?.startsWith('light.')))) {
       return this._renderSubColorPicker(entityId, stateObj, colorStyle, bgClass, label, liveStateText);
     }

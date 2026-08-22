@@ -924,21 +924,21 @@ const Xt = (c, e, t) => {
     const i = e.card_padding_vertical ?? e.card_padding ?? 0, o = e.card_padding_horizontal ?? e.card_padding ?? 15, a = e.card_padding_top ?? i, s = e.card_padding_bottom ?? i, d = e.card_padding_left ?? o, h = e.card_padding_right ?? o, u = e.card_margin ?? -1, n = e.card_margin_vertical ?? u, p = e.card_margin_horizontal ?? u, b = e.card_margin_top ?? n, v = e.card_margin_bottom ?? n, f = e.card_margin_left ?? p, m = e.card_margin_right ?? p;
     let l = "";
     (b !== void 0 || v !== void 0 || f !== void 0 || m !== void 0) && (l = `margin: ${b ?? 0}px ${m ?? 0}px ${v ?? 0}px ${f ?? 0}px;`);
-    const _ = e.border_radius ?? 12, g = e.slider_style === "google", y = e.slider_style === "full", $ = g ? 42 : y ? 40 : 12, x = e.slider_height !== void 0 ? e.slider_height : $, A = g ? 21 : y ? 0 : x / 2, k = e.slider_border_radius !== void 0 ? e.slider_border_radius : A, T = e.card_border_width ?? (e.card_border_color ? 1 : 0), E = e.card_border_style ?? "solid", L = T > 0 ? `border: ${T}px ${E} ${e.card_border_color || "var(--divider-color, rgba(150, 150, 150, 0.2))"};` : "", M = e.card_width ? `width: ${e.card_width};` : "", C = e.card_max_width ? `max-width: ${e.card_max_width};` : "", ee = e.card_height ? `height: ${e.card_height};` : "", K = e.card_min_height !== void 0 ? `min-height: ${e.card_min_height}px;` : "", X = e.fill_container === !0 ? "height: 100%; width: 100%;" : "", q = e.overflow_hidden !== !1 ? "overflow: hidden;" : "overflow: visible;", te = e.backdrop_blur !== void 0 ? `backdrop-filter: blur(${e.backdrop_blur}px); -webkit-backdrop-filter: blur(${e.backdrop_blur}px);` : "", I = e.card_opacity !== void 0 ? `opacity: ${e.card_opacity / 100};` : "", O = e.transition_duration !== void 0 ? `transition: all ${e.transition_duration}ms ease;` : "", J = e.card_padding_vertical ?? 0, Z = e.card_padding_horizontal ?? 0, ze = 0, Ie = 0, Oe = e.sub_button_padding ?? 6, at = e.sub_button_container_padding ?? 0, nt = e.sub_button_alignment ? `--ag-sub-button-alignment: ${e.sub_button_alignment};` : "--ag-sub-button-alignment: flex-end;", st = e.text_scrolling_speed ? `--ag-scroll-speed: ${e.text_scrolling_speed}s;` : "", N = e.full_slider_opacity !== void 0 ? `--ag-full-slider-opacity: ${e.full_slider_opacity / 100};` : "", ye = e.theme_preset || "default", xe = qt[ye] || qt.default, Fe = xe.generateStyles(e), F = [
+    const _ = e.border_radius ?? 12, g = e.slider_style === "google", y = e.slider_style === "full", $ = g ? 42 : y ? 40 : 12, x = e.slider_height !== void 0 ? e.slider_height : $, A = g ? 21 : y ? 0 : x / 2, k = e.slider_border_radius !== void 0 ? e.slider_border_radius : A, T = e.card_border_width ?? (e.card_border_color ? 1 : 0), E = e.card_border_style ?? "solid", L = T > 0 ? `border: ${T}px ${E} ${e.card_border_color || "var(--divider-color, rgba(150, 150, 150, 0.2))"};` : "", M = e.card_width ? `width: ${e.card_width};` : "", C = e.card_max_width ? `max-width: ${e.card_max_width};` : "", ee = e.card_height ? `height: ${e.card_height};` : "", Y = e.card_min_height !== void 0 ? `min-height: ${e.card_min_height}px;` : "", K = e.fill_container === !0 ? "height: 100%; width: 100%;" : "", X = e.overflow_hidden !== !1 ? "overflow: hidden;" : "overflow: visible;", te = e.backdrop_blur !== void 0 ? `backdrop-filter: blur(${e.backdrop_blur}px); -webkit-backdrop-filter: blur(${e.backdrop_blur}px);` : "", I = e.card_opacity !== void 0 ? `opacity: ${e.card_opacity / 100};` : "", O = e.transition_duration !== void 0 ? `transition: all ${e.transition_duration}ms ease;` : "", q = e.card_padding_vertical ?? 0, J = e.card_padding_horizontal ?? 0, ze = 0, Ie = 0, Oe = e.sub_button_padding ?? 6, at = e.sub_button_container_padding ?? 0, nt = e.sub_button_alignment ? `--ag-sub-button-alignment: ${e.sub_button_alignment};` : "--ag-sub-button-alignment: flex-end;", st = e.text_scrolling_speed ? `--ag-scroll-speed: ${e.text_scrolling_speed}s;` : "", H = e.full_slider_opacity !== void 0 ? `--ag-full-slider-opacity: ${e.full_slider_opacity / 100};` : "", ye = e.theme_preset || "default", xe = qt[ye] || qt.default, Fe = xe.generateStyles(e), U = [
       l,
       `border-radius: ${_}px;`,
       L,
       M,
       C,
       ee,
+      Y,
       K,
       X,
-      q,
       te,
       I,
       O,
       `--ag-card-padding: ${a}px ${h}px ${s}px ${d}px;`,
-      `--ag-text-padding: ${J}px ${Z}px;`,
+      `--ag-text-padding: ${q}px ${J}px;`,
       `--ag-features-padding: ${ze}px ${Ie}px;`,
       `--ag-sub-button-padding: ${Oe}px;`,
       `--ag-sub-button-container-padding: ${at}px;`,
@@ -953,7 +953,7 @@ const Xt = (c, e, t) => {
       `--ag-content-alignment: ${e.content_alignment ?? "flex-start"};`,
       nt,
       st,
-      N,
+      H,
       Fe
     ].filter(Boolean).join(" ").trim(), Se = [
       "ha-card",
@@ -963,7 +963,7 @@ const Xt = (c, e, t) => {
       `hover-${e.hover_effect ?? "glow"}`,
       `slider-style-${e.slider_style ?? "circle"}`,
       e.text_color_mode === "inverse" ? "text-color-mode-inverse" : ""
-    ].filter(Boolean).join(" "), le = Number(e.text_offset_x) || -28, lt = Number(e.text_offset_y) || 2, U = `transform: translate(${le}px, ${lt}px);`, ce = Number(e.primary_text_start_offset ?? e.primary_text_offset_x) || 8, Ue = Number(e.primary_text_end_offset) || 250, Ge = Number(e.primary_text_offset_y) || 0, ct = ce !== 0 || Ge !== 0 ? `transform: translate(${ce}px, ${Ge}px);` : "", dt = ce !== 0 || Ue !== 0 ? `margin-left: ${ce}px; margin-right: ${Ue}px;` : "", ut = `${ct} ${dt}`.trim(), de = Number(e.secondary_text_start_offset ?? e.secondary_text_offset_x) || 8, ue = Number(e.secondary_text_end_offset) || 250, G = Number(e.secondary_text_offset_y) || 0, Q = de !== 0 || G !== 0 ? `transform: translate(${de}px, ${G}px);` : "", _t = de !== 0 || ue !== 0 ? `margin-left: ${de}px; margin-right: ${ue}px;` : "", ht = `${Q} ${_t}`.trim(), we = Number(e.features_offset_x) || 0, $e = Number(e.features_offset_y) || 0, Ve = we !== 0 || $e !== 0 ? `transform: translate(${we}px, ${$e}px);` : "", _e = Number(e.slider_start_offset) || 0, We = Number(e.slider_end_offset) || 0, Ce = [
+    ].filter(Boolean).join(" "), le = Number(e.text_offset_x) || -28, lt = Number(e.text_offset_y) || 2, G = `transform: translate(${le}px, ${lt}px);`, ce = Number(e.primary_text_start_offset ?? e.primary_text_offset_x) || 8, Ue = Number(e.primary_text_end_offset) || 250, Ge = Number(e.primary_text_offset_y) || 0, ct = ce !== 0 || Ge !== 0 ? `transform: translate(${ce}px, ${Ge}px);` : "", dt = ce !== 0 || Ue !== 0 ? `margin-left: ${ce}px; margin-right: ${Ue}px;` : "", ut = `${ct} ${dt}`.trim(), de = Number(e.secondary_text_start_offset ?? e.secondary_text_offset_x) || 8, ue = Number(e.secondary_text_end_offset) || 250, V = Number(e.secondary_text_offset_y) || 0, Z = de !== 0 || V !== 0 ? `transform: translate(${de}px, ${V}px);` : "", _t = de !== 0 || ue !== 0 ? `margin-left: ${de}px; margin-right: ${ue}px;` : "", ht = `${Z} ${_t}`.trim(), we = Number(e.features_offset_x) || 0, $e = Number(e.features_offset_y) || 0, Ve = we !== 0 || $e !== 0 ? `transform: translate(${we}px, ${$e}px);` : "", _e = Number(e.slider_start_offset) || 0, We = Number(e.slider_end_offset) || 0, Ce = [
       _e ? `margin-left: ${_e}px !important;` : "",
       We ? `margin-right: ${We}px !important;` : ""
     ].filter(Boolean).join(" "), ke = Number(e.color_temp_start_offset) || 0, P = Number(e.color_temp_end_offset) || 0, Te = [
@@ -973,9 +973,9 @@ const Xt = (c, e, t) => {
       At ? `margin-left: ${At}px !important;` : "",
       Pt ? `margin-right: ${Pt}px !important;` : ""
     ].filter(Boolean).join(" "), yr = e.text_box_width ? `max-width: ${e.text_box_width}; width: ${e.text_box_width};` : "width: 100%; max-width: 100%;", xr = e.font_family_primary ? `font-family: ${e.font_family_primary};` : "", Sr = `font-size: ${e.font_size_primary ?? 14}px;`, wr = `font-weight: ${e.font_weight_primary ?? "800"};`, $r = `text-transform: ${e.text_transform_primary ?? "capitalize"};`, Et = `letter-spacing: ${e.letter_spacing ?? -0.5}px;`, Lt = `line-height: ${e.line_height ?? 1.1};`, Cr = `${xr} ${Sr} ${wr} ${$r} ${Et} ${Lt}`.trim(), kr = e.font_family_secondary ? `font-family: ${e.font_family_secondary};` : "", Tr = `font-size: ${e.font_size_secondary ?? 15}px;`, Mr = e.font_weight_secondary ? `font-weight: ${e.font_weight_secondary};` : "", Ar = `text-transform: ${e.text_transform_secondary ?? "capitalize"};`, Pr = `${kr} ${Tr} ${Mr} ${Ar} ${Et} ${Lt}`.trim(), Dt = {
-      staticCardStyles: F,
+      staticCardStyles: U,
       staticCardClasses: Se,
-      textOffsetStyle: U,
+      textOffsetStyle: G,
       primaryTextOffsetStyle: ut,
       secondaryTextOffsetStyle: ht,
       featuresOffsetStyle: Ve,
@@ -2723,8 +2723,465 @@ class Jt {
     return Object.freeze(r);
   }
 }
-const V = /* @__PURE__ */ new Map(), Zt = 200, pi = Array.from({ length: 60 }, (c, e) => `${e}s`), mi = Array.from({ length: 60 }, (c, e) => `${e} seconds ago`), fi = Array.from({ length: 60 }, (c, e) => `${e}m`), gi = Array.from({ length: 60 }, (c, e) => e === 1 ? "1 minute ago" : `${e} minutes ago`), bi = Array.from({ length: 24 }, (c, e) => `${e}h`), vi = Array.from({ length: 24 }, (c, e) => `${e}h ago`);
-class Qt {
+const pi = 60, mi = 600, fi = 1800, Zt = 250, Qt = 400, ft = 8, gi = 30, bi = 60, vi = 256, yi = "#ff9800", xi = "#cddc39", Si = "#4caf50", kt = Object.freeze(
+  /* @__PURE__ */ new Set([
+    "on",
+    "open",
+    "opening",
+    "closing",
+    "unlocked",
+    "unlocking",
+    "locking",
+    "playing",
+    "buffering",
+    "active",
+    "running",
+    "cool",
+    "heat",
+    "auto",
+    "heat_cool",
+    "fan_only",
+    "dry",
+    "home",
+    "occupied",
+    "motion",
+    "cleaning",
+    "returning"
+  ])
+), wi = Object.freeze(
+  /* @__PURE__ */ new Set([
+    "binary_sensor",
+    "sensor",
+    "weather",
+    "sun",
+    "device_tracker",
+    "person",
+    "zone",
+    "camera",
+    "image"
+  ])
+), $i = Object.freeze(
+  /* @__PURE__ */ new Set(["hs", "xy", "rgb", "rgbw", "rgbww", "color_temp"])
+), Ci = Object.freeze(
+  /* @__PURE__ */ new Set([
+    "primary",
+    "accent",
+    "red",
+    "pink",
+    "purple",
+    "deep-purple",
+    "indigo",
+    "blue",
+    "light-blue",
+    "cyan",
+    "teal",
+    "green",
+    "light-green",
+    "lime",
+    "yellow",
+    "amber",
+    "orange",
+    "deep-orange",
+    "brown",
+    "grey",
+    "blue-grey"
+  ])
+), ki = /^\d+\s*,\s*\d+\s*,\s*\d+$/, Ti = /^\d+\s*,\s*\d+\s*,\s*\d+\s*,[\d.]+$/;
+var jt, er;
+(function(c) {
+  c.language = "language", c.system = "system", c.comma_decimal = "comma_decimal", c.decimal_comma = "decimal_comma", c.space_comma = "space_comma", c.none = "none";
+})(jt || (jt = {})), function(c) {
+  c.language = "language", c.system = "system", c.am_pm = "12", c.twenty_four = "24";
+}(er || (er = {}));
+function Mi(c) {
+  return c.substr(0, c.indexOf("."));
+}
+var Ai = ["closed", "locked", "off"], Re = function(c, e, t, r) {
+  r = r || {}, t = t ?? {};
+  var i = new Event(e, { bubbles: r.bubbles === void 0 || r.bubbles, cancelable: !!r.cancelable, composed: r.composed === void 0 || r.composed });
+  return i.detail = t, c.dispatchEvent(i), i;
+}, Pe = function(c) {
+  Re(window, "haptic", c);
+}, Pi = function(c, e, t) {
+  t === void 0 && (t = !1), t ? history.replaceState(null, "", e) : history.pushState(null, "", e), Re(window, "location-changed", { replace: t });
+}, Ei = function(c, e, t) {
+  t === void 0 && (t = !0);
+  var r, i = Mi(e), o = i === "group" ? "homeassistant" : i;
+  switch (i) {
+    case "lock":
+      r = t ? "unlock" : "lock";
+      break;
+    case "cover":
+      r = t ? "open_cover" : "close_cover";
+      break;
+    default:
+      r = t ? "turn_on" : "turn_off";
+  }
+  return c.callService(o, r, { entity_id: e });
+}, Li = function(c, e) {
+  var t = Ai.includes(c.states[e].state);
+  return Ei(c, e, t);
+}, Di = function(c, e, t, r) {
+  if (r || (r = { action: "more-info" }), !r.confirmation || r.confirmation.exemptions && r.confirmation.exemptions.some(function(o) {
+    return o.user === e.user.id;
+  }) || (Pe("warning"), confirm(r.confirmation.text || "Are you sure you want to " + r.action + "?"))) switch (r.action) {
+    case "more-info":
+      (t.entity || t.camera_image) && Re(c, "hass-more-info", { entityId: t.entity ? t.entity : t.camera_image });
+      break;
+    case "navigate":
+      r.navigation_path && Pi(0, r.navigation_path);
+      break;
+    case "url":
+      r.url_path && window.open(r.url_path);
+      break;
+    case "toggle":
+      t.entity && (Li(e, t.entity), Pe("success"));
+      break;
+    case "call-service":
+      if (!r.service) return void Pe("failure");
+      var i = r.service.split(".", 2);
+      e.callService(i[0], i[1], r.service_data, r.target), Pe("success");
+      break;
+    case "fire-dom-event":
+      Re(c, "ll-custom", r);
+  }
+}, Ni = function(c, e, t, r) {
+  var i;
+  r === "double_tap" && t.double_tap_action ? i = t.double_tap_action : r === "hold" && t.hold_action ? i = t.hold_action : r === "tap" && t.tap_action && (i = t.tap_action), Di(c, e, t, i);
+};
+const Hi = /rgba?\((\d+)[,\s]+(\d+)[,\s]+(\d+)/i, Ri = /^\[\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\]$/, he = /* @__PURE__ */ new Map(), tr = 250;
+function Bi(c) {
+  if (!c) return "";
+  const e = he.get(c);
+  if (e !== void 0) return e;
+  const t = c.trim();
+  if (!t)
+    return he.set(c, ""), "";
+  let r = t;
+  if (t.startsWith("#") || t.startsWith("rgb") || t.startsWith("hsl") || t.startsWith("var(") ? r = t : ki.test(t) ? r = `rgb(${t})` : Ti.test(t) ? r = `rgba(${t})` : t.toLowerCase() === "state" ? r = "var(--state-icon-color, var(--primary-color))" : Ci.has(t.toLowerCase()) && (r = `var(--${t.toLowerCase()}-color, ${t.toLowerCase()})`), he.size >= tr) {
+    const i = Math.floor(tr / 4), o = he.keys();
+    for (let a = 0; a < i; a++) {
+      const s = o.next().value;
+      s !== void 0 && he.delete(s);
+    }
+  }
+  return he.set(c, r), r;
+}
+class zi {
+  constructor() {
+    this._cache = /* @__PURE__ */ new Map(), this._cacheAccessTimes = /* @__PURE__ */ new Map(), this._kelvinCache = /* @__PURE__ */ new Map(), this._kelvinStringCache = /* @__PURE__ */ new Map();
+  }
+  /**
+   * Parse any CSS color string into an [r, g, b] integer tuple.
+   * Uses a true LRU cache with access timestamp tracking.
+   */
+  parseColorToRgb(e) {
+    if (!e || typeof e != "string") return null;
+    const t = e.trim();
+    if (!t) return null;
+    if (this._cache.has(t))
+      return this._cacheAccessTimes.set(t, Date.now()), this._cache.get(t);
+    let r = null;
+    if (t.charCodeAt(0) === 35) {
+      const o = t.substring(1), a = o.length;
+      if (a === 3 || a === 4) {
+        const s = parseInt(o[0] + o[0], 16), d = parseInt(o[1] + o[1], 16), h = parseInt(o[2] + o[2], 16);
+        !isNaN(s) && !isNaN(d) && !isNaN(h) && (r = [s, d, h]);
+      } else if (a >= 6) {
+        const s = parseInt(o.substring(0, 2), 16), d = parseInt(o.substring(2, 4), 16), h = parseInt(o.substring(4, 6), 16);
+        !isNaN(s) && !isNaN(d) && !isNaN(h) && (r = [s, d, h]);
+      }
+    } else if (t.startsWith("rgb")) {
+      const o = t.match(Hi);
+      if (o) {
+        const a = parseInt(o[1], 10), s = parseInt(o[2], 10), d = parseInt(o[3], 10);
+        !isNaN(a) && !isNaN(s) && !isNaN(d) && (r = [
+          Math.max(0, Math.min(255, a)),
+          Math.max(0, Math.min(255, s)),
+          Math.max(0, Math.min(255, d))
+        ]);
+      }
+    } else if (t.charCodeAt(0) === 91 && t.charCodeAt(t.length - 1) === 93) {
+      const o = t.match(Ri);
+      o && (r = [
+        Math.max(0, Math.min(255, parseInt(o[1], 10))),
+        Math.max(0, Math.min(255, parseInt(o[2], 10))),
+        Math.max(0, Math.min(255, parseInt(o[3], 10)))
+      ]);
+    }
+    if (this._cache.size >= vi) {
+      let o = null, a = 1 / 0;
+      for (const [s, d] of this._cacheAccessTimes)
+        d < a && (a = d, o = s);
+      o !== null && (this._cache.delete(o), this._cacheAccessTimes.delete(o));
+    }
+    const i = Date.now();
+    return this._cache.set(t, r), this._cacheAccessTimes.set(t, i), r;
+  }
+  /**
+   * Convert an [r, g, b] tuple to a 6-character hex string (#rrggbb).
+   */
+  rgbToHex(e) {
+    if (!e || isNaN(e[0]) || isNaN(e[1]) || isNaN(e[2])) return "#000000";
+    const t = Math.max(0, Math.min(255, e[0] | 0)).toString(16).padStart(2, "0"), r = Math.max(0, Math.min(255, e[1] | 0)).toString(16).padStart(2, "0"), i = Math.max(0, Math.min(255, e[2] | 0)).toString(16).padStart(2, "0");
+    return `#${t}${r}${i}`;
+  }
+  /**
+   * Extract Hue angle (0-360) from an RGB tuple with strict NaN and bounds guards.
+   */
+  rgbToHue(e, t, r) {
+    if (isNaN(e) || isNaN(t) || isNaN(r)) return 0;
+    e = Math.max(0, Math.min(255, e)) / 255, t = Math.max(0, Math.min(255, t)) / 255, r = Math.max(0, Math.min(255, r)) / 255;
+    const i = Math.max(e, t, r), o = Math.min(e, t, r), a = i - o;
+    let s = 0;
+    return a === 0 ? 0 : (i === e ? s = (t - r) / a + (t < r ? 6 : 0) : i === t ? s = (r - e) / a + 2 : i === r && (s = (e - t) / a + 4), Math.round(s / 6 * 360) % 360);
+  }
+  /**
+   * Convert HSV values (h: 0-360, s: 0-1, v: 0-1) to an RGB tuple.
+   */
+  hsvToRgb(e, t, r) {
+    e = isNaN(e) ? 0 : Math.max(0, Math.min(360, e)), t = isNaN(t) ? 0 : Math.max(0, Math.min(1, t)), r = isNaN(r) ? 0 : Math.max(0, Math.min(1, r));
+    const i = r * t, o = i * (1 - Math.abs(e / 60 % 2 - 1)), a = r - i;
+    let s = 0, d = 0, h = 0;
+    return e >= 0 && e < 60 ? (s = i, d = o) : e >= 60 && e < 120 ? (s = o, d = i) : e >= 120 && e < 180 ? (d = i, h = o) : e >= 180 && e < 240 ? (d = o, h = i) : e >= 240 && e < 300 ? (s = o, h = i) : e >= 300 && e <= 360 && (s = i, h = o), [
+      Math.round((s + a) * 255),
+      Math.round((d + a) * 255),
+      Math.round((h + a) * 255)
+    ];
+  }
+  /**
+   * Convert Kelvin temperature to an approximation RGB tuple with fast integer LUT caching.
+   */
+  kelvinToRgb(e) {
+    if (isNaN(e)) return [255, 255, 255];
+    const t = Math.round(e / 10) * 10, r = this._kelvinCache.get(t);
+    if (r) return r;
+    const i = Math.max(1e3, Math.min(4e4, t)) / 100;
+    let o = 0, a = 0, s = 0;
+    i <= 66 ? o = 255 : o = Math.min(255, Math.max(0, 329.698727446 * Math.pow(i - 60, -0.1332047592))), i <= 66 ? a = Math.min(255, Math.max(0, 99.4708025861 * Math.log(i) - 161.1195681661)) : a = Math.min(255, Math.max(0, 288.1221695283 * Math.pow(i - 60, -0.0755148492))), i >= 66 ? s = 255 : i <= 19 ? s = 0 : s = Math.min(255, Math.max(0, 138.5177312231 * Math.log(i - 10) - 305.0447927307));
+    const d = [Math.round(o), Math.round(a), Math.round(s)];
+    return this._kelvinCache.size < 500 && (this._kelvinCache.set(t, d), this._kelvinStringCache.set(t, `rgb(${d[0]}, ${d[1]}, ${d[2]})`)), d;
+  }
+  /**
+   * Convert Kelvin temperature directly to cached CSS RGB string.
+   */
+  kelvinToRgbString(e) {
+    if (isNaN(e)) return "rgb(255, 255, 255)";
+    const t = Math.round(e / 10) * 10, r = this._kelvinStringCache.get(t);
+    if (r) return r;
+    const [i, o, a] = this.kelvinToRgb(t), s = `rgb(${i}, ${o}, ${a})`;
+    return this._kelvinStringCache.size < 500 && this._kelvinStringCache.set(t, s), s;
+  }
+  /**
+   * Linear interpolation between two RGB tuples.
+   */
+  lerpRgb(e, t, r) {
+    if (!e || !t) return [0, 0, 0];
+    const i = isNaN(r) ? 0 : Math.max(0, Math.min(1, r));
+    return [
+      Math.round(e[0] + (t[0] - e[0]) * i),
+      Math.round(e[1] + (t[1] - e[1]) * i),
+      Math.round(e[2] + (t[2] - e[2]) * i)
+    ];
+  }
+  /**
+   * Convert HS values (h: 0-360, s: 0-100) to an RGB tuple.
+   */
+  hsToRgb(e, t) {
+    e = (e % 360 + 360) % 360 / 360, t = Math.max(0, Math.min(100, t)) / 100;
+    const r = 1, i = Math.floor(e * 6), o = e * 6 - i, a = r * (1 - t), s = r * (1 - o * t), d = r * (1 - (1 - o) * t);
+    let h = 0, u = 0, n = 0;
+    switch (i % 6) {
+      case 0:
+        h = r, u = d, n = a;
+        break;
+      case 1:
+        h = s, u = r, n = a;
+        break;
+      case 2:
+        h = a, u = r, n = d;
+        break;
+      case 3:
+        h = a, u = s, n = r;
+        break;
+      case 4:
+        h = d, u = a, n = r;
+        break;
+      case 5:
+        h = r, u = a, n = s;
+        break;
+    }
+    return [Math.round(h * 255), Math.round(u * 255), Math.round(n * 255)];
+  }
+}
+const D = new zi(), me = D.parseColorToRgb.bind(D), Ye = D.rgbToHex.bind(D), Ii = D.rgbToHue.bind(D);
+D.hsvToRgb.bind(D);
+const vt = D.hsToRgb.bind(D), Q = D.kelvinToRgb.bind(D), Oi = D.kelvinToRgbString.bind(D), gt = D.lerpRgb.bind(D), rr = [
+  { hex: "#f44336", label: "Red", rgb: [244, 67, 54] },
+  { hex: "#ff9800", label: "Orange", rgb: [255, 152, 0] },
+  { hex: "#ffeb3b", label: "Yellow", rgb: [255, 235, 59] },
+  { hex: "#4caf50", label: "Green", rgb: [76, 175, 80] },
+  { hex: "#00bcd4", label: "Cyan", rgb: [0, 188, 212] },
+  { hex: "#2196f3", label: "Blue", rgb: [33, 150, 243] },
+  { hex: "#9c27b0", label: "Purple", rgb: [156, 39, 176] },
+  { hex: "#e91e63", label: "Pink", rgb: [233, 30, 99] },
+  { hex: "#ffffff", label: "White", rgb: [255, 255, 255] },
+  { hex: "#ffe0b2", label: "Warm", rgb: [255, 224, 178] }
+], Fi = [
+  { k: 2200, label: "2200K", rgb: Q(2200) },
+  { k: 2700, label: "2700K", rgb: Q(2700) },
+  { k: 3e3, label: "3000K", rgb: Q(3e3) },
+  { k: 4e3, label: "4000K", rgb: Q(4e3) },
+  { k: 5e3, label: "5000K", rgb: Q(5e3) },
+  { k: 6500, label: "6500K", rgb: Q(6500) }
+];
+let ir = 0;
+function R(c = "light", e = !0) {
+  if (!e) return;
+  const t = Date.now();
+  if (!(t - ir < 40)) {
+    ir = t;
+    try {
+      Pe(c);
+    } catch {
+    }
+  }
+}
+const Ui = /* @__PURE__ */ new Set(["hs", "xy", "rgb", "rgbw", "rgbww"]), Mt = class Mt {
+  /**
+   * Determine whether an entity is currently in an active state.
+   */
+  static isEntityActive(e) {
+    return e ? kt.has(e.state) : !1;
+  }
+  /**
+   * Extract clean domain from entity ID with zero array allocation.
+   */
+  static getDomain(e) {
+    if (!e || typeof e != "string") return "";
+    const t = e.indexOf(".");
+    return t === -1 ? e : e.slice(0, t);
+  }
+  /**
+   * Clean redundant domain words from friendly names (e.g. "Living Room Motion" -> "Living Room").
+   */
+  static getCleanName(e, t, r) {
+    if (r && r.trim())
+      return r.trim();
+    const i = t?.attributes?.friendly_name;
+    if (!i) {
+      if (!e) return "";
+      const a = e.indexOf(".");
+      return a === -1 ? e : e.slice(a + 1).replace(/_/g, " ");
+    }
+    if (this._nameCache.has(i))
+      return this._nameCache.get(i);
+    let o = i.replace(/\b(Motion Sensor|Motion Detector|Motion|Opening|Contact Sensor|Contact|Door Sensor|Door Lock|Lock|Smart Plug Dimmer|Smart Plug|Dimmer|Light Switch|Switch)\b/gi, "").replace(/\s+/g, " ").trim();
+    return o || (o = i), this._nameCache.set(i, o), o;
+  }
+  /**
+   * Resolve live light color from state attributes (prioritizing RGB / HS over color temp).
+   */
+  static getLightLiveColor(e) {
+    if (!e || !e.attributes || e.state !== void 0 && e.state !== "on") return null;
+    const t = e.attributes;
+    if (t.color_mode === "color_temp") {
+      const i = t.color_temp_kelvin ?? (t.color_temp ? Math.round(1e6 / t.color_temp) : 3e3);
+      return Oi(i);
+    }
+    if (Array.isArray(t.rgb_color) && t.rgb_color.length >= 3)
+      return `rgb(${t.rgb_color[0]}, ${t.rgb_color[1]}, ${t.rgb_color[2]})`;
+    if (Array.isArray(t.hs_color) && t.hs_color.length >= 2) {
+      const [i, o, a] = vt(t.hs_color[0], t.hs_color[1]);
+      return `rgb(${i}, ${o}, ${a})`;
+    }
+    if (Array.isArray(t.rgbw_color) && t.rgbw_color.length >= 3)
+      return `rgb(${t.rgbw_color[0]}, ${t.rgbw_color[1]}, ${t.rgbw_color[2]})`;
+    if (Array.isArray(t.rgbww_color) && t.rgbww_color.length >= 3)
+      return `rgb(${t.rgbww_color[0]}, ${t.rgbww_color[1]}, ${t.rgbww_color[2]})`;
+    if (t.color_temp_kelvin !== void 0 || t.color_temp !== void 0) {
+      const i = t.color_temp_kelvin ?? Math.round(1e6 / t.color_temp), [o, a, s] = Q(i);
+      return `rgb(${o}, ${a}, ${s})`;
+    }
+    return e.state === "on" ? "var(--state-light-active-color, rgb(255, 205, 120))" : null;
+  }
+  /**
+   * Alias for getLightLiveColor
+   */
+  static getLiveLightColor(e) {
+    return this.getLightLiveColor(e);
+  }
+  /**
+   * Get hex color code for the live state.
+   */
+  static getLiveHex(e) {
+    if (!e?.attributes || e.state !== "on") return "#ffffff";
+    const t = e.attributes;
+    if (Array.isArray(t.rgb_color) && t.rgb_color.length >= 3)
+      return Ye(t.rgb_color);
+    if (Array.isArray(t.hs_color) && t.hs_color.length >= 2)
+      return Ye(vt(t.hs_color[0], t.hs_color[1]));
+    if (t.color_temp_kelvin !== void 0 || t.color_temp !== void 0) {
+      const o = t.color_temp_kelvin ?? Math.round(1e6 / t.color_temp);
+      return Ye(Q(o));
+    }
+    const r = this.getLightLiveColor(e);
+    if (!r) return "#ffffff";
+    const i = me(r);
+    return i ? Ye(i) : "#ffffff";
+  }
+  /**
+   * Get live hue (0-360) for color wheel or hue slider.
+   */
+  static getLiveHue(e) {
+    if (!e) return 0;
+    if (Array.isArray(e.attributes?.hs_color) && e.attributes.hs_color.length >= 1)
+      return Math.round(e.attributes.hs_color[0]) % 360;
+    if (Array.isArray(e.attributes?.rgb_color) && e.attributes.rgb_color.length >= 3) {
+      const [t, r, i] = e.attributes.rgb_color;
+      return Ii(t, r, i);
+    }
+    return 0;
+  }
+  /**
+   * Detect supported color and brightness modes for light entities.
+   */
+  static detectLightFeatures(e) {
+    const t = e?.attributes?.supported_color_modes;
+    let r = e?.attributes?.brightness !== void 0, i = !1, o = !1;
+    if (Array.isArray(t))
+      for (let a = 0; a < t.length; a++) {
+        const s = t[a];
+        s !== "onoff" && (r = !0), s === "color_temp" && (i = !0), Ui.has(s) && (o = !0);
+      }
+    return { supportsBrightness: r, supportsColorTemp: i, supportsColor: o };
+  }
+  /**
+   * Determine the default active color for an entity based on its domain and state.
+   */
+  static getDefaultActiveColor(e, t, r = null) {
+    if (e === "climate") {
+      if (t?.state === "heat") return "var(--state-climate-heat-color, #ff7043)";
+      if (t?.state === "cool") return "var(--state-climate-cool-color, #42a5f5)";
+      if (t?.state === "dry") return "var(--state-climate-dry-color, #ab47bc)";
+      if (t?.state === "fan_only") return "var(--state-climate-fan_only-color, #26a69a)";
+    } else if (e === "light") {
+      if (r) return r;
+    } else if (e === "binary_sensor" || e === "lock" || e === "switch")
+      return "#d60000";
+    return "var(--primary-color)";
+  }
+  /**
+   * Determine the default inactive color for an entity based on its domain.
+   */
+  static getDefaultInactiveColor(e) {
+    return e === "light" ? "#000000" : e === "binary_sensor" || e === "lock" || e === "switch" ? "#03b500" : "var(--secondary-background-color, rgba(150, 150, 150, 0.2))";
+  }
+};
+Mt._nameCache = /* @__PURE__ */ new Map();
+let F = Mt;
+const W = /* @__PURE__ */ new Map(), or = 200, Gi = Array.from({ length: 60 }, (c, e) => `${e}s`), Vi = Array.from({ length: 60 }, (c, e) => `${e} seconds ago`), Wi = Array.from({ length: 60 }, (c, e) => `${e}m`), Yi = Array.from({ length: 60 }, (c, e) => e === 1 ? "1 minute ago" : `${e} minutes ago`), Ki = Array.from({ length: 24 }, (c, e) => `${e}h`), Xi = Array.from({ length: 24 }, (c, e) => `${e}h ago`);
+class ar {
   /**
    * Parse date strings, numbers, or Date instances safely with LRU caching.
    */
@@ -2736,16 +3193,16 @@ class Qt {
       return isNaN(t.getTime()) ? null : t;
     }
     if (typeof e == "string") {
-      const t = V.get(e);
+      const t = W.get(e);
       if (t) return t;
       const r = Date.parse(e);
       if (!isNaN(r)) {
         const d = new Date(r);
-        if (V.size >= Zt) {
-          const h = V.keys().next().value;
-          h !== void 0 && V.delete(h);
+        if (W.size >= or) {
+          const h = W.keys().next().value;
+          h !== void 0 && W.delete(h);
         }
-        return V.set(e, d), d;
+        return W.set(e, d), d;
       }
       let i = e.trim();
       i.includes(" ") && !i.includes("T") && (i = i.replace(" ", "T")), i.includes("T") && !i.endsWith("Z") && !/[+-]\d{2}:\d{2}$/.test(i) && !/[+-]\d{4}$/.test(i) && (i += "Z");
@@ -2754,11 +3211,11 @@ class Qt {
       !isNaN(o) && i !== "" && !i.includes("T") ? a = new Date(o > 1e11 ? o : o * 1e3) : a = new Date(i);
       const s = isNaN(a.getTime()) ? null : a;
       if (s) {
-        if (V.size >= Zt) {
-          const d = V.keys().next().value;
-          d !== void 0 && V.delete(d);
+        if (W.size >= or) {
+          const d = W.keys().next().value;
+          d !== void 0 && W.delete(d);
         }
-        V.set(e, s);
+        W.set(e, s);
       }
       return s;
     }
@@ -2772,11 +3229,11 @@ class Qt {
     if (!i) return "";
     const o = Math.max(0, ((r ?? Date.now()) - i.getTime()) / 1e3 | 0);
     if (o < 5) return t ? "< 5s" : "just now";
-    if (o < 60) return t ? pi[o] || `${o}s` : mi[o] || `${o} seconds ago`;
+    if (o < 60) return t ? Gi[o] || `${o}s` : Vi[o] || `${o} seconds ago`;
     const a = o / 60 | 0;
-    if (a < 60) return t ? fi[a] || `${a}m` : gi[a] || `${a} minutes ago`;
+    if (a < 60) return t ? Wi[a] || `${a}m` : Yi[a] || `${a} minutes ago`;
     const s = a / 60 | 0;
-    if (s < 24) return t ? bi[s] || `${s}h` : vi[s] || `${s}h ago`;
+    if (s < 24) return t ? Ki[s] || `${s}h` : Xi[s] || `${s}h ago`;
     const d = s / 24 | 0;
     if (d < 7) return `${d}d${t ? "" : " ago"}`;
     const h = d / 7 | 0;
@@ -2799,7 +3256,7 @@ class Qt {
       case "name":
         return r?.name || t.attributes?.friendly_name || r?.entity || "";
       case "state": {
-        const a = (t.entity_id || "").split(".")[0];
+        const a = F.getDomain(t.entity_id);
         if (a === "timer") {
           if (t.state === "paused")
             return `${t.attributes?.remaining || "Paused"} (Paused)`;
@@ -2915,448 +3372,6 @@ class Qt {
     }
   }
 }
-const yi = 60, xi = 600, Si = 1800, jt = 250, er = 400, ft = 8, wi = 30, $i = 60, Ci = 256, ki = "#ff9800", Ti = "#cddc39", Mi = "#4caf50", kt = Object.freeze(
-  /* @__PURE__ */ new Set([
-    "on",
-    "open",
-    "opening",
-    "closing",
-    "unlocked",
-    "unlocking",
-    "locking",
-    "playing",
-    "buffering",
-    "active",
-    "running",
-    "cool",
-    "heat",
-    "auto",
-    "heat_cool",
-    "fan_only",
-    "dry",
-    "home",
-    "occupied",
-    "motion",
-    "cleaning",
-    "returning"
-  ])
-), Ai = Object.freeze(
-  /* @__PURE__ */ new Set([
-    "binary_sensor",
-    "sensor",
-    "weather",
-    "sun",
-    "device_tracker",
-    "person",
-    "zone",
-    "camera",
-    "image"
-  ])
-), Pi = Object.freeze(
-  /* @__PURE__ */ new Set(["hs", "xy", "rgb", "rgbw", "rgbww", "color_temp"])
-), Ei = Object.freeze(
-  /* @__PURE__ */ new Set([
-    "primary",
-    "accent",
-    "red",
-    "pink",
-    "purple",
-    "deep-purple",
-    "indigo",
-    "blue",
-    "light-blue",
-    "cyan",
-    "teal",
-    "green",
-    "light-green",
-    "lime",
-    "yellow",
-    "amber",
-    "orange",
-    "deep-orange",
-    "brown",
-    "grey",
-    "blue-grey"
-  ])
-), Li = /^\d+\s*,\s*\d+\s*,\s*\d+$/, Di = /^\d+\s*,\s*\d+\s*,\s*\d+\s*,[\d.]+$/;
-var tr, rr;
-(function(c) {
-  c.language = "language", c.system = "system", c.comma_decimal = "comma_decimal", c.decimal_comma = "decimal_comma", c.space_comma = "space_comma", c.none = "none";
-})(tr || (tr = {})), function(c) {
-  c.language = "language", c.system = "system", c.am_pm = "12", c.twenty_four = "24";
-}(rr || (rr = {}));
-function Ni(c) {
-  return c.substr(0, c.indexOf("."));
-}
-var Hi = ["closed", "locked", "off"], Re = function(c, e, t, r) {
-  r = r || {}, t = t ?? {};
-  var i = new Event(e, { bubbles: r.bubbles === void 0 || r.bubbles, cancelable: !!r.cancelable, composed: r.composed === void 0 || r.composed });
-  return i.detail = t, c.dispatchEvent(i), i;
-}, Pe = function(c) {
-  Re(window, "haptic", c);
-}, Ri = function(c, e, t) {
-  t === void 0 && (t = !1), t ? history.replaceState(null, "", e) : history.pushState(null, "", e), Re(window, "location-changed", { replace: t });
-}, Bi = function(c, e, t) {
-  t === void 0 && (t = !0);
-  var r, i = Ni(e), o = i === "group" ? "homeassistant" : i;
-  switch (i) {
-    case "lock":
-      r = t ? "unlock" : "lock";
-      break;
-    case "cover":
-      r = t ? "open_cover" : "close_cover";
-      break;
-    default:
-      r = t ? "turn_on" : "turn_off";
-  }
-  return c.callService(o, r, { entity_id: e });
-}, zi = function(c, e) {
-  var t = Hi.includes(c.states[e].state);
-  return Bi(c, e, t);
-}, Ii = function(c, e, t, r) {
-  if (r || (r = { action: "more-info" }), !r.confirmation || r.confirmation.exemptions && r.confirmation.exemptions.some(function(o) {
-    return o.user === e.user.id;
-  }) || (Pe("warning"), confirm(r.confirmation.text || "Are you sure you want to " + r.action + "?"))) switch (r.action) {
-    case "more-info":
-      (t.entity || t.camera_image) && Re(c, "hass-more-info", { entityId: t.entity ? t.entity : t.camera_image });
-      break;
-    case "navigate":
-      r.navigation_path && Ri(0, r.navigation_path);
-      break;
-    case "url":
-      r.url_path && window.open(r.url_path);
-      break;
-    case "toggle":
-      t.entity && (zi(e, t.entity), Pe("success"));
-      break;
-    case "call-service":
-      if (!r.service) return void Pe("failure");
-      var i = r.service.split(".", 2);
-      e.callService(i[0], i[1], r.service_data, r.target), Pe("success");
-      break;
-    case "fire-dom-event":
-      Re(c, "ll-custom", r);
-  }
-}, Oi = function(c, e, t, r) {
-  var i;
-  r === "double_tap" && t.double_tap_action ? i = t.double_tap_action : r === "hold" && t.hold_action ? i = t.hold_action : r === "tap" && t.tap_action && (i = t.tap_action), Ii(c, e, t, i);
-};
-const Fi = /rgba?\((\d+)[,\s]+(\d+)[,\s]+(\d+)/i, Ui = /^\[\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\]$/, he = /* @__PURE__ */ new Map(), ir = 250;
-function Gi(c) {
-  if (!c) return "";
-  const e = he.get(c);
-  if (e !== void 0) return e;
-  const t = c.trim();
-  if (!t)
-    return he.set(c, ""), "";
-  let r = t;
-  if (t.startsWith("#") || t.startsWith("rgb") || t.startsWith("hsl") || t.startsWith("var(") ? r = t : Li.test(t) ? r = `rgb(${t})` : Di.test(t) ? r = `rgba(${t})` : t.toLowerCase() === "state" ? r = "var(--state-icon-color, var(--primary-color))" : Ei.has(t.toLowerCase()) && (r = `var(--${t.toLowerCase()}-color, ${t.toLowerCase()})`), he.size >= ir) {
-    const i = Math.floor(ir / 4), o = he.keys();
-    for (let a = 0; a < i; a++) {
-      const s = o.next().value;
-      s !== void 0 && he.delete(s);
-    }
-  }
-  return he.set(c, r), r;
-}
-class Vi {
-  constructor() {
-    this._cache = /* @__PURE__ */ new Map(), this._cacheAccessTimes = /* @__PURE__ */ new Map(), this._kelvinCache = /* @__PURE__ */ new Map();
-  }
-  /**
-   * Parse any CSS color string into an [r, g, b] integer tuple.
-   * Uses a true LRU cache with access timestamp tracking.
-   */
-  parseColorToRgb(e) {
-    if (!e || typeof e != "string") return null;
-    const t = e.trim();
-    if (!t) return null;
-    if (this._cache.has(t))
-      return this._cacheAccessTimes.set(t, Date.now()), this._cache.get(t);
-    let r = null;
-    if (t.charCodeAt(0) === 35) {
-      const o = t.substring(1), a = o.length;
-      if (a === 3 || a === 4) {
-        const s = parseInt(o[0] + o[0], 16), d = parseInt(o[1] + o[1], 16), h = parseInt(o[2] + o[2], 16);
-        !isNaN(s) && !isNaN(d) && !isNaN(h) && (r = [s, d, h]);
-      } else if (a >= 6) {
-        const s = parseInt(o.substring(0, 2), 16), d = parseInt(o.substring(2, 4), 16), h = parseInt(o.substring(4, 6), 16);
-        !isNaN(s) && !isNaN(d) && !isNaN(h) && (r = [s, d, h]);
-      }
-    } else if (t.startsWith("rgb")) {
-      const o = t.match(Fi);
-      if (o) {
-        const a = parseInt(o[1], 10), s = parseInt(o[2], 10), d = parseInt(o[3], 10);
-        !isNaN(a) && !isNaN(s) && !isNaN(d) && (r = [
-          Math.max(0, Math.min(255, a)),
-          Math.max(0, Math.min(255, s)),
-          Math.max(0, Math.min(255, d))
-        ]);
-      }
-    } else if (t.charCodeAt(0) === 91 && t.charCodeAt(t.length - 1) === 93) {
-      const o = t.match(Ui);
-      o && (r = [
-        Math.max(0, Math.min(255, parseInt(o[1], 10))),
-        Math.max(0, Math.min(255, parseInt(o[2], 10))),
-        Math.max(0, Math.min(255, parseInt(o[3], 10)))
-      ]);
-    }
-    if (this._cache.size >= Ci) {
-      let o = null, a = 1 / 0;
-      for (const [s, d] of this._cacheAccessTimes)
-        d < a && (a = d, o = s);
-      o !== null && (this._cache.delete(o), this._cacheAccessTimes.delete(o));
-    }
-    const i = Date.now();
-    return this._cache.set(t, r), this._cacheAccessTimes.set(t, i), r;
-  }
-  /**
-   * Convert an [r, g, b] tuple to a 6-character hex string (#rrggbb).
-   */
-  rgbToHex(e) {
-    if (!e || isNaN(e[0]) || isNaN(e[1]) || isNaN(e[2])) return "#000000";
-    const t = Math.max(0, Math.min(255, e[0] | 0)).toString(16).padStart(2, "0"), r = Math.max(0, Math.min(255, e[1] | 0)).toString(16).padStart(2, "0"), i = Math.max(0, Math.min(255, e[2] | 0)).toString(16).padStart(2, "0");
-    return `#${t}${r}${i}`;
-  }
-  /**
-   * Extract Hue angle (0-360) from an RGB tuple with strict NaN and bounds guards.
-   */
-  rgbToHue(e, t, r) {
-    if (isNaN(e) || isNaN(t) || isNaN(r)) return 0;
-    e = Math.max(0, Math.min(255, e)) / 255, t = Math.max(0, Math.min(255, t)) / 255, r = Math.max(0, Math.min(255, r)) / 255;
-    const i = Math.max(e, t, r), o = Math.min(e, t, r), a = i - o;
-    let s = 0;
-    return a === 0 ? 0 : (i === e ? s = (t - r) / a + (t < r ? 6 : 0) : i === t ? s = (r - e) / a + 2 : i === r && (s = (e - t) / a + 4), Math.round(s / 6 * 360) % 360);
-  }
-  /**
-   * Convert HSV values (h: 0-360, s: 0-1, v: 0-1) to an RGB tuple.
-   */
-  hsvToRgb(e, t, r) {
-    e = isNaN(e) ? 0 : Math.max(0, Math.min(360, e)), t = isNaN(t) ? 0 : Math.max(0, Math.min(1, t)), r = isNaN(r) ? 0 : Math.max(0, Math.min(1, r));
-    const i = r * t, o = i * (1 - Math.abs(e / 60 % 2 - 1)), a = r - i;
-    let s = 0, d = 0, h = 0;
-    return e >= 0 && e < 60 ? (s = i, d = o) : e >= 60 && e < 120 ? (s = o, d = i) : e >= 120 && e < 180 ? (d = i, h = o) : e >= 180 && e < 240 ? (d = o, h = i) : e >= 240 && e < 300 ? (s = o, h = i) : e >= 300 && e <= 360 && (s = i, h = o), [
-      Math.round((s + a) * 255),
-      Math.round((d + a) * 255),
-      Math.round((h + a) * 255)
-    ];
-  }
-  /**
-   * Convert Kelvin temperature to an approximation RGB tuple with fast integer LUT caching.
-   */
-  kelvinToRgb(e) {
-    if (isNaN(e)) return [255, 255, 255];
-    const t = Math.round(e / 10) * 10, r = this._kelvinCache.get(t);
-    if (r) return r;
-    const i = Math.max(1e3, Math.min(4e4, t)) / 100;
-    let o = 0, a = 0, s = 0;
-    i <= 66 ? o = 255 : o = Math.min(255, Math.max(0, 329.698727446 * Math.pow(i - 60, -0.1332047592))), i <= 66 ? a = Math.min(255, Math.max(0, 99.4708025861 * Math.log(i) - 161.1195681661)) : a = Math.min(255, Math.max(0, 288.1221695283 * Math.pow(i - 60, -0.0755148492))), i >= 66 ? s = 255 : i <= 19 ? s = 0 : s = Math.min(255, Math.max(0, 138.5177312231 * Math.log(i - 10) - 305.0447927307));
-    const d = [Math.round(o), Math.round(a), Math.round(s)];
-    return this._kelvinCache.size < 500 && this._kelvinCache.set(t, d), d;
-  }
-  /**
-   * Linear interpolation between two RGB tuples.
-   */
-  lerpRgb(e, t, r) {
-    if (!e || !t) return [0, 0, 0];
-    const i = isNaN(r) ? 0 : Math.max(0, Math.min(1, r));
-    return [
-      Math.round(e[0] + (t[0] - e[0]) * i),
-      Math.round(e[1] + (t[1] - e[1]) * i),
-      Math.round(e[2] + (t[2] - e[2]) * i)
-    ];
-  }
-  /**
-   * Convert HS values (h: 0-360, s: 0-100) to an RGB tuple.
-   */
-  hsToRgb(e, t) {
-    e = (e % 360 + 360) % 360 / 360, t = Math.max(0, Math.min(100, t)) / 100;
-    const r = 1, i = Math.floor(e * 6), o = e * 6 - i, a = r * (1 - t), s = r * (1 - o * t), d = r * (1 - (1 - o) * t);
-    let h = 0, u = 0, n = 0;
-    switch (i % 6) {
-      case 0:
-        h = r, u = d, n = a;
-        break;
-      case 1:
-        h = s, u = r, n = a;
-        break;
-      case 2:
-        h = a, u = r, n = d;
-        break;
-      case 3:
-        h = a, u = s, n = r;
-        break;
-      case 4:
-        h = d, u = a, n = r;
-        break;
-      case 5:
-        h = r, u = a, n = s;
-        break;
-    }
-    return [Math.round(h * 255), Math.round(u * 255), Math.round(n * 255)];
-  }
-}
-const R = new Vi(), me = R.parseColorToRgb.bind(R), Ye = R.rgbToHex.bind(R), Wi = R.rgbToHue.bind(R);
-R.hsvToRgb.bind(R);
-const vt = R.hsToRgb.bind(R), W = R.kelvinToRgb.bind(R), gt = R.lerpRgb.bind(R), or = [
-  { hex: "#f44336", label: "Red", rgb: [244, 67, 54] },
-  { hex: "#ff9800", label: "Orange", rgb: [255, 152, 0] },
-  { hex: "#ffeb3b", label: "Yellow", rgb: [255, 235, 59] },
-  { hex: "#4caf50", label: "Green", rgb: [76, 175, 80] },
-  { hex: "#00bcd4", label: "Cyan", rgb: [0, 188, 212] },
-  { hex: "#2196f3", label: "Blue", rgb: [33, 150, 243] },
-  { hex: "#9c27b0", label: "Purple", rgb: [156, 39, 176] },
-  { hex: "#e91e63", label: "Pink", rgb: [233, 30, 99] },
-  { hex: "#ffffff", label: "White", rgb: [255, 255, 255] },
-  { hex: "#ffe0b2", label: "Warm", rgb: [255, 224, 178] }
-], Yi = [
-  { k: 2200, label: "2200K", rgb: W(2200) },
-  { k: 2700, label: "2700K", rgb: W(2700) },
-  { k: 3e3, label: "3000K", rgb: W(3e3) },
-  { k: 4e3, label: "4000K", rgb: W(4e3) },
-  { k: 5e3, label: "5000K", rgb: W(5e3) },
-  { k: 6500, label: "6500K", rgb: W(6500) }
-];
-let ar = 0;
-function H(c = "light", e = !0) {
-  if (!e) return;
-  const t = Date.now();
-  if (!(t - ar < 40)) {
-    ar = t;
-    try {
-      Pe(c);
-    } catch {
-    }
-  }
-}
-const Ki = /* @__PURE__ */ new Set(["hs", "xy", "rgb", "rgbw", "rgbww"]), Mt = class Mt {
-  /**
-   * Determine whether an entity is currently in an active state.
-   */
-  static isEntityActive(e) {
-    return e ? kt.has(e.state) : !1;
-  }
-  /**
-   * Extract clean domain from entity ID.
-   */
-  static getDomain(e) {
-    return !e || typeof e != "string" ? "" : e.split(".")[0] || "";
-  }
-  /**
-   * Clean redundant domain words from friendly names (e.g. "Living Room Motion" -> "Living Room").
-   */
-  static getCleanName(e, t, r) {
-    if (r && r.trim())
-      return r.trim();
-    const i = t?.attributes?.friendly_name;
-    if (!i)
-      return e ? e.split(".")[1]?.replace(/_/g, " ") || e : "";
-    if (this._nameCache.has(i))
-      return this._nameCache.get(i);
-    let o = i.replace(/\b(Motion Sensor|Motion Detector|Motion|Opening|Contact Sensor|Contact|Door Sensor|Door Lock|Lock|Smart Plug Dimmer|Smart Plug|Dimmer|Light Switch|Switch)\b/gi, "").replace(/\s+/g, " ").trim();
-    return o || (o = i), this._nameCache.set(i, o), o;
-  }
-  /**
-   * Resolve live light color from state attributes (prioritizing RGB / HS over color temp).
-   */
-  static getLightLiveColor(e) {
-    if (!e || !e.attributes || e.state !== void 0 && e.state !== "on") return null;
-    const t = e.attributes;
-    if (t.color_mode === "color_temp") {
-      const i = t.color_temp_kelvin ?? (t.color_temp ? Math.round(1e6 / t.color_temp) : 3e3), [o, a, s] = W(i);
-      return `rgb(${o}, ${a}, ${s})`;
-    }
-    if (Array.isArray(t.rgb_color) && t.rgb_color.length >= 3)
-      return `rgb(${t.rgb_color[0]}, ${t.rgb_color[1]}, ${t.rgb_color[2]})`;
-    if (Array.isArray(t.hs_color) && t.hs_color.length >= 2) {
-      const [i, o, a] = vt(t.hs_color[0], t.hs_color[1]);
-      return `rgb(${i}, ${o}, ${a})`;
-    }
-    if (Array.isArray(t.rgbw_color) && t.rgbw_color.length >= 3)
-      return `rgb(${t.rgbw_color[0]}, ${t.rgbw_color[1]}, ${t.rgbw_color[2]})`;
-    if (Array.isArray(t.rgbww_color) && t.rgbww_color.length >= 3)
-      return `rgb(${t.rgbww_color[0]}, ${t.rgbww_color[1]}, ${t.rgbww_color[2]})`;
-    if (t.color_temp_kelvin !== void 0 || t.color_temp !== void 0) {
-      const i = t.color_temp_kelvin ?? Math.round(1e6 / t.color_temp), [o, a, s] = W(i);
-      return `rgb(${o}, ${a}, ${s})`;
-    }
-    return e.state === "on" ? "var(--state-light-active-color, rgb(255, 205, 120))" : null;
-  }
-  /**
-   * Alias for getLightLiveColor
-   */
-  static getLiveLightColor(e) {
-    return this.getLightLiveColor(e);
-  }
-  /**
-   * Get hex color code for the live state.
-   */
-  static getLiveHex(e) {
-    if (!e?.attributes || e.state !== "on") return "#ffffff";
-    const t = e.attributes;
-    if (Array.isArray(t.rgb_color) && t.rgb_color.length >= 3)
-      return Ye(t.rgb_color);
-    if (Array.isArray(t.hs_color) && t.hs_color.length >= 2)
-      return Ye(vt(t.hs_color[0], t.hs_color[1]));
-    if (t.color_temp_kelvin !== void 0 || t.color_temp !== void 0) {
-      const o = t.color_temp_kelvin ?? Math.round(1e6 / t.color_temp);
-      return Ye(W(o));
-    }
-    const r = this.getLightLiveColor(e);
-    if (!r) return "#ffffff";
-    const i = me(r);
-    return i ? Ye(i) : "#ffffff";
-  }
-  /**
-   * Get live hue (0-360) for color wheel or hue slider.
-   */
-  static getLiveHue(e) {
-    if (!e) return 0;
-    if (Array.isArray(e.attributes?.hs_color) && e.attributes.hs_color.length >= 1)
-      return Math.round(e.attributes.hs_color[0]) % 360;
-    if (Array.isArray(e.attributes?.rgb_color) && e.attributes.rgb_color.length >= 3) {
-      const [t, r, i] = e.attributes.rgb_color;
-      return Wi(t, r, i);
-    }
-    return 0;
-  }
-  /**
-   * Detect supported color and brightness modes for light entities.
-   */
-  static detectLightFeatures(e) {
-    const t = e?.attributes?.supported_color_modes;
-    let r = e?.attributes?.brightness !== void 0, i = !1, o = !1;
-    if (Array.isArray(t))
-      for (let a = 0; a < t.length; a++) {
-        const s = t[a];
-        s !== "onoff" && (r = !0), s === "color_temp" && (i = !0), Ki.has(s) && (o = !0);
-      }
-    return { supportsBrightness: r, supportsColorTemp: i, supportsColor: o };
-  }
-  /**
-   * Determine the default active color for an entity based on its domain and state.
-   */
-  static getDefaultActiveColor(e, t, r = null) {
-    if (e === "climate") {
-      if (t?.state === "heat") return "var(--state-climate-heat-color, #ff7043)";
-      if (t?.state === "cool") return "var(--state-climate-cool-color, #42a5f5)";
-      if (t?.state === "dry") return "var(--state-climate-dry-color, #ab47bc)";
-      if (t?.state === "fan_only") return "var(--state-climate-fan_only-color, #26a69a)";
-    } else if (e === "light") {
-      if (r) return r;
-    } else if (e === "binary_sensor" || e === "lock" || e === "switch")
-      return "#d60000";
-    return "var(--primary-color)";
-  }
-  /**
-   * Determine the default inactive color for an entity based on its domain.
-   */
-  static getDefaultInactiveColor(e) {
-    return e === "light" ? "#000000" : e === "binary_sensor" || e === "lock" || e === "switch" ? "#03b500" : "var(--secondary-background-color, rgba(150, 150, 150, 0.2))";
-  }
-};
-Mt._nameCache = /* @__PURE__ */ new Map();
-let Y = Mt;
 class z {
   /**
    * Render a generic slider container with support for Google, Full, and Compact themes.
@@ -3400,7 +3415,7 @@ class z {
    * Render light brightness slider.
    */
   static renderLightSlider(e, t, r, i = "") {
-    const o = Y.isEntityActive(t), a = t.attributes.brightness ?? 0, s = Math.max(0, Math.min(100, Math.round(a / 255 * 100))), d = Y.getLightLiveColor(t), h = (e.use_light_color !== !1 || !e.slider_color) && d ? `--slider-color: ${d};` : "";
+    const o = F.isEntityActive(t), a = t.attributes.brightness ?? 0, s = Math.max(0, Math.min(100, Math.round(a / 255 * 100))), d = F.getLightLiveColor(t), h = (e.use_light_color !== !1 || !e.slider_color) && d ? `--slider-color: ${d};` : "";
     return this.renderGenericSlider(
       e,
       "brightness",
@@ -3434,7 +3449,7 @@ class z {
       ].filter(Boolean).join(" ");
       return w`
         <div class="presets-row" style="display: flex; gap: 6px; overflow-x: auto; padding: 2px 0; ${$}">
-          ${Yi.map((x) => {
+          ${Fi.map((x) => {
         const [A, k, T] = x.rgb, E = Math.abs(h - x.k) < 200, L = () => {
           r.forwardHaptic && r.forwardHaptic("light"), r.callService("light", "turn_on", { entity_id: e.entity, [p]: x.k });
         };
@@ -3489,13 +3504,13 @@ class z {
     if (o === "wheel")
       return this.renderColorPicker(e, t, r);
     if (o === "swatches") {
-      const b = Y.getLiveHex(t).toLowerCase(), v = e.color_slider_height !== void 0 ? e.color_slider_height : 32, f = e.color_slider_border_radius !== void 0 ? e.color_slider_border_radius : 8, m = Number(e.color_slider_start_offset) || 0, l = Number(e.color_slider_end_offset) || 0, _ = [
+      const b = F.getLiveHex(t).toLowerCase(), v = e.color_slider_height !== void 0 ? e.color_slider_height : 32, f = e.color_slider_border_radius !== void 0 ? e.color_slider_border_radius : 8, m = Number(e.color_slider_start_offset) || 0, l = Number(e.color_slider_end_offset) || 0, _ = [
         m ? `margin-left: ${m}px;` : "",
         l ? `margin-right: ${l}px;` : ""
       ].filter(Boolean).join(" ");
       return w`
         <div class="swatches-palette-row" style="display: flex; gap: 6px; overflow-x: auto; padding: 2px 0; ${_}">
-          ${or.map((g) => {
+          ${rr.map((g) => {
         const y = b === g.hex.toLowerCase(), $ = () => {
           r.forwardHaptic && r.forwardHaptic("light"), r.callService("light", "turn_on", { entity_id: e.entity, rgb_color: g.rgb });
         };
@@ -3520,11 +3535,11 @@ class z {
         </div>
       `;
     }
-    const a = e.slider_style === "google", s = e.color_slider_height !== void 0 ? e.color_slider_height : e.slider_height ?? (a ? 42 : 36), d = e.color_slider_border_radius !== void 0 ? e.color_slider_border_radius : e.slider_border_radius ?? (a ? 21 : 8), h = Y.getLiveHue(t), u = `hsl(${h}, 100%, 50%)`, n = Math.round(h / 360 * 100);
+    const a = e.slider_style === "google", s = e.color_slider_height !== void 0 ? e.color_slider_height : e.slider_height ?? (a ? 42 : 36), d = e.color_slider_border_radius !== void 0 ? e.color_slider_border_radius : e.slider_border_radius ?? (a ? 21 : 8), h = F.getLiveHue(t), u = `hsl(${h}, 100%, 50%)`, n = Math.round(h / 360 * 100);
     let p;
     return e.color_swatch_presets !== !1 && (p = w`
         <div class="color-swatch-chips">
-          ${or.slice(0, 8).map((b) => w`
+          ${rr.slice(0, 8).map((b) => w`
             <span 
               class="color-swatch-chip" 
               role="button" 
@@ -3568,7 +3583,7 @@ class z {
    * Render HTML color picker.
    */
   static renderColorPicker(e, t, r) {
-    const i = Y.getLiveHex(t), o = e.color_slider_height !== void 0 ? e.color_slider_height : e.slider_height ?? 36, a = e.color_slider_border_radius !== void 0 ? e.color_slider_border_radius : e.slider_border_radius ?? 8;
+    const i = F.getLiveHex(t), o = e.color_slider_height !== void 0 ? e.color_slider_height : e.slider_height ?? 36, a = e.color_slider_border_radius !== void 0 ? e.color_slider_border_radius : e.slider_border_radius ?? 8;
     return w`
       <div class="color-picker" title="Adjust Light Color" style="height: ${o}px; border-radius: ${a}px;">
         <input type="color" 
@@ -3797,7 +3812,7 @@ class z {
    * Render sub color picker.
    */
   static renderSubColorPicker(e, t, r, i, o, a, s, d) {
-    const h = r || e.states[t || ""], u = t || h?.entity_id, n = Y.getLiveHex(h);
+    const h = r || e.states[t || ""], u = t || h?.entity_id, n = F.getLiveHex(h);
     return w`
       <div class="sub-button sub-button-color-picker ${o}" style="${i}" title="Color (${n})">
         <input type="color" 
@@ -3812,7 +3827,7 @@ class z {
     `;
   }
 }
-class Xi {
+class qi {
   constructor() {
     this._sliderStateMap = /* @__PURE__ */ new WeakMap();
   }
@@ -3884,7 +3899,7 @@ class Xi {
       a.style.setProperty("--slider-pct", `${u}%`);
       const n = a.closest(".slider-container, .sub-button-slider-container"), p = n?.querySelector(".slider-percent-badge, .sub-slider-pct");
       p && (p.textContent = o ? o(h, u) : `${u}%`), t === "color_hue" && n && n.style.setProperty("--color-hue-val", `hsl(${h}, 100%, 50%)`);
-    }), H("selection", r?.haptic_feedback !== !1);
+    }), R("selection", r?.haptic_feedback !== !1);
   }
   handleSliderChange(e, t, r, i, o, a) {
     e.stopPropagation();
@@ -3923,7 +3938,7 @@ class nr {
    */
   static dispatchAction(e, t, r, i, o, a, s) {
     if (!t) return;
-    const d = a || r.entity, h = d ? d.split(".")[0] : "", u = Ai.has(h);
+    const d = a || r.entity, h = d ? d.split(".")[0] : "", u = wi.has(h);
     let n = o;
     if (n || (i === "double_tap" ? n = r.double_tap_action : i === "hold" ? n = r.hold_action || (u ? { action: "more-info" } : { action: "toggle" }) : r.tap_action && r.tap_action.action && r.tap_action.action !== "default" ? u && r.tap_action.action === "toggle" ? n = { action: "none" } : n = r.tap_action : n = u ? { action: "none" } : { action: "toggle" }), !(!n || n.action === "none")) {
       if (n.action === "more-info") {
@@ -3960,15 +3975,15 @@ class nr {
         t.callService(p, b, n.data || n.service_data || {}, n.target);
         return;
       }
-      u && (!n.action || n.action === "toggle") || Oi(e, t, { ...r, entity: d }, i);
+      u && (!n.action || n.action === "toggle") || Ni(e, t, { ...r, entity: d }, i);
     }
   }
   // --- MAIN CARD POINTER EVENT LIFECYCLE ---
   handlePointerDown(e, t, r) {
     if (!this.isSubElement(e) && (this._startX = e.clientX, this._startY = e.clientY, this._moved = !1, this._held = !1, this._canceled = !1, this._pointerDownReceived = !0, this._pointerDownTime = Date.now(), this._activePointerId = e.pointerId, this._holdTimer && (clearTimeout(this._holdTimer), this._holdTimer = null), t && r)) {
-      const i = t.hold_action_time ?? er;
+      const i = t.hold_action_time ?? Qt;
       this._holdTimer = setTimeout(() => {
-        !this._moved && !this._canceled && this._pointerDownReceived && (this._held = !0, H("medium", t.haptic_feedback !== !1), (t.collapse_controls_trigger || "hold") === "hold" && r.toggleCollapse ? r.toggleCollapse() : r.dispatchAction("hold"));
+        !this._moved && !this._canceled && this._pointerDownReceived && (this._held = !0, R("medium", t.haptic_feedback !== !1), (t.collapse_controls_trigger || "hold") === "hold" && r.toggleCollapse ? r.toggleCollapse() : r.dispatchAction("hold"));
       }, i);
     }
   }
@@ -4002,16 +4017,16 @@ class nr {
       return;
     const o = (t.collapse_controls_trigger || "hold") === "double_tap";
     if (!(o || t.double_tap_action && t.double_tap_action.action !== "none")) {
-      H("light", t.haptic_feedback !== !1), r.dispatchAction("tap");
+      R("light", t.haptic_feedback !== !1), r.dispatchAction("tap");
       return;
     }
     if (this._tapTimer) {
-      clearTimeout(this._tapTimer), this._tapTimer = null, H("light", t.haptic_feedback !== !1), o && r.toggleCollapse ? r.toggleCollapse() : r.dispatchAction("double_tap");
+      clearTimeout(this._tapTimer), this._tapTimer = null, R("light", t.haptic_feedback !== !1), o && r.toggleCollapse ? r.toggleCollapse() : r.dispatchAction("double_tap");
       return;
     }
     this._tapTimer = setTimeout(() => {
-      this._tapTimer = null, H("light", t.haptic_feedback !== !1), r.dispatchAction("tap");
-    }, jt);
+      this._tapTimer = null, R("light", t.haptic_feedback !== !1), r.dispatchAction("tap");
+    }, Zt);
   }
   handleContextMenu(e, t, r) {
     if (this.isSubElement(e)) return;
@@ -4020,17 +4035,17 @@ class nr {
       return;
     }
     const i = t.hold_action && t.hold_action.action !== "none" && t.hold_action.action !== "default", o = (t.collapse_controls_trigger || "hold") === "hold";
-    (i || o) && (e.preventDefault(), e.stopPropagation(), this._held = !0, H("medium", t.haptic_feedback !== !1), o && r.toggleCollapse ? r.toggleCollapse() : r.dispatchAction("hold"));
+    (i || o) && (e.preventDefault(), e.stopPropagation(), this._held = !0, R("medium", t.haptic_feedback !== !1), o && r.toggleCollapse ? r.toggleCollapse() : r.dispatchAction("hold"));
   }
   handleKeyDown(e, t, r) {
-    (e.key === "Enter" || e.key === " ") && (e.preventDefault(), e.stopPropagation(), H("light", t.haptic_feedback !== !1), r.dispatchAction("tap"));
+    (e.key === "Enter" || e.key === " ") && (e.preventDefault(), e.stopPropagation(), R("light", t.haptic_feedback !== !1), r.dispatchAction("tap"));
   }
   // --- SUB-BUTTON GESTURES & TAP ROUTING ---
   handleSubPointerDown(e, t, r, i, o) {
     if (this._subStartX = e.clientX, this._subStartY = e.clientY, this._subMoved = !1, this._subHeld = !1, this._subCanceled = !1, this._subHoldTimer && (clearTimeout(this._subHoldTimer), this._subHoldTimer = null), r && r.action !== "none") {
-      const a = i.hold_action_time ?? er;
+      const a = i.hold_action_time ?? Qt;
       this._subHoldTimer = setTimeout(() => {
-        !this._subMoved && !this._subCanceled && (this._subHeld = !0, H("medium", i.haptic_feedback !== !1), o.dispatchAction("hold", r, t));
+        !this._subMoved && !this._subCanceled && (this._subHeld = !0, R("medium", i.haptic_feedback !== !1), o.dispatchAction("hold", r, t));
       }, a);
     }
   }
@@ -4056,21 +4071,21 @@ class nr {
     }
     const d = i && i.action !== "none", h = `sub_${t || a.entity || "main"}`;
     if (!d) {
-      H("light", a.haptic_feedback !== !1), o && (!r || r.action === "default") ? o() : s.dispatchAction("tap", r, t);
+      R("light", a.haptic_feedback !== !1), o && (!r || r.action === "default") ? o() : s.dispatchAction("tap", r, t);
       return;
     }
     const u = this._subTapTimerMap.get(h);
     if (u) {
-      clearTimeout(u), this._subTapTimerMap.delete(h), H("light", a.haptic_feedback !== !1), s.dispatchAction("double_tap", i, t);
+      clearTimeout(u), this._subTapTimerMap.delete(h), R("light", a.haptic_feedback !== !1), s.dispatchAction("double_tap", i, t);
       return;
     }
     const n = setTimeout(() => {
-      this._subTapTimerMap.delete(h), H("light", a.haptic_feedback !== !1), o && (!r || r.action === "default") ? o() : s.dispatchAction("tap", r, t);
-    }, jt);
+      this._subTapTimerMap.delete(h), R("light", a.haptic_feedback !== !1), o && (!r || r.action === "default") ? o() : s.dispatchAction("tap", r, t);
+    }, Zt);
     this._subTapTimerMap.set(h, n);
   }
   handleSubContextMenu(e, t, r, i, o) {
-    r && r.action !== "none" && (e.preventDefault(), e.stopPropagation(), H("medium", i.haptic_feedback !== !1), o.dispatchAction("hold", r, t));
+    r && r.action !== "none" && (e.preventDefault(), e.stopPropagation(), R("medium", i.haptic_feedback !== !1), o.dispatchAction("hold", r, t));
   }
   isSubElement(e) {
     return !!e.target?.closest?.('.sub-button, .sub-button-container, .slider-container, input[type="range"], input[type="color"], .color-picker, .color-swatch-chip, .temp-preset-chip, [data-ag-sub]');
@@ -4092,7 +4107,7 @@ const Ke = Object.freeze({
   currentStage: 0,
   stageLabel: ""
 });
-class qi {
+class Ji {
   constructor() {
     this._previousLiveRgb = null, this._currentLiveRgb = null, this._lastTrackedState = null, this._cachedDurations = null, this._lastFadeConfigHash = null, this._hexCache = /* @__PURE__ */ new Map(), this._lastResult = null, this._lastColorRgbKey = "", this._lastColorRgbStr = "", this._lastColorHexStr = "";
   }
@@ -4113,10 +4128,10 @@ class qi {
     const t = `${e.fade_stage_1_duration}_${e.fade_stage_1_color}_${e.fade_stage_2_duration}_${e.fade_stage_2_color}_${e.fade_stage_3_duration}_${e.fade_stage_3_color}`;
     if (t === this._lastFadeConfigHash && this._cachedDurations)
       return this._cachedDurations;
-    const r = Number(e.fade_stage_1_duration) || yi, i = Number(e.fade_stage_2_duration) || xi, o = Number(e.fade_stage_3_duration) || Si, a = r + i + o;
+    const r = Number(e.fade_stage_1_duration) || pi, i = Number(e.fade_stage_2_duration) || mi, o = Number(e.fade_stage_3_duration) || fi, a = r + i + o;
     if (a <= 0)
       return this._cachedDurations = null, this._lastFadeConfigHash = t, null;
-    const s = me(e.fade_stage_1_color || ki) || [255, 152, 0], d = me(e.fade_stage_2_color || Ti) || [205, 220, 57], h = me(e.fade_stage_3_color || Mi) || [76, 175, 80];
+    const s = me(e.fade_stage_1_color || yi) || [255, 152, 0], d = me(e.fade_stage_2_color || xi) || [205, 220, 57], h = me(e.fade_stage_3_color || Si) || [76, 175, 80];
     return this._cachedDurations = { d1: r, d2: i, d3: o, totalDuration: a, c1: s, c2: d, c3: h }, this._lastFadeConfigHash = t, this._cachedDurations;
   }
   /**
@@ -4145,20 +4160,20 @@ class qi {
       T = gt(M, l, O), L = Math.round(k / m * 100);
     } else if (k < b + v) {
       E = 2;
-      const O = k - b, J = v > 0 ? O / v : 1, Z = e.fade_stage_2_pickup !== !1 ? l : n;
-      T = gt(Z, _, J), L = Math.round(k / m * 100);
+      const O = k - b, q = v > 0 ? O / v : 1, J = e.fade_stage_2_pickup !== !1 ? l : n;
+      T = gt(J, _, q), L = Math.round(k / m * 100);
     } else if (k < m) {
       E = 3;
-      const O = k - (b + v), J = f > 0 ? O / f : 1, Z = e.fade_stage_3_pickup !== !1 ? _ : n;
-      T = gt(Z, g, J), L = Math.round(k / m * 100);
+      const O = k - (b + v), q = f > 0 ? O / f : 1, J = e.fade_stage_3_pickup !== !1 ? _ : n;
+      T = gt(J, g, q), L = Math.round(k / m * 100);
     } else
       E = 3, T = p, L = 100;
     this._currentLiveRgb = T;
     const C = Math.max(0, m - k);
     let ee = "";
     C >= 60 ? ee = `${Math.ceil(C / 60)}m left` : ee = `${C}s left`;
-    const K = T[0], X = T[1], q = T[2], te = `${K}_${X}_${q}`;
-    te !== this._lastColorRgbKey && (this._lastColorRgbKey = te, this._lastColorRgbStr = `rgb(${K}, ${X}, ${q})`, this._lastColorHexStr = `#${((1 << 24) + (K << 16) + (X << 8) + q).toString(16).slice(1)}`);
+    const Y = T[0], K = T[1], X = T[2], te = `${Y}_${K}_${X}`;
+    te !== this._lastColorRgbKey && (this._lastColorRgbKey = te, this._lastColorRgbStr = `rgb(${Y}, ${K}, ${X})`, this._lastColorHexStr = `#${((1 << 24) + (Y << 16) + (K << 8) + X).toString(16).slice(1)}`);
     const I = Math.min(100, L);
     return this._lastResult && this._lastResult.currentStage === E && this._lastResult.progressPct === I && this._lastResult.remainingSeconds === C && this._lastResult.currentColor === this._lastColorRgbStr ? this._lastResult : (this._lastResult = {
       enabled: !0,
@@ -4175,13 +4190,13 @@ class qi {
     this._previousLiveRgb = null, this._currentLiveRgb = null, this._lastTrackedState = null, this._cachedDurations = null, this._lastFadeConfigHash = null, this._lastResult = null, this._lastColorRgbKey = "", this._hexCache.clear();
   }
 }
-const sr = new qi();
-var Ji = Object.defineProperty, Tt = (c, e, t, r) => {
+const sr = new Ji();
+var Zi = Object.defineProperty, Tt = (c, e, t, r) => {
   for (var i = void 0, o = c.length - 1, a; o >= 0; o--)
     (a = c[o]) && (i = a(e, t, i) || i);
-  return i && Ji(e, t, i), i;
+  return i && Zi(e, t, i), i;
 };
-const Zi = [
+const Qi = [
   { name: "entity", selector: { entity: {} } },
   { name: "name", selector: { text: {} } },
   { name: "visibility_state", selector: { select: { options: [
@@ -4227,7 +4242,7 @@ const Zi = [
   { name: "show_state", selector: { boolean: {} } },
   { name: "fill_container", selector: { boolean: {} } },
   { name: "overflow_hidden", selector: { boolean: {} } }
-], Qi = [
+], ji = [
   { name: "theme_preset", selector: { select: { options: [
     { value: "default", label: "Default (Card Colors)" },
     { value: "glassmorphism", label: "Frosted Glass (Glassmorphism)" },
@@ -4300,7 +4315,7 @@ const Zi = [
   { name: "fade_stage_3_duration", selector: { number: { min: 0, max: 7200, mode: "slider", unit_of_measurement: "sec", step: 30 } } },
   { name: "fade_stage_3_pickup", selector: { boolean: {} } },
   { name: "fade_stage_3_color", selector: { color_rgb: {} } }
-], ji = [
+], eo = [
   { name: "use_light_color", label: "Dynamic Light Color Accent (Mushroom/Bubble Style)", selector: { boolean: {} } },
   { name: "haptic_feedback", label: "Haptic Feedback Vibrations (Mobile / Companion App)", selector: { boolean: {} } },
   { name: "haptic_type", label: "Haptic Vibration Intensity / Pattern", selector: { select: { options: [
@@ -4366,7 +4381,7 @@ const Zi = [
     { value: "hold", label: "Long Press / Hold Card (Recommended)" },
     { value: "double_tap", label: "Double Tap Card" }
   ] } } }
-], eo = [
+], to = [
   { name: "card_padding", label: "Card Base Padding (All Sides px)", selector: { number: { min: 0, max: 64, mode: "slider" } } },
   { name: "card_padding_vertical", label: "Card Vertical Padding (Top/Bottom px)", selector: { number: { min: 0, max: 64, mode: "slider" } } },
   { name: "card_padding_horizontal", label: "Card Horizontal Padding (Left/Right px)", selector: { number: { min: 0, max: 64, mode: "slider" } } },
@@ -4421,7 +4436,7 @@ const Zi = [
   { name: "secondary_text_offset_y", selector: { number: { min: -150, max: 250, mode: "slider" } } },
   { name: "features_offset_x", selector: { number: { min: -150, max: 250, mode: "slider" } } },
   { name: "features_offset_y", selector: { number: { min: -150, max: 250, mode: "slider" } } }
-], to = [
+], ro = [
   { name: "text_color_mode", selector: { select: { options: [
     { value: "selected", label: "Fixed Selected Color (Default)" },
     { value: "inverse", label: "Inverse Dynamic Text (Blend Mode Difference)" },
@@ -4562,7 +4577,7 @@ function it(c) {
     { name: `sub_button_${c}_double_tap_action`, selector: { "ui-action": {} } }
   ];
 }
-const ro = it(1), io = it(2), oo = it(3), ao = it(4), no = [
+const io = it(1), oo = it(2), ao = it(3), no = it(4), so = [
   { name: "tap_action", selector: { "ui-action": {} } },
   { name: "hold_action", selector: { "ui-action": {} } },
   { name: "double_tap_action", selector: { "ui-action": {} } },
@@ -4588,14 +4603,14 @@ function B(c) {
   }
   return c;
 }
-function D(c) {
+function N(c) {
   const e = B(c);
   if (!e || !e.startsWith("#") || e.length < 7) return;
   const t = parseInt(e.slice(1, 3), 16), r = parseInt(e.slice(3, 5), 16), i = parseInt(e.slice(5, 7), 16);
   if (!(isNaN(t) || isNaN(r) || isNaN(i)))
     return [t, r, i];
 }
-const so = {
+const lo = {
   entity: "Entity",
   name: "Name (Optional Override)",
   theme_preset: "Visual Design Theme Preset",
@@ -4793,14 +4808,14 @@ class Be extends fe {
     };
   }
   _computeLabel(e) {
-    return so[e.name] || e.name;
+    return lo[e.name] || e.name;
   }
   _transformConfigForForm() {
     if (!this._config) return {};
     const e = this._formDataCache.get(this._config);
     if (e) return e;
     const t = { ...this._config };
-    return t.bg_color = D(t.bg_color), t.card_border_color = D(t.card_border_color), t.active_color = D(t.active_color), t.inactive_color = D(t.inactive_color), t.slider_color = D(t.slider_color), t.slider_track_color = D(t.slider_track_color), t.text_color_primary = D(t.text_color_primary), t.text_color_secondary = D(t.text_color_secondary), t.sub_button_1_color = D(t.sub_button_1_color), t.sub_button_2_color = D(t.sub_button_2_color), t.sub_button_3_color = D(t.sub_button_3_color), t.sub_button_4_color = D(t.sub_button_4_color), t.fade_stage_1_color = D(t.fade_stage_1_color), t.fade_stage_2_color = D(t.fade_stage_2_color), t.fade_stage_3_color = D(t.fade_stage_3_color), this._formDataCache.set(this._config, t), t;
+    return t.bg_color = N(t.bg_color), t.card_border_color = N(t.card_border_color), t.active_color = N(t.active_color), t.inactive_color = N(t.inactive_color), t.slider_color = N(t.slider_color), t.slider_track_color = N(t.slider_track_color), t.text_color_primary = N(t.text_color_primary), t.text_color_secondary = N(t.text_color_secondary), t.sub_button_1_color = N(t.sub_button_1_color), t.sub_button_2_color = N(t.sub_button_2_color), t.sub_button_3_color = N(t.sub_button_3_color), t.sub_button_4_color = N(t.sub_button_4_color), t.fade_stage_1_color = N(t.fade_stage_1_color), t.fade_stage_2_color = N(t.fade_stage_2_color), t.fade_stage_3_color = N(t.fade_stage_3_color), this._formDataCache.set(this._config, t), t;
   }
   _valueChanged(e, t) {
     const r = e.detail.value, i = { ...this._config };
@@ -4876,19 +4891,19 @@ class Be extends fe {
     return w`
       <div class="editor-container">
         <!-- 1. CORE & LAYOUT -->
-        ${this._renderSection("core", "📦", "Core & Layout", Zi, e)}
+        ${this._renderSection("core", "📦", "Core & Layout", Qi, e)}
 
         <!-- 2. APPEARANCE & THEMING -->
-        ${this._renderSection("appearance", "🎨", "Appearance & Theming", Qi, e)}
+        ${this._renderSection("appearance", "🎨", "Appearance & Theming", ji, e)}
 
         <!-- 3. SLIDERS & CONTROLS -->
-        ${this._renderSection("controls", "🎛️", "Sliders & Interactive Controls", ji, e)}
+        ${this._renderSection("controls", "🎛️", "Sliders & Interactive Controls", eo, e)}
 
         <!-- 4. SPACING, PADDING & SIZING -->
-        ${this._renderSection("spacing", "📏", "Spacing, Padding & Sizing", eo, e)}
+        ${this._renderSection("spacing", "📏", "Spacing, Padding & Sizing", to, e)}
 
         <!-- 5. TYPOGRAPHY & LIVE SCROLLING -->
-        ${this._renderSection("typography", "✍️", "Typography & Live Scrolling", to, e)}
+        ${this._renderSection("typography", "✍️", "Typography & Live Scrolling", ro, e)}
 
         <!-- 6. CONSOLIDATED SUB-BUTTONS (1-4) -->
         <div class="custom-panel ${a ? "open" : ""}">
@@ -4911,17 +4926,17 @@ class Be extends fe {
               ></ha-form>
               
               <div class="sub-buttons-nested-list">
-                ${this._renderSubButtonPanel(1, t, ro, e)}
-                ${this._renderSubButtonPanel(2, r, io, e)}
-                ${this._renderSubButtonPanel(3, i, oo, e)}
-                ${this._renderSubButtonPanel(4, o, ao, e)}
+                ${this._renderSubButtonPanel(1, t, io, e)}
+                ${this._renderSubButtonPanel(2, r, oo, e)}
+                ${this._renderSubButtonPanel(3, i, ao, e)}
+                ${this._renderSubButtonPanel(4, o, no, e)}
               </div>
             </div>
           ` : S}
         </div>
 
         <!-- 7. ACTIONS & CUSTOM STYLESHEET -->
-        ${this._renderSection("actions", "⚡", "Actions & Scoped CSS", no, e)}
+        ${this._renderSection("actions", "⚡", "Actions & Scoped CSS", so, e)}
       </div>
     `;
   }
@@ -5056,15 +5071,15 @@ Tt([
 ], Be.prototype, "_openPanels");
 customElements.get("antigravity-no-icon-card-editor") || customElements.define("antigravity-no-icon-card-editor", Be);
 customElements.get("antigravity-card-editor") || customElements.define("antigravity-card-editor", Be);
-var lo = Object.defineProperty, ot = (c, e, t, r) => {
+var co = Object.defineProperty, ot = (c, e, t, r) => {
   for (var i = void 0, o = c.length - 1, a; o >= 0; o--)
     (a = c[o]) && (i = a(e, t, i) || i);
-  return i && lo(e, t, i), i;
+  return i && co(e, t, i), i;
 };
 typeof window < "u" && (window.runAntigravityCI = gr, window.antigravityMemoryReport = () => Qe.logStatus(), window.antigravityPowerStatus = () => ae.isPowerSaveActive());
-const co = "145";
+const uo = "145";
 console.info(
-  `%c 🚀 ANTIGRAVITY-CARD (NO-ICON) %c v${co} `,
+  `%c 🚀 ANTIGRAVITY-CARD (NO-ICON) %c v${uo} `,
   "color: white; background: #6200ea; font-weight: 700; padding: 2px 6px; border-radius: 4px 0 0 4px;",
   "color: #6200ea; background: #ede7f6; font-weight: 700; padding: 2px 6px; border-radius: 0 4px 4px 0;"
 );
@@ -5103,7 +5118,7 @@ window.customCards.push({
 });
 class ve extends fe {
   constructor() {
-    super(...arguments), this.preview = !1, this._collapsed = !0, this._interaction = new nr(), this._sliderDrag = new Xi(), this._throttleMap = /* @__PURE__ */ new Map(), this._monitoredEntities = [], this._powerUnsubscribe = null, this._gl = null, this._staticCardStyles = "", this._staticCardClasses = "", this._textOffsetStyle = "", this._featuresOffsetStyle = "", this._mainSliderMarginOffsets = "", this._colorTempMarginOffsets = "", this._colorHueMarginOffsets = "", this._textBoxWidth = "", this._primaryTextStyle = "", this._secondaryTextStyle = "", this._primaryTextOffsetStyle = "", this._secondaryTextOffsetStyle = "", this._fadeStaticConfig = null, this._sanitizedCustomStyles = "", this._interactionCallbacks = {
+    super(...arguments), this.preview = !1, this._collapsed = !0, this._interaction = new nr(), this._sliderDrag = new qi(), this._throttleMap = /* @__PURE__ */ new Map(), this._monitoredEntities = [], this._powerUnsubscribe = null, this._gl = null, this._staticCardStyles = "", this._staticCardClasses = "", this._textOffsetStyle = "", this._featuresOffsetStyle = "", this._mainSliderMarginOffsets = "", this._colorTempMarginOffsets = "", this._colorHueMarginOffsets = "", this._textBoxWidth = "", this._primaryTextStyle = "", this._secondaryTextStyle = "", this._primaryTextOffsetStyle = "", this._secondaryTextOffsetStyle = "", this._fadeStaticConfig = null, this._sanitizedCustomStyles = "", this._interactionCallbacks = {
       dispatchAction: (e, t, r) => this._dispatchAction(e, t, r),
       toggleCollapse: () => {
         this._hasCollapsible() && (this._collapsed = !this._collapsed);
@@ -5118,7 +5133,7 @@ class ve extends fe {
       onSliderChange: (e, t, r, i) => this._sliderChange(e, t, r, i),
       onColorInput: (e, t, r, i) => this._handleColorInput(e, t, r, i),
       callService: (e, t, r) => this.hass.callService(e, t, r),
-      forwardHaptic: (e) => H(e, this.config.haptic_feedback !== !1)
+      forwardHaptic: (e) => R(e, this.config.haptic_feedback !== !1)
     }, this._subButtonCallbacks = {
       onTap: (e, t, r, i, o) => this._handleSubTap(e, t, r, i, o),
       onPointerDown: (e, t, r) => this._handleSubPointerDown(e, t, r),
@@ -5134,7 +5149,7 @@ class ve extends fe {
       this._sliderDrag.handlePointerCancel(e);
     }, this._onSliderPointerUp = (e) => {
       this._sliderDrag.handlePointerUp(e, this.config, () => {
-        H("light", this.config.haptic_feedback !== !1), this._dispatchAction("tap");
+        R("light", this.config.haptic_feedback !== !1), this._dispatchAction("tap");
       });
     };
   }
@@ -5318,13 +5333,13 @@ class ve extends fe {
     );
   }
   _resolveColor(e) {
-    return Gi(e);
+    return Bi(e);
   }
   _parseDate(e) {
-    return Qt.parseDate(e);
+    return ar.parseDate(e);
   }
   _getInfoContent(e, t) {
-    return Qt.getInfoContent(e, t, this.config, this.hass);
+    return ar.getInfoContent(e, t, this.config, this.hass);
   }
   // --- NATIVE ACTION ROUTING & TOUCH GESTURE HANDLING ---
   _dispatchAction(e, t, r) {
@@ -5380,7 +5395,7 @@ class ve extends fe {
   }
   // --- THROTTLED SERVICE CALL HELPER ---
   _throttledCall(e, t, r) {
-    const i = Date.now(), o = r ?? (ae.isPowerSaveActive(this.hass) ? $i : wi), a = this._throttleMap.get(e) || 0;
+    const i = Date.now(), o = r ?? (ae.isPowerSaveActive(this.hass) ? bi : gi), a = this._throttleMap.get(e) || 0;
     i - a >= o ? (this._throttleMap.set(e, i), t()) : setTimeout(() => {
       const s = Date.now(), d = this._throttleMap.get(e) || 0;
       s - d >= o && (this._throttleMap.set(e, s), t());
@@ -5393,7 +5408,7 @@ class ve extends fe {
     this._sliderDrag.handleSliderChange(e, t, r, this.config, this.hass, i);
   }
   _getLightLiveColor(e) {
-    return Y.getLightLiveColor(e);
+    return F.getLightLiveColor(e);
   }
   _handleColorInput(e, t, r, i) {
     e.stopPropagation();
@@ -5439,37 +5454,37 @@ class ve extends fe {
     if (Array.isArray(T))
       for (let P = 0; P < T.length; P++) {
         const Te = T[P];
-        Te !== "onoff" && (E = !0), Te === "color_temp" && (L = !0), Pi.has(Te) && (M = !0);
+        Te !== "onoff" && (E = !0), Te === "color_temp" && (L = !0), $i.has(Te) && (M = !0);
       }
-    const C = v && b && E && (!$ || o), ee = t.attributes?.color_temp_kelvin ?? t.attributes?.color_temp, K = v && b && this.config.show_color_temp === !0 && (ee !== void 0 || L) && (!x || o), X = this.config.color_picker_type !== "wheel", q = v && b && (this.config.show_color_slider === !0 || this.config.show_color_picker === !0 && X) && M && (!k || o), te = v && b && this.config.show_color_picker === !0 && !X && M && (!A || o), I = t.state !== "unavailable" && t.state !== "unknown", O = f && I && b && t.attributes?.current_position !== void 0, J = m && I && o && b && t.attributes?.percentage !== void 0, Z = l && I && o && b && (t.attributes?.humidity !== void 0 || t.attributes?.target_humidity !== void 0), ze = _ && I && o && b && t.attributes?.volume_level !== void 0, Ie = g && I && b, Oe = y && I && o && b && (t.attributes?.temperature !== void 0 || t.attributes?.target_temp_high !== void 0), at = (this.config.bg_opacity ?? 10) / 100, nt = this.config.slider_color ? `--slider-color: ${this._resolveColor(this.config.slider_color)};` : h && o && !this.config.use_light_color ? "--slider-color: rgba(255, 255, 255, 0.95);" : `--slider-color: ${u};`, st = this.config.slider_track_color ? `--slider-track-color: ${this._resolveColor(this.config.slider_track_color)};` : h && o ? "--slider-track-color: rgba(0, 0, 0, 0.25);" : "", N = this._calculateMultiStageFade(t, s, p), ye = this.config.fade_target ?? "card", xe = this._resolveColor(this.config.bg_color), Fe = typeof N.currentColor == "string" ? N.currentColor : Array.isArray(N.currentColor) ? `rgb(${N.currentColor.join(",")})` : "";
-    let F;
-    N.activeFade && (ye === "card" || ye === "all" || h) ? F = Fe : h ? a === "light" ? F = o ? d || u : this.config.inactive_color ? p : "#000000" : F = o ? u : p : xe ? F = xe : a === "light" && !o ? F = "#000000" : F = `rgba(150, 150, 150, ${at})`;
+    const C = v && b && E && (!$ || o), ee = t.attributes?.color_temp_kelvin ?? t.attributes?.color_temp, Y = v && b && this.config.show_color_temp === !0 && (ee !== void 0 || L) && (!x || o), K = this.config.color_picker_type !== "wheel", X = v && b && (this.config.show_color_slider === !0 || this.config.show_color_picker === !0 && K) && M && (!k || o), te = v && b && this.config.show_color_picker === !0 && !K && M && (!A || o), I = t.state !== "unavailable" && t.state !== "unknown", O = f && I && b && t.attributes?.current_position !== void 0, q = m && I && o && b && t.attributes?.percentage !== void 0, J = l && I && o && b && (t.attributes?.humidity !== void 0 || t.attributes?.target_humidity !== void 0), ze = _ && I && o && b && t.attributes?.volume_level !== void 0, Ie = g && I && b, Oe = y && I && o && b && (t.attributes?.temperature !== void 0 || t.attributes?.target_temp_high !== void 0), at = (this.config.bg_opacity ?? 10) / 100, nt = this.config.slider_color ? `--slider-color: ${this._resolveColor(this.config.slider_color)};` : h && o && !this.config.use_light_color ? "--slider-color: rgba(255, 255, 255, 0.95);" : `--slider-color: ${u};`, st = this.config.slider_track_color ? `--slider-track-color: ${this._resolveColor(this.config.slider_track_color)};` : h && o ? "--slider-track-color: rgba(0, 0, 0, 0.25);" : "", H = this._calculateMultiStageFade(t, s, p), ye = this.config.fade_target ?? "card", xe = this._resolveColor(this.config.bg_color), Fe = typeof H.currentColor == "string" ? H.currentColor : Array.isArray(H.currentColor) ? `rgb(${H.currentColor.join(",")})` : "";
+    let U;
+    H.activeFade && (ye === "card" || ye === "all" || h) ? U = Fe : h ? a === "light" ? U = o ? d || u : this.config.inactive_color ? p : "#000000" : U = o ? u : p : xe ? U = xe : a === "light" && !o ? U = "#000000" : U = `rgba(150, 150, 150, ${at})`;
     let Se = this._resolveColor(this.config.active_color) || (a === "light" && d ? d : u) || "var(--primary-color)";
-    N.activeFade && (ye === "all" || this.config.active_glow === !0) && (Se = Fe);
+    H.activeFade && (ye === "all" || this.config.active_glow === !0) && (Se = Fe);
     let le = "";
-    this.config.box_shadow === "soft" && (le = "box-shadow: 0 4px 10px rgba(0,0,0,0.1);"), this.config.box_shadow === "deep" && (le = "box-shadow: 0 10px 20px rgba(0,0,0,0.3);"), (this.config.box_shadow === "glow" || this.config.active_glow === !0) && (le = o || N.activeFade ? `box-shadow: 0 0 22px ${Se}, 0 0 45px rgba(255, 255, 255, 0.18);` : "");
-    const lt = this.config.active_glow === !0 || this.config.box_shadow === "glow" ? "card-active-glow" : "", U = t?.attributes?.device_class, ce = a === "binary_sensor" && (U === "motion" || U === "occupancy" || U === "presence"), Ue = a === "binary_sensor" && (U === "door" || U === "window" || U === "garage_door" || U === "opening"), Ge = ce && (o || N.activeFade && N.currentStage === 1) ? "motion-active" : "", ct = Ue && o ? "door-open" : "", dt = a === "climate" && t?.attributes?.hvac_action ? `hvac-${t.attributes.hvac_action}` : "", ut = a === "cover" ? t?.state === "opening" ? "cover-opening" : t?.state === "closing" ? "cover-closing" : "" : "", de = `${this._staticCardClasses} ${lt} ${Ge} ${ct} ${dt} ${ut}`, ue = this._getSubButtons();
-    let G = "";
-    this.config.text_color_mode === "active_accent" && o ? G += `--primary-text-color: ${u}; ` : this.config.text_color_primary ? G += `--primary-text-color: ${this._resolveColor(this.config.text_color_primary)}; ` : h && o && (G += "--primary-text-color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.4); "), this.config.text_color_secondary ? G += `--secondary-text-color: ${this._resolveColor(this.config.text_color_secondary)}; ` : h && o && (G += "--secondary-text-color: rgba(255, 255, 255, 0.9); text-shadow: 0 1px 2px rgba(0,0,0,0.3); ");
-    const Q = this.config.features_position === "inline", _t = this.config.text_scrolling_primary || "none", ht = this.config.text_scrolling_secondary || "none", we = w`
+    this.config.box_shadow === "soft" && (le = "box-shadow: 0 4px 10px rgba(0,0,0,0.1);"), this.config.box_shadow === "deep" && (le = "box-shadow: 0 10px 20px rgba(0,0,0,0.3);"), (this.config.box_shadow === "glow" || this.config.active_glow === !0) && (le = o || H.activeFade ? `box-shadow: 0 0 22px ${Se}, 0 0 45px rgba(255, 255, 255, 0.18);` : "");
+    const lt = this.config.active_glow === !0 || this.config.box_shadow === "glow" ? "card-active-glow" : "", G = t?.attributes?.device_class, ce = a === "binary_sensor" && (G === "motion" || G === "occupancy" || G === "presence"), Ue = a === "binary_sensor" && (G === "door" || G === "window" || G === "garage_door" || G === "opening"), Ge = ce && (o || H.activeFade && H.currentStage === 1) ? "motion-active" : "", ct = Ue && o ? "door-open" : "", dt = a === "climate" && t?.attributes?.hvac_action ? `hvac-${t.attributes.hvac_action}` : "", ut = a === "cover" ? t?.state === "opening" ? "cover-opening" : t?.state === "closing" ? "cover-closing" : "" : "", de = `${this._staticCardClasses} ${lt} ${Ge} ${ct} ${dt} ${ut}`, ue = this._getSubButtons();
+    let V = "";
+    this.config.text_color_mode === "active_accent" && o ? V += `--primary-text-color: ${u}; ` : this.config.text_color_primary ? V += `--primary-text-color: ${this._resolveColor(this.config.text_color_primary)}; ` : h && o && (V += "--primary-text-color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.4); "), this.config.text_color_secondary ? V += `--secondary-text-color: ${this._resolveColor(this.config.text_color_secondary)}; ` : h && o && (V += "--secondary-text-color: rgba(255, 255, 255, 0.9); text-shadow: 0 1px 2px rgba(0,0,0,0.3); ");
+    const Z = this.config.features_position === "inline", _t = this.config.text_scrolling_primary || "none", ht = this.config.text_scrolling_secondary || "none", we = w`
       ${C ? this._renderLightSlider(t) : S}
       ${O ? this._renderCoverSlider(t) : S}
-      ${J ? this._renderFanSlider(t) : S}
-      ${Z ? this._renderHumidifierSlider(t) : S}
+      ${q ? this._renderFanSlider(t) : S}
+      ${J ? this._renderHumidifierSlider(t) : S}
       ${ze ? this._renderMediaSlider(t) : S}
       ${Ie ? this._renderNumberSlider(t) : S}
       ${Oe ? this._renderClimateSlider(t) : S}
     `, $e = w`
-      ${K ? this._renderColorTempSlider(t) : S}
-      ${q ? this._renderColorSlider(t) : S}
+      ${Y ? this._renderColorTempSlider(t) : S}
+      ${X ? this._renderColorSlider(t) : S}
       ${te ? this._renderColorPicker(t) : S}
-    `, Ve = C || O || J || Z || ze || Ie || Oe, _e = K || q || te, We = !Q && _e || ue.length > 0, Ce = this.config.decay_slider_position ?? "bottom", ke = this._sanitizedCustomStyles;
+    `, Ve = C || O || q || J || ze || Ie || Oe, _e = Y || X || te, We = !Z && _e || ue.length > 0, Ce = this.config.decay_slider_position ?? "bottom", ke = this._sanitizedCustomStyles;
     return w`
       ${ke ? w`<style>${dr(ke)}</style>` : S}
       <ha-card 
         class="${de}" 
         ?active=${o}
-        style="${this._staticCardStyles} background: ${F}; ${le} ${nt} ${st} ${G} --ag-glow-color: ${Se}; --ag-active-color: ${u};"
+        style="${this._staticCardStyles} background: ${U}; ${le} ${nt} ${st} ${V} --ag-glow-color: ${Se}; --ag-active-color: ${u};"
         @click=${this._handleTap}
         @keydown=${this._handleKeyDown}
         @contextmenu=${this._handleContextMenu}
@@ -5478,8 +5493,8 @@ class ve extends fe {
         @pointerup=${this._handlePointerUp}
         @pointercancel=${this._handlePointerCancel}
       >
-        <div class="card-content ${Q ? "features-inline" : ""}" style="justify-content: var(--ag-content-alignment);">
-          ${Ce === "top" ? this._renderDecaySlider(N) : S}
+        <div class="card-content ${Z ? "features-inline" : ""}" style="justify-content: var(--ag-content-alignment);">
+          ${Ce === "top" ? this._renderDecaySlider(H) : S}
 
           <div class="info-container">
             <div class="info" style="${this._textOffsetStyle} ${this._textBoxWidth} text-align: var(--ag-text-alignment);">
@@ -5492,17 +5507,17 @@ class ve extends fe {
                   <span class="secondary scroll-content" style="${this._secondaryTextStyle}">${i}</span>
                 </div>` : S}
             </div>
-            ${Ce === "inline" ? w`<div class="inline-sliders">${this._renderDecaySlider(N)}</div>` : S}
-            ${Q && Ve ? w`<div class="inline-sliders" style="${this._mainSliderMarginOffsets}">${we}</div>` : S}
-            ${Q && _e ? w`<div class="inline-sliders ${this._collapsed ? "collapsed" : ""}">${$e}</div>` : S}
+            ${Ce === "inline" ? w`<div class="inline-sliders">${this._renderDecaySlider(H)}</div>` : S}
+            ${Z && Ve ? w`<div class="inline-sliders" style="${this._mainSliderMarginOffsets}">${we}</div>` : S}
+            ${Z && _e ? w`<div class="inline-sliders ${this._collapsed ? "collapsed" : ""}">${$e}</div>` : S}
           </div>
           
-          ${Ce === "bottom" ? this._renderDecaySlider(N) : S}
-          ${!Q && Ve ? w`<div class="features-container" style="${this._featuresOffsetStyle} ${this._mainSliderMarginOffsets}">${we}</div>` : S}
+          ${Ce === "bottom" ? this._renderDecaySlider(H) : S}
+          ${!Z && Ve ? w`<div class="features-container" style="${this._featuresOffsetStyle} ${this._mainSliderMarginOffsets}">${we}</div>` : S}
 
           ${We ? w`
             <div class="collapsible-wrapper ${this._collapsed ? "collapsed" : ""}">
-              ${!Q && _e ? w`<div class="features-container" style="${this._featuresOffsetStyle}">${$e}</div>` : S}
+              ${!Z && _e ? w`<div class="features-container" style="${this._featuresOffsetStyle}">${$e}</div>` : S}
 
               ${ue.length > 0 ? w`
                 <div class="sub-buttons-container">
@@ -5598,7 +5613,7 @@ class ve extends fe {
     }
     let m;
     u && n && (m = this._getInfoContent("state", n));
-    const l = (e || this.config.entity || "").split(".")[0];
+    const l = F.getDomain(e || this.config.entity);
     return d === "color_picker" && (l === "light" || !e && this.config.entity?.startsWith("light.")) ? this._renderSubColorPicker(e, n, b, v, o, m) : Jt.renderSubButton(
       this.config,
       this.hass,
@@ -5639,5 +5654,5 @@ customElements.get("antigravity-no-icon-card") || customElements.define("antigra
 customElements.get("antigravity-card") || customElements.define("antigravity-card", ve);
 export {
   ve as AntigravityCard,
-  co as CARD_VERSION
+  uo as CARD_VERSION
 };

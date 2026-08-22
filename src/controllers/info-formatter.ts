@@ -4,6 +4,7 @@
  */
 
 import { html, TemplateResult } from 'lit';
+import { EntityController } from './entity-controller';
 
 const DATE_PARSE_CACHE = new Map<string, Date>();
 const DATE_PARSE_CACHE_MAX = 200;
@@ -115,7 +116,7 @@ export class InfoFormatter {
         return rawName;
       }
       case 'state': {
-        const domain = (stateObj.entity_id || '').split('.')[0];
+        const domain = EntityController.getDomain(stateObj.entity_id);
 
         // 1. Timer active / paused
         if (domain === 'timer') {

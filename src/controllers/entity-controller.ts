@@ -6,6 +6,7 @@
 import { ACTIVE_STATES } from '../constants';
 import {
   kelvinToRgb,
+  kelvinToRgbString,
   rgbToHex,
   rgbToHue,
   hsToRgb,
@@ -32,11 +33,12 @@ export class EntityController {
   }
 
   /**
-   * Extract clean domain from entity ID.
+   * Extract clean domain from entity ID with zero array allocation.
    */
   public static getDomain(entityId?: string): string {
     if (!entityId || typeof entityId !== 'string') return '';
-    return entityId.split('.')[0] || '';
+    const dot = entityId.indexOf('.');
+    return dot === -1 ? entityId : entityId.slice(0, dot);
   }
 
   /**
@@ -48,7 +50,9 @@ export class EntityController {
     }
     const rawName = stateObj?.attributes?.friendly_name;
     if (!rawName) {
-      return entityId ? entityId.split('.')[1]?.replace(/_/g, ' ') || entityId : '';
+      if (!entityId) return '';
+      const dot = entityId.indexOf('.');
+      return dot === -1 ? entityId : entityId.slice(dot + 1).replace(/_/g, ' ');
     }
 
     if (this._nameCache.has(rawName)) {
@@ -76,8 +80,7 @@ export class EntityController {
     // 1. If explicit color_temp mode, use color temperature
     if (colorMode === 'color_temp') {
       const kelvin = attr.color_temp_kelvin ?? (attr.color_temp ? Math.round(1000000 / attr.color_temp) : 3000);
-      const [r, g, b] = kelvinToRgb(kelvin);
-      return `rgb(${r}, ${g}, ${b})`;
+      return kelvinToRgbString(kelvin);
     }
 
     // 2. If RGB / HS / XY / RGBW / RGBWW or rgb_color is present, prioritize RGB color!

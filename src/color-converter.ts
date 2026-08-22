@@ -199,6 +199,7 @@ class ColorConverterService {
   }
 
   private _kelvinCache = new Map<number, RGBTuple>();
+  private _kelvinStringCache = new Map<number, string>();
 
   /**
    * Convert Kelvin temperature to an approximation RGB tuple with fast integer LUT caching.
@@ -238,8 +239,25 @@ class ColorConverterService {
     const res: RGBTuple = [Math.round(r), Math.round(g), Math.round(b)];
     if (this._kelvinCache.size < 500) {
       this._kelvinCache.set(roundedK, res);
+      this._kelvinStringCache.set(roundedK, `rgb(${res[0]}, ${res[1]}, ${res[2]})`);
     }
     return res;
+  }
+
+  /**
+   * Convert Kelvin temperature directly to cached CSS RGB string.
+   */
+  public kelvinToRgbString(kelvin: number): string {
+    if (isNaN(kelvin)) return 'rgb(255, 255, 255)';
+    const roundedK = Math.round(kelvin / 10) * 10;
+    const cached = this._kelvinStringCache.get(roundedK);
+    if (cached) return cached;
+    const [r, g, b] = this.kelvinToRgb(roundedK);
+    const str = `rgb(${r}, ${g}, ${b})`;
+    if (this._kelvinStringCache.size < 500) {
+      this._kelvinStringCache.set(roundedK, str);
+    }
+    return str;
   }
 
   /**
@@ -286,6 +304,7 @@ export const rgbToHue = colorConverter.rgbToHue.bind(colorConverter);
 export const hsvToRgb = colorConverter.hsvToRgb.bind(colorConverter);
 export const hsToRgb = colorConverter.hsToRgb.bind(colorConverter);
 export const kelvinToRgb = colorConverter.kelvinToRgb.bind(colorConverter);
+export const kelvinToRgbString = colorConverter.kelvinToRgbString.bind(colorConverter);
 export const lerpRgb = colorConverter.lerpRgb.bind(colorConverter);
 
 export const COLOR_SWATCHES = [

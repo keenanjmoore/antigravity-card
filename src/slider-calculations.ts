@@ -187,14 +187,23 @@ export class SliderCalculationsEngine {
     return Math.max(min, Math.min(max, value));
   }
 
-  /**
-   * Snap a numeric slider value to the configured step increment avoiding float errors.
-   */
   public snapToStep(value: number, step: number, min: number): number {
     if (isNaN(value)) return min;
     if (step <= 0) return value;
     const steps = Math.round((value - min) / step);
     const result = min + steps * step;
+
+    // Fast-path: integer step increments (brightness 0-255, fan speed, cover position)
+    if ((step | 0) === step && (min | 0) === min) {
+      return Math.round(result);
+    }
+
+    // High-precision float step rounding without string conversions
+    const factor = Math.round(1 / step);
+    if (factor > 0 && factor <= 10000) {
+      return Math.round(result * factor) / factor;
+    }
+
     const stepStr = step.toString();
     const decimals = stepStr.includes('.') ? stepStr.split('.')[1].length : 0;
     return Number(result.toFixed(Math.min(decimals, 6)));
