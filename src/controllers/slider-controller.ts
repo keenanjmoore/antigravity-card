@@ -33,6 +33,16 @@ export interface SliderCallbacks {
   forwardHaptic?: (type: string) => void;
 }
 
+const PERCENT_LUT = Array.from({ length: 101 }, (_, i) => `${i}%`);
+
+const LIGHT_DATA_FN = (v: number) => ({ brightness: v });
+const LIGHT_PCT_CALC = (v: number) => Math.round((v / 255) * 100);
+const LIGHT_LABEL_FORMATTER = (_: number, p: number) => (p <= 0 ? '' : (PERCENT_LUT[p] || `${p}%`));
+const COVER_DATA_FN = (v: number) => ({ position: v });
+const IDENTITY_PCT_CALC = (v: number) => v;
+const PERCENT_LABEL_FORMATTER = (_: number, p: number) => (PERCENT_LUT[p] || `${p}%`);
+const MEDIA_DATA_FN = (v: number) => ({ volume_level: v / 100 });
+
 export class SliderController {
   /**
    * Render a generic slider container with support for Google, Full, and Compact themes.
@@ -59,7 +69,7 @@ export class SliderController {
   ): TemplateResult {
     const isGoogle = config.slider_style === 'google';
     const showPercent = (isGoogle && config.show_slider_percent !== false) || config.show_slider_percent === true;
-    const defaultBadgeText = labelFormatter ? labelFormatter(val, pct) : `${pct}%`;
+    const defaultBadgeText = labelFormatter ? labelFormatter(val, pct) : (PERCENT_LUT[pct] || `${pct}%`);
     const finalBadge = badgeContent !== undefined ? badgeContent : defaultBadgeText;
 
     const effectiveStep = (config.slider_stepped_movement === false) ? 'any' : step;
@@ -118,7 +128,6 @@ export class SliderController {
     callbacks: SliderCallbacks,
     marginOffsets = ''
   ): TemplateResult {
-    const isActive = EntityController.isEntityActive(stateObj);
     const val = stateObj.attributes.brightness ?? 0;
     const pct = Math.max(0, Math.min(100, Math.round((val / 255) * 100)));
     const liveColor = EntityController.getLightLiveColor(stateObj);
@@ -126,9 +135,9 @@ export class SliderController {
 
     return this.renderGenericSlider(
       config, 'brightness', 'Brightness', 0, 255, 1, val, pct, 'light', 'turn_on',
-      (v) => ({ brightness: v }), callbacks,
-      (v) => Math.round((v / 255) * 100),
-      (_, p) => (!isActive || p <= 0 ? '' : `${p}%`),
+      LIGHT_DATA_FN, callbacks,
+      LIGHT_PCT_CALC,
+      LIGHT_LABEL_FORMATTER,
       '', sliderColorStyle, undefined, marginOffsets
     );
   }
@@ -357,8 +366,8 @@ export class SliderController {
     const pos = stateObj.attributes.current_position ?? ((stateObj.state === 'open' || stateObj.state === 'opening') ? 100 : 0);
     return this.renderGenericSlider(
       config, 'cover', 'Cover Position', 0, 100, 1, pos, pos, 'cover', 'set_cover_position',
-      (v) => ({ position: v }), callbacks,
-      (v) => v, (_, p) => `${p}%`, '', '', undefined, marginOffsets
+      COVER_DATA_FN, callbacks,
+      IDENTITY_PCT_CALC, PERCENT_LABEL_FORMATTER, '', '', undefined, marginOffsets
     );
   }
 
@@ -379,7 +388,7 @@ export class SliderController {
         const snapped = step > 1 ? Math.round(v / step) * step : v;
         return { percentage: Math.min(100, Math.max(0, snapped)) };
       }, callbacks,
-      (v) => v, (_, p) => `${p}%`, '', '', undefined, marginOffsets
+      IDENTITY_PCT_CALC, PERCENT_LABEL_FORMATTER, '', '', undefined, marginOffsets
     );
   }
 
@@ -397,8 +406,8 @@ export class SliderController {
     const label = isMuted ? 'Muted (0%)' : undefined;
     return this.renderGenericSlider(
       config, 'media', 'Volume', 0, 100, 1, vol, vol, 'media_player', 'volume_set',
-      (v) => ({ volume_level: v / 100 }), callbacks,
-      (v) => v, (_, p) => (isMuted ? 'Muted' : `${p}%`),
+      MEDIA_DATA_FN, callbacks,
+      IDENTITY_PCT_CALC, (_, p) => (isMuted ? 'Muted' : (PERCENT_LUT[p] || `${p}%`)),
       'media', '', label, marginOffsets
     );
   }
@@ -420,7 +429,7 @@ export class SliderController {
     const val = !isNaN(numVal) ? numVal : min;
     const range = max - min;
     const pct = range > 0 ? Math.max(0, Math.min(100, Math.round(((val - min) / range) * 100))) : 0;
-    const svcDomain = (config.entity || 'number').split('.')[0];
+    const svcDomain = EntityController.getDomain(config.entity) || 'number';
     const unit = stateObj.attributes.unit_of_measurement ? ` ${stateObj.attributes.unit_of_measurement}` : '';
     const stepStr = step.toString();
     const precision = stepStr.includes('.') ? stepStr.split('.')[1].length : 0;
