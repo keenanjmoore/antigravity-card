@@ -1770,7 +1770,7 @@ var or = Object.defineProperty, ar = Object.getOwnPropertyDescriptor, ue = (n, e
     (a = n[o]) && (r = (i ? a(e, t, r) : a(r)) || r);
   return i && r && or(e, t, r), r;
 };
-const nr = "134";
+const nr = "135";
 console.info(
   `%c 🚀 ANTIGRAVITY-CARD (NO-ICON) %c v${nr} `,
   "color: white; background: #6200ea; font-weight: 700; padding: 2px 6px; border-radius: 4px 0 0 4px;",
@@ -1788,6 +1788,11 @@ if (typeof CSS < "u" && "registerProperty" in CSS)
       syntax: "<percentage>",
       inherits: !0,
       initialValue: "100%"
+    }), CSS.registerProperty({
+      name: "--glow-intensity",
+      syntax: "<number>",
+      inherits: !0,
+      initialValue: "1"
     });
   } catch {
   }
