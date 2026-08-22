@@ -8,6 +8,13 @@ import { html, TemplateResult } from 'lit';
 const DATE_PARSE_CACHE = new Map<string, Date>();
 const DATE_PARSE_CACHE_MAX = 200;
 
+const COMPACT_SECONDS_LUT = Array.from({ length: 60 }, (_, i) => `${i}s`);
+const HUMAN_SECONDS_LUT = Array.from({ length: 60 }, (_, i) => `${i} seconds ago`);
+const COMPACT_MINUTES_LUT = Array.from({ length: 60 }, (_, i) => `${i}m`);
+const HUMAN_MINUTES_LUT = Array.from({ length: 60 }, (_, i) => i === 1 ? '1 minute ago' : `${i} minutes ago`);
+const COMPACT_HOURS_LUT = Array.from({ length: 24 }, (_, i) => `${i}h`);
+const HUMAN_HOURS_LUT = Array.from({ length: 24 }, (_, i) => `${i}h ago`);
+
 export class InfoFormatter {
   /**
    * Parse date strings, numbers, or Date instances safely with LRU caching.
@@ -60,7 +67,7 @@ export class InfoFormatter {
   }
 
   /**
-   * Format a past timestamp to relative time string (compact or human-friendly).
+   * Format a past timestamp to relative time string (compact or human-friendly) with LUT caching.
    */
   public static formatTimeAgo(dateInput: string | Date | number | undefined, compact = false, nowMs?: number): string {
     const date = this.parseDate(dateInput);
@@ -68,11 +75,11 @@ export class InfoFormatter {
 
     const diffSec = Math.max(0, (((nowMs ?? Date.now()) - date.getTime()) / 1000) | 0);
     if (diffSec < 5) return compact ? "< 5s" : "just now";
-    if (diffSec < 60) return compact ? `${diffSec}s` : `${diffSec} seconds ago`;
+    if (diffSec < 60) return compact ? (COMPACT_SECONDS_LUT[diffSec] || `${diffSec}s`) : (HUMAN_SECONDS_LUT[diffSec] || `${diffSec} seconds ago`);
     const diffMin = (diffSec / 60) | 0;
-    if (diffMin < 60) return compact ? `${diffMin}m` : `${diffMin} ${diffMin === 1 ? 'minute' : 'minutes'} ago`;
+    if (diffMin < 60) return compact ? (COMPACT_MINUTES_LUT[diffMin] || `${diffMin}m`) : (HUMAN_MINUTES_LUT[diffMin] || `${diffMin} minutes ago`);
     const diffHours = (diffMin / 60) | 0;
-    if (diffHours < 24) return `${diffHours}h${compact ? '' : ' ago'}`;
+    if (diffHours < 24) return compact ? (COMPACT_HOURS_LUT[diffHours] || `${diffHours}h`) : (HUMAN_HOURS_LUT[diffHours] || `${diffHours}h ago`);
     const diffDays = (diffHours / 24) | 0;
     if (diffDays < 7) return `${diffDays}d${compact ? '' : ' ago'}`;
     const diffWeeks = (diffDays / 7) | 0;

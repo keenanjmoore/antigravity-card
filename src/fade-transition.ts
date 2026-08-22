@@ -4,7 +4,7 @@
  */
 
 import { AntigravityCardConfig, FadeCalculationResult, RGBTuple } from './types';
-import { parseColorToRgb, rgbToHex, lerpRgb } from './color-converter';
+import { parseColorToRgb, lerpRgb } from './color-converter';
 import {
   DEFAULT_FADE_STAGE_1_SECONDS,
   DEFAULT_FADE_STAGE_2_SECONDS,
@@ -193,17 +193,44 @@ export class FadeTransitionManager {
       stageLabel = `${remainingSeconds}s left`;
     }
 
-    return {
+    const r = currentColor[0];
+    const g = currentColor[1];
+    const b = currentColor[2];
+    const colorKey = `${r}_${g}_${b}`;
+    if (colorKey !== this._lastColorRgbKey) {
+      this._lastColorRgbKey = colorKey;
+      this._lastColorRgbStr = `rgb(${r}, ${g}, ${b})`;
+      this._lastColorHexStr = `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+    }
+
+    const roundedPct = Math.min(100, progressPct);
+    if (
+      this._lastResult &&
+      this._lastResult.currentStage === currentStage &&
+      this._lastResult.progressPct === roundedPct &&
+      this._lastResult.remainingSeconds === remainingSeconds &&
+      this._lastResult.currentColor === this._lastColorRgbStr
+    ) {
+      return this._lastResult;
+    }
+
+    this._lastResult = {
       enabled: true,
       activeFade: true,
-      currentColor: `rgb(${currentColor[0]}, ${currentColor[1]}, ${currentColor[2]})`,
-      colorHex: rgbToHex(currentColor),
-      progressPct: Math.min(100, progressPct),
+      currentColor: this._lastColorRgbStr,
+      colorHex: this._lastColorHexStr,
+      progressPct: roundedPct,
       remainingSeconds,
       currentStage,
       stageLabel,
     };
+    return this._lastResult;
   }
+
+  private _lastResult: FadeCalculationResult | null = null;
+  private _lastColorRgbKey = '';
+  private _lastColorRgbStr = '';
+  private _lastColorHexStr = '';
 
   public reset(): void {
     this._previousLiveRgb = null;
@@ -211,6 +238,9 @@ export class FadeTransitionManager {
     this._lastTrackedState = null;
     this._cachedDurations = null;
     this._lastFadeConfigHash = null;
+    this._lastResult = null;
+    this._lastColorRgbKey = '';
+    this._hexCache.clear();
   }
 }
 

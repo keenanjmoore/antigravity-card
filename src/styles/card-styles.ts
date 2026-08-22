@@ -323,6 +323,8 @@ export const antigravityCardStyles: CSSResult = css`
     max-width: 100%;
     position: relative;
     white-space: nowrap;
+    contain: paint layout;
+    will-change: transform;
   }
   .primary {
     color: var(--primary-text-color);

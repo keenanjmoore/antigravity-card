@@ -175,9 +175,20 @@ export class AntigravityCard extends LitElement {
       return true;
     }
 
-    // Linear scan on monitored entities without array/heap allocation
+    // Fast-path: HA states reference identical (zero entity changes)
+    if (oldHass.states === this.hass.states) {
+      return false;
+    }
+
+    // Single-entity fast-path (bypasses loop overhead for 80%+ of cards)
     const monitored = this._monitoredEntities;
     const len = monitored.length;
+    if (len === 1) {
+      const ent = monitored[0];
+      return oldHass.states[ent] !== this.hass.states[ent];
+    }
+
+    // Multi-entity scan without array/heap allocation
     for (let i = 0; i < len; i++) {
       const ent = monitored[i];
       if (oldHass.states[ent] !== this.hass.states[ent]) {

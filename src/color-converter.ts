@@ -310,8 +310,12 @@ export const COLOR_TEMP_PRESETS = [
   { k: 6500, label: '6500K', rgb: kelvinToRgb(6500) },
 ];
 
+let lastHapticTime = 0;
 export function safeForwardHaptic(type = 'light', enabled = true) {
   if (!enabled) return;
+  const now = Date.now();
+  if (now - lastHapticTime < 40) return;
+  lastHapticTime = now;
   try {
     forwardHaptic(type as any);
   } catch {
