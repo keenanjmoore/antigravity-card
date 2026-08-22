@@ -552,10 +552,10 @@ let Ni = class {
     return this.render(...t);
   }
 };
-const { I: Li } = ki, Ut = (n) => n, Gt = () => document.createComment(""), xe = (n, e, t) => {
+const { I: Li } = ki, Ut = (n) => n, Vt = () => document.createComment(""), xe = (n, e, t) => {
   const i = n._$AA.parentNode, r = e === void 0 ? n._$AB : e._$AA;
   if (t === void 0) {
-    const o = i.insertBefore(Gt(), r), a = i.insertBefore(Gt(), r);
+    const o = i.insertBefore(Vt(), r), a = i.insertBefore(Vt(), r);
     t = new Li(o, a, n, n.options);
   } else {
     const o = t._$AB.nextSibling, a = t._$AM, l = a !== n;
@@ -575,7 +575,7 @@ const { I: Li } = ki, Ut = (n) => n, Gt = () => document.createComment(""), xe =
 }, Z = (n, e, t = n) => (n._$AI(e, t), n), Hi = {}, Ri = (n, e = Hi) => n._$AH = e, Oi = (n) => n._$AH, ft = (n) => {
   n._$AR(), n._$AA.remove();
 };
-const Vt = (n, e, t) => {
+const Gt = (n, e, t) => {
   const i = /* @__PURE__ */ new Map();
   for (let r = e; r <= t; r++) i.set(n[r], r);
   return i;
@@ -605,7 +605,7 @@ const Vt = (n, e, t) => {
     else if (l[y] === a[x]) u[x] = Z(r[y], o[x]), y--, x--;
     else if (l[c] === a[x]) u[x] = Z(r[c], o[x]), xe(n, u[x + 1], r[c]), c++, x--;
     else if (l[y] === a[m]) u[m] = Z(r[y], o[m]), xe(n, r[c], r[y]), y--, m++;
-    else if (f === void 0 && (f = Vt(a, m, x), h = Vt(l, c, y)), f.has(l[c])) if (f.has(l[y])) {
+    else if (f === void 0 && (f = Gt(a, m, x), h = Gt(l, c, y)), f.has(l[c])) if (f.has(l[y])) {
       const d = h.get(a[m]), g = d !== void 0 ? r[d] : null;
       if (g === null) {
         const w = xe(n, r[c]);
@@ -642,7 +642,7 @@ var Fi = ["closed", "locked", "off"], Ae = function(n, e, t, i) {
   Ae(window, "haptic", n);
 }, Ui = function(n, e, t) {
   t === void 0 && (t = !1), t ? history.replaceState(null, "", e) : history.pushState(null, "", e), Ae(window, "location-changed", { replace: t });
-}, Gi = function(n, e, t) {
+}, Vi = function(n, e, t) {
   t === void 0 && (t = !0);
   var i, r = zi(e), o = r === "group" ? "homeassistant" : r;
   switch (r) {
@@ -656,9 +656,9 @@ var Fi = ["closed", "locked", "off"], Ae = function(n, e, t, i) {
       i = t ? "turn_on" : "turn_off";
   }
   return n.callService(o, i, { entity_id: e });
-}, Vi = function(n, e) {
+}, Gi = function(n, e) {
   var t = Fi.includes(n.states[e].state);
-  return Gi(n, e, t);
+  return Vi(n, e, t);
 }, Ii = function(n, e, t, i) {
   if (i || (i = { action: "more-info" }), !i.confirmation || i.confirmation.exemptions && i.confirmation.exemptions.some(function(o) {
     return o.user === e.user.id;
@@ -673,7 +673,7 @@ var Fi = ["closed", "locked", "off"], Ae = function(n, e, t, i) {
       i.url_path && window.open(i.url_path);
       break;
     case "toggle":
-      t.entity && (Vi(e, t.entity), Se("success"));
+      t.entity && (Gi(e, t.entity), Se("success"));
       break;
     case "call-service":
       if (!i.service) return void Se("failure");
@@ -1770,12 +1770,27 @@ var or = Object.defineProperty, ar = Object.getOwnPropertyDescriptor, ue = (n, e
     (a = n[o]) && (r = (i ? a(e, t, r) : a(r)) || r);
   return i && r && or(e, t, r), r;
 };
-const nr = "132";
+const nr = "133";
 console.info(
   `%c 🚀 ANTIGRAVITY-CARD (NO-ICON) %c v${nr} `,
   "color: white; background: #6200ea; font-weight: 700; padding: 2px 6px; border-radius: 4px 0 0 4px;",
   "color: #6200ea; background: #ede7f6; font-weight: 700; padding: 2px 6px; border-radius: 0 4px 4px 0;"
 );
+if (typeof CSS < "u" && "registerProperty" in CSS)
+  try {
+    CSS.registerProperty({
+      name: "--slider-pct",
+      syntax: "<percentage>",
+      inherits: !0,
+      initialValue: "0%"
+    }), CSS.registerProperty({
+      name: "--decay-pct",
+      syntax: "<percentage>",
+      inherits: !0,
+      initialValue: "100%"
+    });
+  } catch {
+  }
 window.customCards = window.customCards || [];
 window.customCards.push({
   type: "antigravity-no-icon-card",
@@ -2057,7 +2072,7 @@ function E(n, e = !0) {
     } catch {
     }
 }
-const ae = /* @__PURE__ */ new Map(), Kt = 250, G = /* @__PURE__ */ new Map(), qt = 128;
+const ae = /* @__PURE__ */ new Map(), Kt = 250, V = /* @__PURE__ */ new Map(), qt = 128;
 function gr(n) {
   if (!n) return "";
   const e = ae.get(n);
@@ -2172,7 +2187,7 @@ class Y extends le {
     const e = this.config.card_padding ?? 12, t = this.config.card_padding_vertical ?? 4, i = this.config.card_padding_horizontal ?? e, r = this.config.card_padding_top ?? t, o = this.config.card_padding_bottom ?? t, a = this.config.card_padding_left ?? i, l = this.config.card_padding_right ?? i, u = this.config.card_margin, f = this.config.card_margin_vertical ?? u, h = this.config.card_margin_horizontal ?? u, c = this.config.card_margin_top ?? f, y = this.config.card_margin_bottom ?? f, m = this.config.card_margin_left ?? h, x = this.config.card_margin_right ?? h;
     let d = "";
     (c !== void 0 || y !== void 0 || m !== void 0 || x !== void 0) && (d = `margin: ${c ?? 0}px ${x ?? 0}px ${y ?? 0}px ${m ?? 0}px;`);
-    const g = this.config.border_radius ?? 12, w = this.config.slider_style === "google", M = this.config.slider_style === "full", p = w ? 42 : M ? 40 : 12, b = this.config.slider_height !== void 0 ? this.config.slider_height : p, A = w ? 21 : M ? 0 : b / 2, s = this.config.slider_border_radius !== void 0 ? this.config.slider_border_radius : A, _ = this.config.card_border_width ?? (this.config.card_border_color ? 1 : 0), v = this.config.card_border_style ?? "solid", k = _ > 0 ? `border: ${_}px ${v} ${this._resolveColor(this.config.card_border_color) || "var(--divider-color, rgba(150, 150, 150, 0.2))"};` : "", T = this.config.card_width ? `width: ${this.config.card_width};` : "", B = this.config.card_max_width ? `max-width: ${this.config.card_max_width};` : "", K = this.config.card_height ? `height: ${this.config.card_height};` : "", ee = this.config.card_min_height !== void 0 ? `min-height: ${this.config.card_min_height}px;` : "", q = this.config.fill_container === !0 ? "height: 100%; width: 100%;" : "", he = this.config.overflow_hidden !== !1 ? "overflow: hidden;" : "overflow: visible;", Pe = this.config.backdrop_blur !== void 0 ? `backdrop-filter: blur(${this.config.backdrop_blur}px); -webkit-backdrop-filter: blur(${this.config.backdrop_blur}px);` : "", Ee = this.config.card_opacity !== void 0 ? `opacity: ${this.config.card_opacity / 100};` : "", De = this.config.transition_duration !== void 0 ? `transition: all ${this.config.transition_duration}ms ease;` : "", V = this.config.text_padding_vertical ?? this.config.text_padding ?? 0, Ne = this.config.text_padding_horizontal ?? this.config.text_padding ?? 0, Le = this.config.features_padding_vertical ?? this.config.features_padding ?? 0, He = this.config.features_padding_horizontal ?? this.config.features_padding ?? 0, Re = this.config.sub_button_padding ?? 0, Oe = this.config.sub_button_container_padding ?? 0, Be = this.config.sub_button_alignment ? `--ag-sub-button-alignment: ${this.config.sub_button_alignment};` : "", nt = this.config.text_scrolling_speed ? `--ag-scroll-speed: ${this.config.text_scrolling_speed}s;` : "", st = this.config.full_slider_opacity !== void 0 ? `--ag-full-slider-opacity: ${this.config.full_slider_opacity / 100};` : "";
+    const g = this.config.border_radius ?? 12, w = this.config.slider_style === "google", M = this.config.slider_style === "full", p = w ? 42 : M ? 40 : 12, b = this.config.slider_height !== void 0 ? this.config.slider_height : p, A = w ? 21 : M ? 0 : b / 2, s = this.config.slider_border_radius !== void 0 ? this.config.slider_border_radius : A, _ = this.config.card_border_width ?? (this.config.card_border_color ? 1 : 0), v = this.config.card_border_style ?? "solid", k = _ > 0 ? `border: ${_}px ${v} ${this._resolveColor(this.config.card_border_color) || "var(--divider-color, rgba(150, 150, 150, 0.2))"};` : "", T = this.config.card_width ? `width: ${this.config.card_width};` : "", B = this.config.card_max_width ? `max-width: ${this.config.card_max_width};` : "", K = this.config.card_height ? `height: ${this.config.card_height};` : "", ee = this.config.card_min_height !== void 0 ? `min-height: ${this.config.card_min_height}px;` : "", q = this.config.fill_container === !0 ? "height: 100%; width: 100%;" : "", he = this.config.overflow_hidden !== !1 ? "overflow: hidden;" : "overflow: visible;", Pe = this.config.backdrop_blur !== void 0 ? `backdrop-filter: blur(${this.config.backdrop_blur}px); -webkit-backdrop-filter: blur(${this.config.backdrop_blur}px);` : "", Ee = this.config.card_opacity !== void 0 ? `opacity: ${this.config.card_opacity / 100};` : "", De = this.config.transition_duration !== void 0 ? `transition: all ${this.config.transition_duration}ms ease;` : "", G = this.config.text_padding_vertical ?? this.config.text_padding ?? 0, Ne = this.config.text_padding_horizontal ?? this.config.text_padding ?? 0, Le = this.config.features_padding_vertical ?? this.config.features_padding ?? 0, He = this.config.features_padding_horizontal ?? this.config.features_padding ?? 0, Re = this.config.sub_button_padding ?? 0, Oe = this.config.sub_button_container_padding ?? 0, Be = this.config.sub_button_alignment ? `--ag-sub-button-alignment: ${this.config.sub_button_alignment};` : "", nt = this.config.text_scrolling_speed ? `--ag-scroll-speed: ${this.config.text_scrolling_speed}s;` : "", st = this.config.full_slider_opacity !== void 0 ? `--ag-full-slider-opacity: ${this.config.full_slider_opacity / 100};` : "";
     this._staticCardStyles = [
       d,
       `border-radius: ${g}px;`,
@@ -2187,7 +2202,7 @@ class Y extends le {
       Ee,
       De,
       `--ag-card-padding: ${r}px ${l}px ${o}px ${a}px;`,
-      `--ag-text-padding: ${V}px ${Ne}px;`,
+      `--ag-text-padding: ${G}px ${Ne}px;`,
       `--ag-features-padding: ${Le}px ${He}px;`,
       `--ag-sub-button-padding: ${Re}px;`,
       `--ag-sub-button-container-padding: ${Oe}px;`,
@@ -2217,11 +2232,11 @@ class Y extends le {
     this._primaryTextOffsetStyle = `${pe} ${te}`.trim();
     const ie = Number(this.config.secondary_text_start_offset ?? this.config.secondary_text_offset_x) || 0, H = Number(this.config.secondary_text_end_offset) || 0, Fe = Number(this.config.secondary_text_offset_y) || 0, lt = ie !== 0 || Fe !== 0 ? `transform: translate(${ie}px, ${Fe}px);` : "", ct = ie !== 0 || H !== 0 ? `margin-left: ${ie}px; margin-right: ${H}px;` : "";
     this._secondaryTextOffsetStyle = `${lt} ${ct}`.trim();
-    const Ue = Number(this.config.features_offset_x) || 0, Ge = Number(this.config.features_offset_y) || 0;
-    this._featuresOffsetStyle = Ue !== 0 || Ge !== 0 ? `transform: translate(${Ue}px, ${Ge}px);` : "";
-    const Ve = Number(this.config.slider_start_offset) || 0, Ie = Number(this.config.slider_end_offset) || 0;
+    const Ue = Number(this.config.features_offset_x) || 0, Ve = Number(this.config.features_offset_y) || 0;
+    this._featuresOffsetStyle = Ue !== 0 || Ve !== 0 ? `transform: translate(${Ue}px, ${Ve}px);` : "";
+    const Ge = Number(this.config.slider_start_offset) || 0, Ie = Number(this.config.slider_end_offset) || 0;
     this._mainSliderMarginOffsets = [
-      Ve ? `margin-left: ${Ve}px !important;` : "",
+      Ge ? `margin-left: ${Ge}px !important;` : "",
       Ie ? `margin-right: ${Ie}px !important;` : ""
     ].filter(Boolean).join(" ");
     const re = Number(this.config.color_temp_start_offset) || 0, z = Number(this.config.color_temp_end_offset) || 0;
@@ -2435,16 +2450,16 @@ class Y extends le {
       return isNaN(t.getTime()) ? null : t;
     }
     if (typeof e == "string") {
-      const t = G.get(e);
+      const t = V.get(e);
       if (t) return t;
       const i = Date.parse(e);
       if (!isNaN(i)) {
         const u = new Date(i);
-        if (G.size >= qt) {
-          const f = G.keys().next().value;
-          f !== void 0 && G.delete(f);
+        if (V.size >= qt) {
+          const f = V.keys().next().value;
+          f !== void 0 && V.delete(f);
         }
-        return G.set(e, u), u;
+        return V.set(e, u), u;
       }
       let r = e.trim();
       r.includes(" ") && !r.includes("T") && (r = r.replace(" ", "T")), r.includes("T") && !r.endsWith("Z") && !/[+-]\d{2}:\d{2}$/.test(r) && !/[+-]\d{4}$/.test(r) && (r += "Z");
@@ -2453,11 +2468,11 @@ class Y extends le {
       !isNaN(o) && r !== "" && !r.includes("T") ? a = new Date(o > 1e11 ? o : o * 1e3) : a = new Date(r);
       const l = isNaN(a.getTime()) ? null : a;
       if (l) {
-        if (G.size >= qt) {
-          const u = G.keys().next().value;
-          u !== void 0 && G.delete(u);
+        if (V.size >= qt) {
+          const u = V.keys().next().value;
+          u !== void 0 && V.delete(u);
         }
-        G.set(e, l);
+        V.set(e, l);
       }
       return l;
     }
@@ -2918,14 +2933,14 @@ class Y extends le {
         const U = k[C];
         U !== "onoff" && (T = !0), U === "color_temp" && (B = !0), cr.has(U) && (K = !0);
       }
-    const ee = x && m && T && (!A || o), q = t.attributes?.color_temp_kelvin ?? t.attributes?.color_temp, he = x && this.config.show_color_temp === !0 && (q !== void 0 || B) && (!s || o), Pe = this.config.color_picker_type !== "wheel", Ee = x && (this.config.show_color_slider === !0 || this.config.show_color_picker === !0 && Pe) && K && (!v || o), De = x && this.config.show_color_picker === !0 && !Pe && K && (!_ || o), V = t.state !== "unavailable" && t.state !== "unknown", Ne = d && V && m && t.attributes?.current_position !== void 0, Le = g && V && o && m && t.attributes?.percentage !== void 0, He = w && V && o && m && (t.attributes?.humidity !== void 0 || t.attributes?.target_humidity !== void 0), Re = M && V && o && m && t.attributes?.volume_level !== void 0, Oe = p && V && m, Be = b && V && o && m && (t.attributes?.temperature !== void 0 || t.attributes?.target_temp_high !== void 0), nt = (this.config.bg_opacity ?? 10) / 100, st = this.config.slider_color ? `--slider-color: ${this._resolveColor(this.config.slider_color)};` : f && o && !this.config.use_light_color ? "--slider-color: rgba(255, 255, 255, 0.95);" : `--slider-color: ${h};`, ze = this.config.slider_track_color ? `--slider-track-color: ${this._resolveColor(this.config.slider_track_color)};` : f && o ? "--slider-track-color: rgba(0, 0, 0, 0.25);" : "", D = this._calculateMultiStageFade(t, l, y), I = this.config.fade_target ?? "card", _e = this._resolveColor(this.config.bg_color);
+    const ee = x && m && T && (!A || o), q = t.attributes?.color_temp_kelvin ?? t.attributes?.color_temp, he = x && this.config.show_color_temp === !0 && (q !== void 0 || B) && (!s || o), Pe = this.config.color_picker_type !== "wheel", Ee = x && (this.config.show_color_slider === !0 || this.config.show_color_picker === !0 && Pe) && K && (!v || o), De = x && this.config.show_color_picker === !0 && !Pe && K && (!_ || o), G = t.state !== "unavailable" && t.state !== "unknown", Ne = d && G && m && t.attributes?.current_position !== void 0, Le = g && G && o && m && t.attributes?.percentage !== void 0, He = w && G && o && m && (t.attributes?.humidity !== void 0 || t.attributes?.target_humidity !== void 0), Re = M && G && o && m && t.attributes?.volume_level !== void 0, Oe = p && G && m, Be = b && G && o && m && (t.attributes?.temperature !== void 0 || t.attributes?.target_temp_high !== void 0), nt = (this.config.bg_opacity ?? 10) / 100, st = this.config.slider_color ? `--slider-color: ${this._resolveColor(this.config.slider_color)};` : f && o && !this.config.use_light_color ? "--slider-color: rgba(255, 255, 255, 0.95);" : `--slider-color: ${h};`, ze = this.config.slider_track_color ? `--slider-track-color: ${this._resolveColor(this.config.slider_track_color)};` : f && o ? "--slider-track-color: rgba(0, 0, 0, 0.25);" : "", D = this._calculateMultiStageFade(t, l, y), I = this.config.fade_target ?? "card", _e = this._resolveColor(this.config.bg_color);
     let L;
     D.activeFade && (I === "card" || I === "all" || f) ? L = D.currentColor : f ? a === "light" ? L = o ? u || h : this.config.inactive_color ? y : "#000000" : L = o ? h : y : _e ? L = _e : a === "light" && !o ? L = "#000000" : L = `rgba(150, 150, 150, ${nt})`;
     let pe = this._resolveColor(this.config.active_color) || (a === "light" && u ? u : h) || "var(--primary-color)";
     D.activeFade && (I === "all" || this.config.active_glow === !0) && (pe = D.currentColor);
     let te = "";
     this.config.box_shadow === "soft" && (te = "box-shadow: 0 4px 10px rgba(0,0,0,0.1);"), this.config.box_shadow === "deep" && (te = "box-shadow: 0 10px 20px rgba(0,0,0,0.3);"), (this.config.box_shadow === "glow" || this.config.active_glow === !0) && (te = o || D.activeFade ? `box-shadow: 0 0 22px ${pe}, 0 0 45px rgba(255, 255, 255, 0.18);` : "");
-    const ie = this.config.active_glow === !0 || this.config.box_shadow === "glow" ? "card-active-glow" : "", H = t?.attributes?.device_class, Fe = a === "binary_sensor" && (H === "motion" || H === "occupancy" || H === "presence"), lt = a === "binary_sensor" && (H === "door" || H === "window" || H === "garage_door" || H === "opening"), ct = Fe && (o || D.activeFade && D.currentStage === 1) ? "motion-active" : "", Ue = lt && o ? "door-open" : "", Ge = a === "climate" && t?.attributes?.hvac_action ? `hvac-${t.attributes.hvac_action}` : "", Ve = a === "cover" ? t?.state === "opening" ? "cover-opening" : t?.state === "closing" ? "cover-closing" : "" : "", Ie = `${this._staticCardClasses} ${ie} ${ct} ${Ue} ${Ge} ${Ve}`, re = this._getSubButtons();
+    const ie = this.config.active_glow === !0 || this.config.box_shadow === "glow" ? "card-active-glow" : "", H = t?.attributes?.device_class, Fe = a === "binary_sensor" && (H === "motion" || H === "occupancy" || H === "presence"), lt = a === "binary_sensor" && (H === "door" || H === "window" || H === "garage_door" || H === "opening"), ct = Fe && (o || D.activeFade && D.currentStage === 1) ? "motion-active" : "", Ue = lt && o ? "door-open" : "", Ve = a === "climate" && t?.attributes?.hvac_action ? `hvac-${t.attributes.hvac_action}` : "", Ge = a === "cover" ? t?.state === "opening" ? "cover-opening" : t?.state === "closing" ? "cover-closing" : "" : "", Ie = `${this._staticCardClasses} ${ie} ${ct} ${Ue} ${Ve} ${Ge}`, re = this._getSubButtons();
     this.config.font_weight_primary;
     let z = "";
     this.config.text_color_mode === "active_accent" && o ? z += `--primary-text-color: ${h}; ` : this.config.text_color_primary ? z += `--primary-text-color: ${this._resolveColor(this.config.text_color_primary)}; ` : f && o && (z += "--primary-text-color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.4); "), this.config.text_color_secondary ? z += `--secondary-text-color: ${this._resolveColor(this.config.text_color_secondary)}; ` : f && o && (z += "--secondary-text-color: rgba(255, 255, 255, 0.9); text-shadow: 0 1px 2px rgba(0,0,0,0.3); ");
