@@ -2713,7 +2713,7 @@ class ae extends Oe {
     if (w <= 0)
       return nt;
     this._lastTrackedState !== null && this._lastTrackedState !== e.state && this._currentLiveRgb && this.config.fade_smooth_retrigger !== !1 && (this._previousLiveRgb = this._currentLiveRgb), this._lastTrackedState = e.state;
-    const $ = this.config.fade_stage_1_pickup !== !1 && this._previousLiveRgb && this.config.fade_smooth_retrigger !== !1 ? this._previousLiveRgb : _, T = c?.c1Rgb ?? (Y(this.config.fade_stage_1_color) || [255, 152, 0]), u = this.config.fade_stage_2_pickup !== !1 ? T : _, f = c?.c2Rgb ?? (Y(this.config.fade_stage_2_color) || [205, 220, 57]), k = this.config.fade_stage_3_pickup !== !1 ? f : T, A = c?.c3Rgb ?? (Y(this.config.fade_stage_3_color) || h), m = this._parseDate(e.last_changed || e.last_updated);
+    const $ = this.config.fade_stage_1_pickup !== !1 && this._previousLiveRgb && this.config.fade_smooth_retrigger !== !1 ? this._previousLiveRgb : _, T = c?.c1Rgb ?? (Y(this.config.fade_stage_1_color) || [255, 152, 0]), u = this.config.fade_stage_2_pickup !== !1 ? T : _, f = c?.c2Rgb ?? (Y(this.config.fade_stage_2_color) || [205, 220, 57]), k = this.config.fade_stage_3_pickup !== !1 ? f : T, A = c?.c3Rgb ?? (Y(this.config.fade_stage_3_color) || h), m = this._parseDate(e.attributes?.last_triggered || e.last_changed || e.last_updated);
     if (!m)
       return nt;
     const b = Math.max(0, (Date.now() - m.getTime()) / 1e3);
