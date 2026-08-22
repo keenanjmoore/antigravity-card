@@ -198,12 +198,18 @@ class ColorConverterService {
     ];
   }
 
+  private _kelvinCache = new Map<number, RGBTuple>();
+
   /**
-   * Convert Kelvin temperature to an approximation RGB tuple.
+   * Convert Kelvin temperature to an approximation RGB tuple with fast integer LUT caching.
    */
   public kelvinToRgb(kelvin: number): RGBTuple {
     if (isNaN(kelvin)) return [255, 255, 255];
-    const temp = Math.max(1000, Math.min(40000, kelvin)) / 100;
+    const roundedK = Math.round(kelvin / 10) * 10;
+    const cached = this._kelvinCache.get(roundedK);
+    if (cached) return cached;
+
+    const temp = Math.max(1000, Math.min(40000, roundedK)) / 100;
     let r = 0, g = 0, b = 0;
 
     // Red
@@ -229,7 +235,11 @@ class ColorConverterService {
       b = Math.min(255, Math.max(0, 138.5177312231 * Math.log(temp - 10) - 305.0447927307));
     }
 
-    return [Math.round(r), Math.round(g), Math.round(b)];
+    const res: RGBTuple = [Math.round(r), Math.round(g), Math.round(b)];
+    if (this._kelvinCache.size < 500) {
+      this._kelvinCache.set(roundedK, res);
+    }
+    return res;
   }
 
   /**

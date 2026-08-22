@@ -42,6 +42,16 @@ export class FadeTransitionManager {
   private _lastTrackedState: string | null = null;
   private _cachedDurations: FadeStaticDurations | null = null;
   private _lastFadeConfigHash: string | null = null;
+  private _hexCache = new Map<string, RGBTuple>();
+
+  private _fastParseHex(hex: string, fallback: RGBTuple): RGBTuple {
+    if (!hex) return fallback;
+    const cached = this._hexCache.get(hex);
+    if (cached) return cached;
+    const parsed = parseColorToRgb(hex) || fallback;
+    if (this._hexCache.size < 50) this._hexCache.set(hex, parsed);
+    return parsed;
+  }
 
   /**
    * Precompute static duration and color bounds on configuration update.
@@ -107,8 +117,8 @@ export class FadeTransitionManager {
     const startColorStr = isActive ? defaultInactiveHex : defaultActiveHex;
     const finalColorStr = isActive ? defaultActiveHex : defaultInactiveHex;
 
-    const startRgb = parseColorToRgb(startColorStr) || [214, 0, 0];
-    const finalRgb = parseColorToRgb(finalColorStr) || [3, 177, 0];
+    const startRgb = this._fastParseHex(startColorStr, [214, 0, 0]);
+    const finalRgb = this._fastParseHex(finalColorStr, [3, 177, 0]);
 
     const { d1, d2, d3, totalDuration, c1: targetC1, c2: targetC2, c3: targetC3 } = staticDurations;
 
