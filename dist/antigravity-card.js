@@ -1191,18 +1191,23 @@ const pi = dr`
     animation-play-state: paused !important;
   }
   :host([power-save]) {
-    --ag-transition-speed: 0.1s;
+    --ag-transition-speed: 0.05s;
   }
   :host([power-save]) .pulse,
   :host([power-save]) .anim-spin,
-  :host([power-save]) .anim-bounce {
+  :host([power-save]) .anim-bounce,
+  :host([power-save]) .scroll-content {
     animation: none !important;
   }
   :host([power-save]) .theme-glassmorphism,
-  :host([power-save]) .theme-aurora {
+  :host([power-save]) .theme-aurora,
+  :host([power-save]) .theme-cyberpunk {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    background: var(--card-background-color, rgba(30, 30, 30, 0.9)) !important;
+    background: var(--card-background-color, rgba(30, 30, 30, 0.95)) !important;
+  }
+  :host([power-save]) ha-card {
+    box-shadow: none !important;
   }
   :host([hidden]) {
     display: none !important;
@@ -4110,10 +4115,10 @@ class Ui {
     const y = t.attributes?.last_triggered || t.last_changed || t.last_updated, $ = (typeof y == "string" ? y : "").trim();
     if (!$)
       return Xe;
-    const x = new Date($);
-    if (isNaN(x.getTime()))
+    const x = Date.parse($);
+    if (isNaN(x))
       return Xe;
-    const A = Date.now(), k = Math.max(0, (A - x.getTime()) / 1e3 | 0);
+    const A = Date.now(), k = Math.max(0, (A - x) / 1e3 | 0);
     let T, L = 1, E = 0;
     const M = e.fade_stage_1_pickup !== !1 && this._previousLiveRgb ? this._previousLiveRgb : n;
     if (k < b) {
@@ -4752,7 +4757,7 @@ class Ne extends pe {
       sub2: !1,
       sub3: !1,
       sub4: !1
-    };
+    }, this._formDataCache = /* @__PURE__ */ new WeakMap();
   }
   setConfig(e) {
     const t = { ...e };
@@ -4769,8 +4774,11 @@ class Ne extends pe {
     return eo[e.name] || e.name;
   }
   _transformConfigForForm() {
-    const e = { ...this._config };
-    return e.bg_color = D(e.bg_color), e.card_border_color = D(e.card_border_color), e.active_color = D(e.active_color), e.inactive_color = D(e.inactive_color), e.slider_color = D(e.slider_color), e.slider_track_color = D(e.slider_track_color), e.text_color_primary = D(e.text_color_primary), e.text_color_secondary = D(e.text_color_secondary), e.sub_button_1_color = D(e.sub_button_1_color), e.sub_button_2_color = D(e.sub_button_2_color), e.sub_button_3_color = D(e.sub_button_3_color), e.sub_button_4_color = D(e.sub_button_4_color), e.fade_stage_1_color = D(e.fade_stage_1_color), e.fade_stage_2_color = D(e.fade_stage_2_color), e.fade_stage_3_color = D(e.fade_stage_3_color), e;
+    if (!this._config) return {};
+    const e = this._formDataCache.get(this._config);
+    if (e) return e;
+    const t = { ...this._config };
+    return t.bg_color = D(t.bg_color), t.card_border_color = D(t.card_border_color), t.active_color = D(t.active_color), t.inactive_color = D(t.inactive_color), t.slider_color = D(t.slider_color), t.slider_track_color = D(t.slider_track_color), t.text_color_primary = D(t.text_color_primary), t.text_color_secondary = D(t.text_color_secondary), t.sub_button_1_color = D(t.sub_button_1_color), t.sub_button_2_color = D(t.sub_button_2_color), t.sub_button_3_color = D(t.sub_button_3_color), t.sub_button_4_color = D(t.sub_button_4_color), t.fade_stage_1_color = D(t.fade_stage_1_color), t.fade_stage_2_color = D(t.fade_stage_2_color), t.fade_stage_3_color = D(t.fade_stage_3_color), this._formDataCache.set(this._config, t), t;
   }
   _valueChanged(e, t) {
     const r = e.detail.value, i = { ...this._config };

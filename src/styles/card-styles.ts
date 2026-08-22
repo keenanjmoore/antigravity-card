@@ -19,18 +19,23 @@ export const antigravityCardStyles: CSSResult = css`
     animation-play-state: paused !important;
   }
   :host([power-save]) {
-    --ag-transition-speed: 0.1s;
+    --ag-transition-speed: 0.05s;
   }
   :host([power-save]) .pulse,
   :host([power-save]) .anim-spin,
-  :host([power-save]) .anim-bounce {
+  :host([power-save]) .anim-bounce,
+  :host([power-save]) .scroll-content {
     animation: none !important;
   }
   :host([power-save]) .theme-glassmorphism,
-  :host([power-save]) .theme-aurora {
+  :host([power-save]) .theme-aurora,
+  :host([power-save]) .theme-cyberpunk {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    background: var(--card-background-color, rgba(30, 30, 30, 0.9)) !important;
+    background: var(--card-background-color, rgba(30, 30, 30, 0.95)) !important;
+  }
+  :host([power-save]) ha-card {
+    box-shadow: none !important;
   }
   :host([hidden]) {
     display: none !important;

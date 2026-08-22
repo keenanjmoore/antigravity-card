@@ -686,7 +686,13 @@ export class AntigravityCardEditor extends LitElement {
     return EDITOR_CUSTOM_LABELS[schema.name] || schema.name;
   }
 
+  private _formDataCache = new WeakMap<object, any>();
+
   private _transformConfigForForm(): any {
+    if (!this._config) return {};
+    const cached = this._formDataCache.get(this._config);
+    if (cached) return cached;
+
     const data: any = { ...this._config };
     data.bg_color = cssToRgbArray(data.bg_color);
     data.card_border_color = cssToRgbArray(data.card_border_color);
@@ -703,6 +709,8 @@ export class AntigravityCardEditor extends LitElement {
     data.fade_stage_1_color = cssToRgbArray(data.fade_stage_1_color);
     data.fade_stage_2_color = cssToRgbArray(data.fade_stage_2_color);
     data.fade_stage_3_color = cssToRgbArray(data.fade_stage_3_color);
+
+    this._formDataCache.set(this._config, data);
     return data;
   }
 

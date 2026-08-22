@@ -120,20 +120,20 @@ export class FadeTransitionManager {
     }
     this._lastTrackedState = stateObj.state;
 
-    // Parse and validate timestamp safely
+    // Parse and validate timestamp safely without allocating Date objects
     const rawTs = stateObj.attributes?.last_triggered || stateObj.last_changed || stateObj.last_updated;
     const tsStr = (typeof rawTs === 'string' ? rawTs : '').trim();
     if (!tsStr) {
       return DISABLED_FADE_RESULT;
     }
 
-    const tsDate = new Date(tsStr);
-    if (isNaN(tsDate.getTime())) {
+    const tsMs = Date.parse(tsStr);
+    if (isNaN(tsMs)) {
       return DISABLED_FADE_RESULT;
     }
 
     const now = Date.now();
-    const ageSeconds = Math.max(0, ((now - tsDate.getTime()) / 1000) | 0);
+    const ageSeconds = Math.max(0, ((now - tsMs) / 1000) | 0);
 
     let currentColor: RGBTuple;
     let currentStage = 1;
