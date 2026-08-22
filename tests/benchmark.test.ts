@@ -6,6 +6,7 @@ import { sliderCalculations } from '../src/slider-calculations';
 import { SubButtonController } from '../src/controllers/sub-button-controller';
 import { InfoFormatter } from '../src/controllers/info-formatter';
 import { fadeTransitionManager } from '../src/fade-transition';
+import { EntityFilterEngine } from '../src/controllers/entity-filter-engine';
 
 describe('Antigravity Comprehensive Performance Benchmarks (Informational)', () => {
   it('1. CI Frame Render & Memory Allocation Bounds', async () => {
@@ -140,5 +141,58 @@ describe('Antigravity Comprehensive Performance Benchmarks (Informational)', () 
     }
     const elapsed = performance.now() - t0;
     console.info(`⚡ 8. Dashboard State Filter (50,000 card checks against 500 entities): ${elapsed.toFixed(2)}ms (0 false renders triggered)`);
+  });
+
+  it('9. Inverted Label & Registry Filtering on 1,000 Entities (50,000 ops)', () => {
+    const states: Record<string, any> = {};
+    const entities: Record<string, any> = {};
+    const devices: Record<string, any> = {};
+    const areas: Record<string, any> = {
+      living_room: { area_id: 'living_room', labels: ['main_floor'] },
+      outside: { area_id: 'outside', labels: ['perimeter'] },
+    };
+
+    for (let i = 0; i < 1000; i++) {
+      const id = `light.fixture_${i}`;
+      states[id] = { state: i % 2 === 0 ? 'on' : 'off', attributes: { friendly_name: `Light ${i}`, brightness: i % 255 }, last_changed: '2026-08-22T00:00:00Z' };
+      const devId = `device_${i % 50}`;
+      devices[devId] = { id: devId, labels: i % 3 === 0 ? ['accent_lighting'] : ['ambient'] };
+      entities[id] = {
+        entity_id: id,
+        device_id: devId,
+        area_id: i % 2 === 0 ? 'living_room' : 'outside',
+        labels: i % 5 === 0 ? ['favorite', 'lights'] : ['lights'],
+      };
+    }
+
+    const mockHass = { states, entities, devices, areas };
+
+    const t0 = performance.now();
+    for (let i = 0; i < 50000; i++) {
+      EntityFilterEngine.filterEntities(mockHass, { labels: ['favorite', 'main_floor'] });
+    }
+    const elapsed = performance.now() - t0;
+    const opsPerSec = Math.round((50000 / elapsed) * 1000);
+    console.info(`⚡ 9. 1,000-Entity Label Filtering Throughput: ${elapsed.toFixed(2)}ms for 50k ops (~${opsPerSec.toLocaleString()} ops/sec)`);
+  });
+
+  it('10. Pre-Cached Friendly Name & Attribute Ranking (20,000 ops)', () => {
+    const states: Record<string, any> = {};
+    const entityList: string[] = [];
+    for (let i = 0; i < 50; i++) {
+      const id = `light.zone_${i}`;
+      entityList.push(id);
+      states[id] = { state: 'on', attributes: { friendly_name: `Ceiling Zone ${50 - i}`, brightness: (i * 5) % 255 } };
+    }
+    const mockHass = { states };
+
+    const t0 = performance.now();
+    for (let i = 0; i < 20000; i++) {
+      const copy = [...entityList];
+      EntityFilterEngine.sortEntities(copy, mockHass, 'name', 'asc');
+    }
+    const elapsed = performance.now() - t0;
+    const opsPerSec = Math.round((20000 / elapsed) * 1000);
+    console.info(`⚡ 10. Memoized Sort & Ranking: ${elapsed.toFixed(2)}ms for 20k ops (~${opsPerSec.toLocaleString()} ops/sec)`);
   });
 });
