@@ -55,3 +55,13 @@ When extracting or modifying style generators ([`src/style-builder.ts`](file:///
 
 - Whenever frontend card JS bundles are deployed to `X:\www\`, all entries in `X:\.storage\lovelace_resources` must be updated with an explicit timestamp query parameter (`?v=<timestamp>`).
 - This guarantees that both desktop browsers (Chrome, Edge, Firefox, Safari) and mobile clients receive the exact same production bundle without stale HTTP/service-worker caching discrepancies.
+
+---
+
+### 7. Mandatory Triple-Phase Build & Verification Pipeline
+Whenever compiling, building, or modifying any Antigravity Card variant, the build pipeline must strictly execute in sequence:
+1. `npm run check` *(TypeScript static type checking with zero errors)*
+2. `npm run test` *(Vitest automated unit tests with 100% pass rate)*
+3. `npm run build` *(Production Vite bundle compilation and minification)*
+
+Never deploy to `X:\www\` or commit to GitHub unless all three steps complete with exit code 0.
