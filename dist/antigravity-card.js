@@ -1,15 +1,15 @@
-const Je = globalThis, yt = Je.ShadowRoot && (Je.ShadyCSS === void 0 || Je.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, xt = Symbol(), Mt = /* @__PURE__ */ new WeakMap();
-let qt = class {
+const Qe = globalThis, xt = Qe.ShadowRoot && (Qe.ShadyCSS === void 0 || Qe.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, wt = Symbol(), Pt = /* @__PURE__ */ new WeakMap();
+let Xt = class {
   constructor(e, t, i) {
-    if (this._$cssResult$ = !0, i !== xt) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
+    if (this._$cssResult$ = !0, i !== wt) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
     this.cssText = e, this.t = t;
   }
   get styleSheet() {
     let e = this.o;
     const t = this.t;
-    if (yt && e === void 0) {
+    if (xt && e === void 0) {
       const i = t !== void 0 && t.length === 1;
-      i && (e = Mt.get(t)), e === void 0 && ((this.o = e = new CSSStyleSheet()).replaceSync(this.cssText), i && Mt.set(t, e));
+      i && (e = Pt.get(t)), e === void 0 && ((this.o = e = new CSSStyleSheet()).replaceSync(this.cssText), i && Pt.set(t, e));
     }
     return e;
   }
@@ -17,28 +17,28 @@ let qt = class {
     return this.cssText;
   }
 };
-const oi = (a) => new qt(typeof a == "string" ? a : a + "", void 0, xt), Xt = (a, ...e) => {
+const ai = (a) => new Xt(typeof a == "string" ? a : a + "", void 0, wt), Zt = (a, ...e) => {
   const t = a.length === 1 ? a[0] : e.reduce((i, r, o) => i + ((n) => {
     if (n._$cssResult$ === !0) return n.cssText;
     if (typeof n == "number") return n;
     throw Error("Value passed to 'css' function must be a 'css' function result: " + n + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
   })(r) + a[o + 1], a[0]);
-  return new qt(t, a, xt);
-}, ni = (a, e) => {
-  if (yt) a.adoptedStyleSheets = e.map((t) => t instanceof CSSStyleSheet ? t : t.styleSheet);
+  return new Xt(t, a, wt);
+}, si = (a, e) => {
+  if (xt) a.adoptedStyleSheets = e.map((t) => t instanceof CSSStyleSheet ? t : t.styleSheet);
   else for (const t of e) {
-    const i = document.createElement("style"), r = Je.litNonce;
+    const i = document.createElement("style"), r = Qe.litNonce;
     r !== void 0 && i.setAttribute("nonce", r), i.textContent = t.cssText, a.appendChild(i);
   }
-}, Pt = yt ? (a) => a : (a) => a instanceof CSSStyleSheet ? ((e) => {
+}, Et = xt ? (a) => a : (a) => a instanceof CSSStyleSheet ? ((e) => {
   let t = "";
   for (const i of e.cssRules) t += i.cssText;
-  return oi(t);
+  return ai(t);
 })(a) : a;
-const { is: ai, defineProperty: si, getOwnPropertyDescriptor: li, getOwnPropertyNames: ci, getOwnPropertySymbols: di, getPrototypeOf: ui } = Object, et = globalThis, Et = et.trustedTypes, hi = Et ? Et.emptyScript : "", _i = et.reactiveElementPolyfillSupport, $e = (a, e) => a, Qe = { toAttribute(a, e) {
+const { is: li, defineProperty: ci, getOwnPropertyDescriptor: di, getOwnPropertyNames: ui, getOwnPropertySymbols: hi, getPrototypeOf: _i } = Object, tt = globalThis, Dt = tt.trustedTypes, pi = Dt ? Dt.emptyScript : "", fi = tt.reactiveElementPolyfillSupport, Se = (a, e) => a, je = { toAttribute(a, e) {
   switch (e) {
     case Boolean:
-      a = a ? hi : null;
+      a = a ? pi : null;
       break;
     case Object:
     case Array:
@@ -63,23 +63,23 @@ const { is: ai, defineProperty: si, getOwnPropertyDescriptor: li, getOwnProperty
       }
   }
   return t;
-} }, wt = (a, e) => !ai(a, e), Dt = { attribute: !0, type: String, converter: Qe, reflect: !1, useDefault: !1, hasChanged: wt };
-Symbol.metadata ??= Symbol("metadata"), et.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
-let ne = class extends HTMLElement {
+} }, $t = (a, e) => !li(a, e), Lt = { attribute: !0, type: String, converter: je, reflect: !1, useDefault: !1, hasChanged: $t };
+Symbol.metadata ??= Symbol("metadata"), tt.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
+let ae = class extends HTMLElement {
   static addInitializer(e) {
     this._$Ei(), (this.l ??= []).push(e);
   }
   static get observedAttributes() {
     return this.finalize(), this._$Eh && [...this._$Eh.keys()];
   }
-  static createProperty(e, t = Dt) {
+  static createProperty(e, t = Lt) {
     if (t.state && (t.attribute = !1), this._$Ei(), this.prototype.hasOwnProperty(e) && ((t = Object.create(t)).wrapped = !0), this.elementProperties.set(e, t), !t.noAccessor) {
       const i = Symbol(), r = this.getPropertyDescriptor(e, i, t);
-      r !== void 0 && si(this.prototype, e, r);
+      r !== void 0 && ci(this.prototype, e, r);
     }
   }
   static getPropertyDescriptor(e, t, i) {
-    const { get: r, set: o } = li(this.prototype, e) ?? { get() {
+    const { get: r, set: o } = di(this.prototype, e) ?? { get() {
       return this[t];
     }, set(n) {
       this[t] = n;
@@ -90,17 +90,17 @@ let ne = class extends HTMLElement {
     }, configurable: !0, enumerable: !0 };
   }
   static getPropertyOptions(e) {
-    return this.elementProperties.get(e) ?? Dt;
+    return this.elementProperties.get(e) ?? Lt;
   }
   static _$Ei() {
-    if (this.hasOwnProperty($e("elementProperties"))) return;
-    const e = ui(this);
+    if (this.hasOwnProperty(Se("elementProperties"))) return;
+    const e = _i(this);
     e.finalize(), e.l !== void 0 && (this.l = [...e.l]), this.elementProperties = new Map(e.elementProperties);
   }
   static finalize() {
-    if (this.hasOwnProperty($e("finalized"))) return;
-    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty($e("properties"))) {
-      const t = this.properties, i = [...ci(t), ...di(t)];
+    if (this.hasOwnProperty(Se("finalized"))) return;
+    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(Se("properties"))) {
+      const t = this.properties, i = [...ui(t), ...hi(t)];
       for (const r of i) this.createProperty(r, t[r]);
     }
     const e = this[Symbol.metadata];
@@ -119,8 +119,8 @@ let ne = class extends HTMLElement {
     const t = [];
     if (Array.isArray(e)) {
       const i = new Set(e.flat(1 / 0).reverse());
-      for (const r of i) t.unshift(Pt(r));
-    } else e !== void 0 && t.push(Pt(e));
+      for (const r of i) t.unshift(Et(r));
+    } else e !== void 0 && t.push(Et(e));
     return t;
   }
   static _$Eu(e, t) {
@@ -146,7 +146,7 @@ let ne = class extends HTMLElement {
   }
   createRenderRoot() {
     const e = this.shadowRoot ?? this.attachShadow(this.constructor.shadowRootOptions);
-    return ni(e, this.constructor.elementStyles), e;
+    return si(e, this.constructor.elementStyles), e;
   }
   connectedCallback() {
     this.renderRoot ??= this.createRenderRoot(), this.enableUpdating(!0), this._$EO?.forEach((e) => e.hostConnected?.());
@@ -162,14 +162,14 @@ let ne = class extends HTMLElement {
   _$ET(e, t) {
     const i = this.constructor.elementProperties.get(e), r = this.constructor._$Eu(e, i);
     if (r !== void 0 && i.reflect === !0) {
-      const o = (i.converter?.toAttribute !== void 0 ? i.converter : Qe).toAttribute(t, i.type);
+      const o = (i.converter?.toAttribute !== void 0 ? i.converter : je).toAttribute(t, i.type);
       this._$Em = e, o == null ? this.removeAttribute(r) : this.setAttribute(r, o), this._$Em = null;
     }
   }
   _$AK(e, t) {
     const i = this.constructor, r = i._$Eh.get(e);
     if (r !== void 0 && this._$Em !== r) {
-      const o = i.getPropertyOptions(r), n = typeof o.converter == "function" ? { fromAttribute: o.converter } : o.converter?.fromAttribute !== void 0 ? o.converter : Qe;
+      const o = i.getPropertyOptions(r), n = typeof o.converter == "function" ? { fromAttribute: o.converter } : o.converter?.fromAttribute !== void 0 ? o.converter : je;
       this._$Em = r;
       const s = n.fromAttribute(t, o.type);
       this[r] = s ?? this._$Ej?.get(r) ?? s, this._$Em = null;
@@ -178,7 +178,7 @@ let ne = class extends HTMLElement {
   requestUpdate(e, t, i, r = !1, o) {
     if (e !== void 0) {
       const n = this.constructor;
-      if (r === !1 && (o = this[e]), i ??= n.getPropertyOptions(e), !((i.hasChanged ?? wt)(o, t) || i.useDefault && i.reflect && o === this._$Ej?.get(e) && !this.hasAttribute(n._$Eu(e, i)))) return;
+      if (r === !1 && (o = this[e]), i ??= n.getPropertyOptions(e), !((i.hasChanged ?? $t)(o, t) || i.useDefault && i.reflect && o === this._$Ej?.get(e) && !this.hasAttribute(n._$Eu(e, i)))) return;
       this.C(e, t, i);
     }
     this.isUpdatePending === !1 && (this._$ES = this._$EP());
@@ -246,70 +246,70 @@ let ne = class extends HTMLElement {
   firstUpdated(e) {
   }
 };
-ne.elementStyles = [], ne.shadowRootOptions = { mode: "open" }, ne[$e("elementProperties")] = /* @__PURE__ */ new Map(), ne[$e("finalized")] = /* @__PURE__ */ new Map(), _i?.({ ReactiveElement: ne }), (et.reactiveElementVersions ??= []).push("2.1.2");
-const $t = globalThis, Lt = (a) => a, je = $t.trustedTypes, Nt = je ? je.createPolicy("lit-html", { createHTML: (a) => a }) : void 0, Kt = "$lit$", V = `lit$${Math.random().toFixed(9).slice(2)}$`, Zt = "?" + V, pi = `<${Zt}>`, J = document, Se = () => J.createComment(""), ke = (a) => a === null || typeof a != "object" && typeof a != "function", St = Array.isArray, fi = (a) => St(a) || typeof a?.[Symbol.iterator] == "function", _t = `[ 	
-\f\r]`, ve = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Ht = /-->/g, Rt = />/g, X = RegExp(`>|${_t}(?:([^\\s"'>=/]+)(${_t}*=${_t}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), Bt = /'/g, Ot = /"/g, Jt = /^(?:script|style|textarea|title)$/i, gi = (a) => (e, ...t) => ({ _$litType$: a, strings: e, values: t }), S = gi(1), Q = Symbol.for("lit-noChange"), w = Symbol.for("lit-nothing"), zt = /* @__PURE__ */ new WeakMap(), Z = J.createTreeWalker(J, 129);
-function Qt(a, e) {
-  if (!St(a) || !a.hasOwnProperty("raw")) throw Error("invalid template strings array");
-  return Nt !== void 0 ? Nt.createHTML(e) : e;
+ae.elementStyles = [], ae.shadowRootOptions = { mode: "open" }, ae[Se("elementProperties")] = /* @__PURE__ */ new Map(), ae[Se("finalized")] = /* @__PURE__ */ new Map(), fi?.({ ReactiveElement: ae }), (tt.reactiveElementVersions ??= []).push("2.1.2");
+const St = globalThis, Nt = (a) => a, et = St.trustedTypes, Rt = et ? et.createPolicy("lit-html", { createHTML: (a) => a }) : void 0, Jt = "$lit$", W = `lit$${Math.random().toFixed(9).slice(2)}$`, Qt = "?" + W, gi = `<${Qt}>`, Q = document, ke = () => Q.createComment(""), Ce = (a) => a === null || typeof a != "object" && typeof a != "function", kt = Array.isArray, mi = (a) => kt(a) || typeof a?.[Symbol.iterator] == "function", pt = `[ 	
+\f\r]`, ye = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Ht = /-->/g, Ot = />/g, X = RegExp(`>|${pt}(?:([^\\s"'>=/]+)(${pt}*=${pt}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`, "g"), Bt = /'/g, zt = /"/g, jt = /^(?:script|style|textarea|title)$/i, bi = (a) => (e, ...t) => ({ _$litType$: a, strings: e, values: t }), S = bi(1), j = Symbol.for("lit-noChange"), w = Symbol.for("lit-nothing"), Ft = /* @__PURE__ */ new WeakMap(), J = Q.createTreeWalker(Q, 129);
+function ei(a, e) {
+  if (!kt(a) || !a.hasOwnProperty("raw")) throw Error("invalid template strings array");
+  return Rt !== void 0 ? Rt.createHTML(e) : e;
 }
-const mi = (a, e) => {
+const vi = (a, e) => {
   const t = a.length - 1, i = [];
-  let r, o = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", n = ve;
+  let r, o = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", n = ye;
   for (let s = 0; s < t; s++) {
-    const l = a[s];
-    let p, d, c = -1, b = 0;
-    for (; b < l.length && (n.lastIndex = b, d = n.exec(l), d !== null); ) b = n.lastIndex, n === ve ? d[1] === "!--" ? n = Ht : d[1] !== void 0 ? n = Rt : d[2] !== void 0 ? (Jt.test(d[2]) && (r = RegExp("</" + d[2], "g")), n = X) : d[3] !== void 0 && (n = X) : n === X ? d[0] === ">" ? (n = r ?? ve, c = -1) : d[1] === void 0 ? c = -2 : (c = n.lastIndex - d[2].length, p = d[1], n = d[3] === void 0 ? X : d[3] === '"' ? Ot : Bt) : n === Ot || n === Bt ? n = X : n === Ht || n === Rt ? n = ve : (n = X, r = void 0);
-    const f = n === X && a[s + 1].startsWith("/>") ? " " : "";
-    o += n === ve ? l + pi : c >= 0 ? (i.push(p), l.slice(0, c) + Kt + l.slice(c) + V + f) : l + V + (c === -2 ? s : f);
+    const d = a[s];
+    let p, h, c = -1, v = 0;
+    for (; v < d.length && (n.lastIndex = v, h = n.exec(d), h !== null); ) v = n.lastIndex, n === ye ? h[1] === "!--" ? n = Ht : h[1] !== void 0 ? n = Ot : h[2] !== void 0 ? (jt.test(h[2]) && (r = RegExp("</" + h[2], "g")), n = X) : h[3] !== void 0 && (n = X) : n === X ? h[0] === ">" ? (n = r ?? ye, c = -1) : h[1] === void 0 ? c = -2 : (c = n.lastIndex - h[2].length, p = h[1], n = h[3] === void 0 ? X : h[3] === '"' ? zt : Bt) : n === zt || n === Bt ? n = X : n === Ht || n === Ot ? n = ye : (n = X, r = void 0);
+    const g = n === X && a[s + 1].startsWith("/>") ? " " : "";
+    o += n === ye ? d + gi : c >= 0 ? (i.push(p), d.slice(0, c) + Jt + d.slice(c) + W + g) : d + W + (c === -2 ? s : g);
   }
-  return [Qt(a, o + (a[t] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), i];
+  return [ei(a, o + (a[t] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), i];
 };
-class Ce {
+class Te {
   constructor({ strings: e, _$litType$: t }, i) {
     let r;
     this.parts = [];
     let o = 0, n = 0;
-    const s = e.length - 1, l = this.parts, [p, d] = mi(e, t);
-    if (this.el = Ce.createElement(p, i), Z.currentNode = this.el.content, t === 2 || t === 3) {
+    const s = e.length - 1, d = this.parts, [p, h] = vi(e, t);
+    if (this.el = Te.createElement(p, i), J.currentNode = this.el.content, t === 2 || t === 3) {
       const c = this.el.content.firstChild;
       c.replaceWith(...c.childNodes);
     }
-    for (; (r = Z.nextNode()) !== null && l.length < s; ) {
+    for (; (r = J.nextNode()) !== null && d.length < s; ) {
       if (r.nodeType === 1) {
-        if (r.hasAttributes()) for (const c of r.getAttributeNames()) if (c.endsWith(Kt)) {
-          const b = d[n++], f = r.getAttribute(c).split(V), x = /([.?@])?(.*)/.exec(b);
-          l.push({ type: 1, index: o, name: x[2], strings: f, ctor: x[1] === "." ? vi : x[1] === "?" ? yi : x[1] === "@" ? xi : tt }), r.removeAttribute(c);
-        } else c.startsWith(V) && (l.push({ type: 6, index: o }), r.removeAttribute(c));
-        if (Jt.test(r.tagName)) {
-          const c = r.textContent.split(V), b = c.length - 1;
-          if (b > 0) {
-            r.textContent = je ? je.emptyScript : "";
-            for (let f = 0; f < b; f++) r.append(c[f], Se()), Z.nextNode(), l.push({ type: 2, index: ++o });
-            r.append(c[b], Se());
+        if (r.hasAttributes()) for (const c of r.getAttributeNames()) if (c.endsWith(Jt)) {
+          const v = h[n++], g = r.getAttribute(c).split(W), x = /([.?@])?(.*)/.exec(v);
+          d.push({ type: 1, index: o, name: x[2], strings: g, ctor: x[1] === "." ? xi : x[1] === "?" ? wi : x[1] === "@" ? $i : it }), r.removeAttribute(c);
+        } else c.startsWith(W) && (d.push({ type: 6, index: o }), r.removeAttribute(c));
+        if (jt.test(r.tagName)) {
+          const c = r.textContent.split(W), v = c.length - 1;
+          if (v > 0) {
+            r.textContent = et ? et.emptyScript : "";
+            for (let g = 0; g < v; g++) r.append(c[g], ke()), J.nextNode(), d.push({ type: 2, index: ++o });
+            r.append(c[v], ke());
           }
         }
-      } else if (r.nodeType === 8) if (r.data === Zt) l.push({ type: 2, index: o });
+      } else if (r.nodeType === 8) if (r.data === Qt) d.push({ type: 2, index: o });
       else {
         let c = -1;
-        for (; (c = r.data.indexOf(V, c + 1)) !== -1; ) l.push({ type: 7, index: o }), c += V.length - 1;
+        for (; (c = r.data.indexOf(W, c + 1)) !== -1; ) d.push({ type: 7, index: o }), c += W.length - 1;
       }
       o++;
     }
   }
   static createElement(e, t) {
-    const i = J.createElement("template");
+    const i = Q.createElement("template");
     return i.innerHTML = e, i;
   }
 }
-function le(a, e, t = a, i) {
-  if (e === Q) return e;
+function ce(a, e, t = a, i) {
+  if (e === j) return e;
   let r = i !== void 0 ? t._$Co?.[i] : t._$Cl;
-  const o = ke(e) ? void 0 : e._$litDirective$;
-  return r?.constructor !== o && (r?._$AO?.(!1), o === void 0 ? r = void 0 : (r = new o(a), r._$AT(a, t, i)), i !== void 0 ? (t._$Co ??= [])[i] = r : t._$Cl = r), r !== void 0 && (e = le(a, r._$AS(a, e.values), r, i)), e;
+  const o = Ce(e) ? void 0 : e._$litDirective$;
+  return r?.constructor !== o && (r?._$AO?.(!1), o === void 0 ? r = void 0 : (r = new o(a), r._$AT(a, t, i)), i !== void 0 ? (t._$Co ??= [])[i] = r : t._$Cl = r), r !== void 0 && (e = ce(a, r._$AS(a, e.values), r, i)), e;
 }
-class bi {
+class yi {
   constructor(e, t) {
     this._$AV = [], this._$AN = void 0, this._$AD = e, this._$AM = t;
   }
@@ -320,24 +320,24 @@ class bi {
     return this._$AM._$AU;
   }
   u(e) {
-    const { el: { content: t }, parts: i } = this._$AD, r = (e?.creationScope ?? J).importNode(t, !0);
-    Z.currentNode = r;
-    let o = Z.nextNode(), n = 0, s = 0, l = i[0];
-    for (; l !== void 0; ) {
-      if (n === l.index) {
+    const { el: { content: t }, parts: i } = this._$AD, r = (e?.creationScope ?? Q).importNode(t, !0);
+    J.currentNode = r;
+    let o = J.nextNode(), n = 0, s = 0, d = i[0];
+    for (; d !== void 0; ) {
+      if (n === d.index) {
         let p;
-        l.type === 2 ? p = new ce(o, o.nextSibling, this, e) : l.type === 1 ? p = new l.ctor(o, l.name, l.strings, this, e) : l.type === 6 && (p = new wi(o, this, e)), this._$AV.push(p), l = i[++s];
+        d.type === 2 ? p = new de(o, o.nextSibling, this, e) : d.type === 1 ? p = new d.ctor(o, d.name, d.strings, this, e) : d.type === 6 && (p = new Si(o, this, e)), this._$AV.push(p), d = i[++s];
       }
-      n !== l?.index && (o = Z.nextNode(), n++);
+      n !== d?.index && (o = J.nextNode(), n++);
     }
-    return Z.currentNode = J, r;
+    return J.currentNode = Q, r;
   }
   p(e) {
     let t = 0;
     for (const i of this._$AV) i !== void 0 && (i.strings !== void 0 ? (i._$AI(e, i, t), t += i.strings.length - 2) : i._$AI(e[t])), t++;
   }
 }
-class ce {
+class de {
   get _$AU() {
     return this._$AM?._$AU ?? this._$Cv;
   }
@@ -356,7 +356,7 @@ class ce {
     return this._$AB;
   }
   _$AI(e, t = this) {
-    e = le(this, e, t), ke(e) ? e === w || e == null || e === "" ? (this._$AH !== w && this._$AR(), this._$AH = w) : e !== this._$AH && e !== Q && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : fi(e) ? this.k(e) : this._(e);
+    e = ce(this, e, t), Ce(e) ? e === w || e == null || e === "" ? (this._$AH !== w && this._$AR(), this._$AH = w) : e !== this._$AH && e !== j && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : mi(e) ? this.k(e) : this._(e);
   }
   O(e) {
     return this._$AA.parentNode.insertBefore(e, this._$AB);
@@ -365,38 +365,38 @@ class ce {
     this._$AH !== e && (this._$AR(), this._$AH = this.O(e));
   }
   _(e) {
-    this._$AH !== w && ke(this._$AH) ? this._$AA.nextSibling.data = e : this.T(J.createTextNode(e)), this._$AH = e;
+    this._$AH !== w && Ce(this._$AH) ? this._$AA.nextSibling.data = e : this.T(Q.createTextNode(e)), this._$AH = e;
   }
   $(e) {
-    const { values: t, _$litType$: i } = e, r = typeof i == "number" ? this._$AC(e) : (i.el === void 0 && (i.el = Ce.createElement(Qt(i.h, i.h[0]), this.options)), i);
+    const { values: t, _$litType$: i } = e, r = typeof i == "number" ? this._$AC(e) : (i.el === void 0 && (i.el = Te.createElement(ei(i.h, i.h[0]), this.options)), i);
     if (this._$AH?._$AD === r) this._$AH.p(t);
     else {
-      const o = new bi(r, this), n = o.u(this.options);
+      const o = new yi(r, this), n = o.u(this.options);
       o.p(t), this.T(n), this._$AH = o;
     }
   }
   _$AC(e) {
-    let t = zt.get(e.strings);
-    return t === void 0 && zt.set(e.strings, t = new Ce(e)), t;
+    let t = Ft.get(e.strings);
+    return t === void 0 && Ft.set(e.strings, t = new Te(e)), t;
   }
   k(e) {
-    St(this._$AH) || (this._$AH = [], this._$AR());
+    kt(this._$AH) || (this._$AH = [], this._$AR());
     const t = this._$AH;
     let i, r = 0;
-    for (const o of e) r === t.length ? t.push(i = new ce(this.O(Se()), this.O(Se()), this, this.options)) : i = t[r], i._$AI(o), r++;
+    for (const o of e) r === t.length ? t.push(i = new de(this.O(ke()), this.O(ke()), this, this.options)) : i = t[r], i._$AI(o), r++;
     r < t.length && (this._$AR(i && i._$AB.nextSibling, r), t.length = r);
   }
   _$AR(e = this._$AA.nextSibling, t) {
     for (this._$AP?.(!1, !0, t); e !== this._$AB; ) {
-      const i = Lt(e).nextSibling;
-      Lt(e).remove(), e = i;
+      const i = Nt(e).nextSibling;
+      Nt(e).remove(), e = i;
     }
   }
   setConnected(e) {
     this._$AM === void 0 && (this._$Cv = e, this._$AP?.(e));
   }
 }
-class tt {
+class it {
   get tagName() {
     return this.element.tagName;
   }
@@ -409,11 +409,11 @@ class tt {
   _$AI(e, t = this, i, r) {
     const o = this.strings;
     let n = !1;
-    if (o === void 0) e = le(this, e, t, 0), n = !ke(e) || e !== this._$AH && e !== Q, n && (this._$AH = e);
+    if (o === void 0) e = ce(this, e, t, 0), n = !Ce(e) || e !== this._$AH && e !== j, n && (this._$AH = e);
     else {
       const s = e;
-      let l, p;
-      for (e = o[0], l = 0; l < o.length - 1; l++) p = le(this, s[i + l], t, l), p === Q && (p = this._$AH[l]), n ||= !ke(p) || p !== this._$AH[l], p === w ? e = w : e !== w && (e += (p ?? "") + o[l + 1]), this._$AH[l] = p;
+      let d, p;
+      for (e = o[0], d = 0; d < o.length - 1; d++) p = ce(this, s[i + d], t, d), p === j && (p = this._$AH[d]), n ||= !Ce(p) || p !== this._$AH[d], p === w ? e = w : e !== w && (e += (p ?? "") + o[d + 1]), this._$AH[d] = p;
     }
     n && !r && this.j(e);
   }
@@ -421,7 +421,7 @@ class tt {
     e === w ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, e ?? "");
   }
 }
-class vi extends tt {
+class xi extends it {
   constructor() {
     super(...arguments), this.type = 3;
   }
@@ -429,7 +429,7 @@ class vi extends tt {
     this.element[this.name] = e === w ? void 0 : e;
   }
 }
-class yi extends tt {
+class wi extends it {
   constructor() {
     super(...arguments), this.type = 4;
   }
@@ -437,12 +437,12 @@ class yi extends tt {
     this.element.toggleAttribute(this.name, !!e && e !== w);
   }
 }
-class xi extends tt {
+class $i extends it {
   constructor(e, t, i, r, o) {
     super(e, t, i, r, o), this.type = 5;
   }
   _$AI(e, t = this) {
-    if ((e = le(this, e, t, 0) ?? w) === Q) return;
+    if ((e = ce(this, e, t, 0) ?? w) === j) return;
     const i = this._$AH, r = e === w && i !== w || e.capture !== i.capture || e.once !== i.once || e.passive !== i.passive, o = e !== w && (i === w || r);
     r && this.element.removeEventListener(this.name, this, i), o && this.element.addEventListener(this.name, this, e), this._$AH = e;
   }
@@ -450,7 +450,7 @@ class xi extends tt {
     typeof this._$AH == "function" ? this._$AH.call(this.options?.host ?? this.element, e) : this._$AH.handleEvent(e);
   }
 }
-let wi = class {
+let Si = class {
   constructor(e, t, i) {
     this.element = e, this.type = 6, this._$AN = void 0, this._$AM = t, this.options = i;
   }
@@ -458,22 +458,22 @@ let wi = class {
     return this._$AM._$AU;
   }
   _$AI(e) {
-    le(this, e);
+    ce(this, e);
   }
 };
-const $i = { I: ce }, Si = $t.litHtmlPolyfillSupport;
-Si?.(Ce, ce), ($t.litHtmlVersions ??= []).push("3.3.3");
-const ki = (a, e, t) => {
+const ki = { I: de }, Ci = St.litHtmlPolyfillSupport;
+Ci?.(Te, de), (St.litHtmlVersions ??= []).push("3.3.3");
+const Ti = (a, e, t) => {
   const i = t?.renderBefore ?? e;
   let r = i._$litPart$;
   if (r === void 0) {
     const o = t?.renderBefore ?? null;
-    i._$litPart$ = r = new ce(e.insertBefore(Se(), o), o, void 0, t ?? {});
+    i._$litPart$ = r = new de(e.insertBefore(ke(), o), o, void 0, t ?? {});
   }
   return r._$AI(a), r;
 };
-const kt = globalThis;
-let se = class extends ne {
+const Ct = globalThis;
+let le = class extends ae {
   constructor() {
     super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
   }
@@ -483,7 +483,7 @@ let se = class extends ne {
   }
   update(e) {
     const t = this.render();
-    this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(e), this._$Do = ki(t, this.renderRoot, this.renderOptions);
+    this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(e), this._$Do = Ti(t, this.renderRoot, this.renderOptions);
   }
   connectedCallback() {
     super.connectedCallback(), this._$Do?.setConnected(!0);
@@ -492,21 +492,21 @@ let se = class extends ne {
     super.disconnectedCallback(), this._$Do?.setConnected(!1);
   }
   render() {
-    return Q;
+    return j;
   }
 };
-se._$litElement$ = !0, se.finalized = !0, kt.litElementHydrateSupport?.({ LitElement: se });
-const Ci = kt.litElementPolyfillSupport;
-Ci?.({ LitElement: se });
-(kt.litElementVersions ??= []).push("4.2.2");
-const Ti = { attribute: !0, type: String, converter: Qe, reflect: !1, hasChanged: wt }, Ai = (a = Ti, e, t) => {
+le._$litElement$ = !0, le.finalized = !0, Ct.litElementHydrateSupport?.({ LitElement: le });
+const Ai = Ct.litElementPolyfillSupport;
+Ai?.({ LitElement: le });
+(Ct.litElementVersions ??= []).push("4.2.2");
+const Mi = { attribute: !0, type: String, converter: je, reflect: !1, hasChanged: $t }, Pi = (a = Mi, e, t) => {
   const { kind: i, metadata: r } = t;
   let o = globalThis.litPropertyMetadata.get(r);
   if (o === void 0 && globalThis.litPropertyMetadata.set(r, o = /* @__PURE__ */ new Map()), i === "setter" && ((a = Object.create(a)).wrapped = !0), o.set(t.name, a), i === "accessor") {
     const { name: n } = t;
     return { set(s) {
-      const l = e.get.call(this);
-      e.set.call(this, s), this.requestUpdate(n, l, a, !0, s);
+      const d = e.get.call(this);
+      e.set.call(this, s), this.requestUpdate(n, d, a, !0, s);
     }, init(s) {
       return s !== void 0 && this.C(n, void 0, a, s), s;
     } };
@@ -514,29 +514,29 @@ const Ti = { attribute: !0, type: String, converter: Qe, reflect: !1, hasChanged
   if (i === "setter") {
     const { name: n } = t;
     return function(s) {
-      const l = this[n];
-      e.call(this, s), this.requestUpdate(n, l, a, !0, s);
+      const d = this[n];
+      e.call(this, s), this.requestUpdate(n, d, a, !0, s);
     };
   }
   throw Error("Unsupported decorator location: " + i);
 };
-function it(a) {
-  return (e, t) => typeof t == "object" ? Ai(a, e, t) : ((i, r, o) => {
+function rt(a) {
+  return (e, t) => typeof t == "object" ? Pi(a, e, t) : ((i, r, o) => {
     const n = r.hasOwnProperty(o);
     return r.constructor.createProperty(o, i), n ? Object.getOwnPropertyDescriptor(r, o) : void 0;
   })(a, e, t);
 }
-function rt(a) {
-  return it({ ...a, state: !0, attribute: !1 });
+function ot(a) {
+  return rt({ ...a, state: !0, attribute: !1 });
 }
-function jt(a) {
+function ti(a) {
   return (e, t) => {
     const i = typeof e == "function" ? e : e[t];
     Object.assign(i, a);
   };
 }
-const Mi = { CHILD: 2 }, Pi = (a) => (...e) => ({ _$litDirective$: a, values: e });
-let Ei = class {
+const Ei = { CHILD: 2 }, Di = (a) => (...e) => ({ _$litDirective$: a, values: e });
+let Li = class {
   constructor(e) {
   }
   get _$AU() {
@@ -552,36 +552,36 @@ let Ei = class {
     return this.render(...t);
   }
 };
-const { I: Di } = $i, It = (a) => a, Ut = () => document.createComment(""), ye = (a, e, t) => {
+const { I: Ni } = ki, Ut = (a) => a, It = () => document.createComment(""), xe = (a, e, t) => {
   const i = a._$AA.parentNode, r = e === void 0 ? a._$AB : e._$AA;
   if (t === void 0) {
-    const o = i.insertBefore(Ut(), r), n = i.insertBefore(Ut(), r);
-    t = new Di(o, n, a, a.options);
+    const o = i.insertBefore(It(), r), n = i.insertBefore(It(), r);
+    t = new Ni(o, n, a, a.options);
   } else {
     const o = t._$AB.nextSibling, n = t._$AM, s = n !== a;
     if (s) {
-      let l;
-      t._$AQ?.(a), t._$AM = a, t._$AP !== void 0 && (l = a._$AU) !== n._$AU && t._$AP(l);
+      let d;
+      t._$AQ?.(a), t._$AM = a, t._$AP !== void 0 && (d = a._$AU) !== n._$AU && t._$AP(d);
     }
     if (o !== r || s) {
-      let l = t._$AA;
-      for (; l !== o; ) {
-        const p = It(l).nextSibling;
-        It(i).insertBefore(l, r), l = p;
+      let d = t._$AA;
+      for (; d !== o; ) {
+        const p = Ut(d).nextSibling;
+        Ut(i).insertBefore(d, r), d = p;
       }
     }
   }
   return t;
-}, K = (a, e, t = a) => (a._$AI(e, t), a), Li = {}, Ni = (a, e = Li) => a._$AH = e, Hi = (a) => a._$AH, pt = (a) => {
+}, Z = (a, e, t = a) => (a._$AI(e, t), a), Ri = {}, Hi = (a, e = Ri) => a._$AH = e, Oi = (a) => a._$AH, ft = (a) => {
   a._$AR(), a._$AA.remove();
 };
-const Ft = (a, e, t) => {
+const Gt = (a, e, t) => {
   const i = /* @__PURE__ */ new Map();
   for (let r = e; r <= t; r++) i.set(a[r], r);
   return i;
-}, Ri = Pi(class extends Ei {
+}, Bi = Di(class extends Li {
   constructor(a) {
-    if (super(a), a.type !== Mi.CHILD) throw Error("repeat() can only be used in text expressions");
+    if (super(a), a.type !== Ei.CHILD) throw Error("repeat() can only be used in text expressions");
   }
   dt(a, e, t) {
     let i;
@@ -595,56 +595,56 @@ const Ft = (a, e, t) => {
     return this.dt(a, e, t).values;
   }
   update(a, [e, t, i]) {
-    const r = Hi(a), { values: o, keys: n } = this.dt(e, t, i);
+    const r = Oi(a), { values: o, keys: n } = this.dt(e, t, i);
     if (!Array.isArray(r)) return this.ut = n, o;
-    const s = this.ut ??= [], l = [];
-    let p, d, c = 0, b = r.length - 1, f = 0, x = o.length - 1;
-    for (; c <= b && f <= x; ) if (r[c] === null) c++;
-    else if (r[b] === null) b--;
-    else if (s[c] === n[f]) l[f] = K(r[c], o[f]), c++, f++;
-    else if (s[b] === n[x]) l[x] = K(r[b], o[x]), b--, x--;
-    else if (s[c] === n[x]) l[x] = K(r[c], o[x]), ye(a, l[x + 1], r[c]), c++, x--;
-    else if (s[b] === n[f]) l[f] = K(r[b], o[f]), ye(a, r[c], r[b]), b--, f++;
-    else if (p === void 0 && (p = Ft(n, f, x), d = Ft(s, c, b)), p.has(s[c])) if (p.has(s[b])) {
-      const h = d.get(n[f]), m = h !== void 0 ? r[h] : null;
+    const s = this.ut ??= [], d = [];
+    let p, h, c = 0, v = r.length - 1, g = 0, x = o.length - 1;
+    for (; c <= v && g <= x; ) if (r[c] === null) c++;
+    else if (r[v] === null) v--;
+    else if (s[c] === n[g]) d[g] = Z(r[c], o[g]), c++, g++;
+    else if (s[v] === n[x]) d[x] = Z(r[v], o[x]), v--, x--;
+    else if (s[c] === n[x]) d[x] = Z(r[c], o[x]), xe(a, d[x + 1], r[c]), c++, x--;
+    else if (s[v] === n[g]) d[g] = Z(r[v], o[g]), xe(a, r[c], r[v]), v--, g++;
+    else if (p === void 0 && (p = Gt(n, g, x), h = Gt(s, c, v)), p.has(s[c])) if (p.has(s[v])) {
+      const u = h.get(n[g]), m = u !== void 0 ? r[u] : null;
       if (m === null) {
-        const $ = ye(a, r[c]);
-        K($, o[f]), l[f] = $;
-      } else l[f] = K(m, o[f]), ye(a, r[c], m), r[h] = null;
-      f++;
-    } else pt(r[b]), b--;
-    else pt(r[c]), c++;
-    for (; f <= x; ) {
-      const h = ye(a, l[x + 1]);
-      K(h, o[f]), l[f++] = h;
+        const $ = xe(a, r[c]);
+        Z($, o[g]), d[g] = $;
+      } else d[g] = Z(m, o[g]), xe(a, r[c], m), r[u] = null;
+      g++;
+    } else ft(r[v]), v--;
+    else ft(r[c]), c++;
+    for (; g <= x; ) {
+      const u = xe(a, d[x + 1]);
+      Z(u, o[g]), d[g++] = u;
     }
-    for (; c <= b; ) {
-      const h = r[c++];
-      h !== null && pt(h);
+    for (; c <= v; ) {
+      const u = r[c++];
+      u !== null && ft(u);
     }
-    return this.ut = n, Ni(a, l), Q;
+    return this.ut = n, Hi(a, d), j;
   }
 });
-var Gt, Vt;
+var Vt, Wt;
 (function(a) {
   a.language = "language", a.system = "system", a.comma_decimal = "comma_decimal", a.decimal_comma = "decimal_comma", a.space_comma = "space_comma", a.none = "none";
-})(Gt || (Gt = {})), function(a) {
+})(Vt || (Vt = {})), function(a) {
   a.language = "language", a.system = "system", a.am_pm = "12", a.twenty_four = "24";
-}(Vt || (Vt = {}));
-function Bi(a) {
+}(Wt || (Wt = {}));
+function zi(a) {
   return a.substr(0, a.indexOf("."));
 }
-var Oi = ["closed", "locked", "off"], Te = function(a, e, t, i) {
+var Fi = ["closed", "locked", "off"], Ae = function(a, e, t, i) {
   i = i || {}, t = t ?? {};
   var r = new Event(e, { bubbles: i.bubbles === void 0 || i.bubbles, cancelable: !!i.cancelable, composed: i.composed === void 0 || i.composed });
   return r.detail = t, a.dispatchEvent(r), r;
-}, we = function(a) {
-  Te(window, "haptic", a);
-}, zi = function(a, e, t) {
-  t === void 0 && (t = !1), t ? history.replaceState(null, "", e) : history.pushState(null, "", e), Te(window, "location-changed", { replace: t });
+}, $e = function(a) {
+  Ae(window, "haptic", a);
+}, Ui = function(a, e, t) {
+  t === void 0 && (t = !1), t ? history.replaceState(null, "", e) : history.pushState(null, "", e), Ae(window, "location-changed", { replace: t });
 }, Ii = function(a, e, t) {
   t === void 0 && (t = !0);
-  var i, r = Bi(e), o = r === "group" ? "homeassistant" : r;
+  var i, r = zi(e), o = r === "group" ? "homeassistant" : r;
   switch (r) {
     case "lock":
       i = t ? "unlock" : "lock";
@@ -656,38 +656,38 @@ var Oi = ["closed", "locked", "off"], Te = function(a, e, t, i) {
       i = t ? "turn_on" : "turn_off";
   }
   return a.callService(o, i, { entity_id: e });
-}, Ui = function(a, e) {
-  var t = Oi.includes(a.states[e].state);
+}, Gi = function(a, e) {
+  var t = Fi.includes(a.states[e].state);
   return Ii(a, e, t);
-}, Fi = function(a, e, t, i) {
+}, Vi = function(a, e, t, i) {
   if (i || (i = { action: "more-info" }), !i.confirmation || i.confirmation.exemptions && i.confirmation.exemptions.some(function(o) {
     return o.user === e.user.id;
-  }) || (we("warning"), confirm(i.confirmation.text || "Are you sure you want to " + i.action + "?"))) switch (i.action) {
+  }) || ($e("warning"), confirm(i.confirmation.text || "Are you sure you want to " + i.action + "?"))) switch (i.action) {
     case "more-info":
-      (t.entity || t.camera_image) && Te(a, "hass-more-info", { entityId: t.entity ? t.entity : t.camera_image });
+      (t.entity || t.camera_image) && Ae(a, "hass-more-info", { entityId: t.entity ? t.entity : t.camera_image });
       break;
     case "navigate":
-      i.navigation_path && zi(0, i.navigation_path);
+      i.navigation_path && Ui(0, i.navigation_path);
       break;
     case "url":
       i.url_path && window.open(i.url_path);
       break;
     case "toggle":
-      t.entity && (Ui(e, t.entity), we("success"));
+      t.entity && (Gi(e, t.entity), $e("success"));
       break;
     case "call-service":
-      if (!i.service) return void we("failure");
+      if (!i.service) return void $e("failure");
       var r = i.service.split(".", 2);
-      e.callService(r[0], r[1], i.service_data, i.target), we("success");
+      e.callService(r[0], r[1], i.service_data, i.target), $e("success");
       break;
     case "fire-dom-event":
-      Te(a, "ll-custom", i);
+      Ae(a, "ll-custom", i);
   }
-}, Gi = function(a, e, t, i) {
+}, Wi = function(a, e, t, i) {
   var r;
-  i === "double_tap" && t.double_tap_action ? r = t.double_tap_action : i === "hold" && t.hold_action ? r = t.hold_action : i === "tap" && t.tap_action && (r = t.tap_action), Fi(a, e, t, r);
+  i === "double_tap" && t.double_tap_action ? r = t.double_tap_action : i === "hold" && t.hold_action ? r = t.hold_action : i === "tap" && t.tap_action && (r = t.tap_action), Vi(a, e, t, r);
 };
-const bt = {
+const vt = {
   // Multi-Stage Fade & Decay defaults
   fade_transition_enabled: !1,
   fade_trigger: "on_inactive",
@@ -888,12 +888,12 @@ const bt = {
   badge_offset: -2,
   custom_styles: ""
 };
-var Vi = Object.defineProperty, Ct = (a, e, t, i) => {
+var Yi = Object.defineProperty, Tt = (a, e, t, i) => {
   for (var r = void 0, o = a.length - 1, n; o >= 0; o--)
     (n = a[o]) && (r = n(e, t, r) || r);
-  return r && Vi(e, t, r), r;
+  return r && Yi(e, t, r), r;
 };
-const Wi = [
+const qi = [
   { name: "entity", selector: { entity: {} } },
   { name: "name", selector: { text: {} } },
   { name: "visibility_state", selector: { select: { options: [
@@ -939,7 +939,7 @@ const Wi = [
   { name: "show_state", selector: { boolean: {} } },
   { name: "fill_container", selector: { boolean: {} } },
   { name: "overflow_hidden", selector: { boolean: {} } }
-], Yi = [
+], Ki = [
   { name: "theme_preset", selector: { select: { options: [
     { value: "default", label: "Default (Card Colors)" },
     { value: "glassmorphism", label: "Frosted Glass (Glassmorphism)" },
@@ -1012,7 +1012,7 @@ const Wi = [
   { name: "fade_stage_3_duration", selector: { number: { min: 0, max: 7200, mode: "slider", unit_of_measurement: "sec", step: 30 } } },
   { name: "fade_stage_3_pickup", selector: { boolean: {} } },
   { name: "fade_stage_3_color", selector: { color_rgb: {} } }
-], qi = [
+], Xi = [
   { name: "use_light_color", label: "Dynamic Light Color Accent (Mushroom/Bubble Style)", selector: { boolean: {} } },
   { name: "haptic_feedback", label: "Haptic Feedback Vibrations (Mobile / Companion App)", selector: { boolean: {} } },
   { name: "haptic_type", label: "Haptic Vibration Intensity / Pattern", selector: { select: { options: [
@@ -1078,7 +1078,7 @@ const Wi = [
     { value: "hold", label: "Long Press / Hold Card (Recommended)" },
     { value: "double_tap", label: "Double Tap Card" }
   ] } } }
-], Xi = [
+], Zi = [
   { name: "card_padding", label: "Card Base Padding (All Sides px)", selector: { number: { min: 0, max: 64, mode: "slider" } } },
   { name: "card_padding_vertical", label: "Card Vertical Padding (Top/Bottom px)", selector: { number: { min: 0, max: 64, mode: "slider" } } },
   { name: "card_padding_horizontal", label: "Card Horizontal Padding (Left/Right px)", selector: { number: { min: 0, max: 64, mode: "slider" } } },
@@ -1133,7 +1133,7 @@ const Wi = [
   { name: "secondary_text_offset_y", selector: { number: { min: -150, max: 250, mode: "slider" } } },
   { name: "features_offset_x", selector: { number: { min: -150, max: 250, mode: "slider" } } },
   { name: "features_offset_y", selector: { number: { min: -150, max: 250, mode: "slider" } } }
-], Ki = [
+], Ji = [
   { name: "text_color_mode", selector: { select: { options: [
     { value: "selected", label: "Fixed Selected Color (Default)" },
     { value: "inverse", label: "Inverse Dynamic Text (Blend Mode Difference)" },
@@ -1182,7 +1182,7 @@ const Wi = [
   ] } } },
   { name: "letter_spacing", selector: { number: { min: -4, max: 16, mode: "slider", step: 0.5 } } },
   { name: "line_height", selector: { number: { min: 0.5, max: 3.5, mode: "slider", step: 0.05 } } }
-], Wt = [
+], Yt = [
   { name: "sub_button_alignment", selector: { select: { options: [
     { value: "flex-end", label: "Right Aligned (Default)" },
     { value: "flex-start", label: "Left Aligned" },
@@ -1194,7 +1194,7 @@ const Wi = [
   { name: "sub_button_padding", label: "Sub-Button Internal Padding (px)", selector: { number: { min: 0, max: 48, mode: "slider" } } },
   { name: "sub_button_container_padding", label: "Container Top Padding (px)", selector: { number: { min: 0, max: 48, mode: "slider" } } }
 ];
-function ot(a) {
+function nt(a) {
   return [
     { name: `sub_button_${a}_entity`, selector: { entity: {} } },
     { name: `sub_button_${a}_type`, selector: { select: { options: [
@@ -1207,27 +1207,37 @@ function ot(a) {
       { value: "mute", label: "Media: Mute / Unmute Toggle" },
       { value: "source", label: "Media: Cycle Input Source" },
       { value: "sound_mode", label: "Media: Cycle Sound DSP Mode" },
+      { value: "shuffle", label: "Media: Toggle Shuffle Mode" },
+      { value: "repeat", label: "Media: Cycle Repeat Mode" },
+      { value: "chime", label: "Audio: Play Chime / Doorbell Sound" },
       { value: "open_close", label: "Cover: Open/Close Dynamic Toggle" },
       { value: "stop", label: "Cover: Stop Position" },
       { value: "open_tilt", label: "Cover: Open Tilt Position" },
       { value: "close_tilt", label: "Cover: Close Tilt Position" },
       { value: "stop_tilt", label: "Cover: Stop Tilt Position" },
+      { value: "cover_preset", label: "Cover: Go to Favorite Preset (50%)" },
       { value: "lock_unlock", label: "Lock: Lock/Unlock Dynamic Toggle" },
       { value: "garage_toggle", label: "Cover: Garage Door Smart Toggle" },
       { value: "fan_speed", label: "Fan: Cycle Speed Preset" },
       { value: "fan_mode", label: "Climate: Cycle Fan Speed Mode" },
+      { value: "fan_oscillate", label: "Fan: Toggle Oscillation" },
+      { value: "fan_direction", label: "Fan: Toggle Direction (Forward/Reverse)" },
       { value: "swing_mode", label: "Climate: Cycle Vane Swing Mode" },
       { value: "climate_preset", label: "Climate: Cycle Preset (Eco/Comfort/Boost)" },
+      { value: "temp_up", label: "Climate: Temperature Step Up (+0.5°C / +1°F)" },
+      { value: "temp_down", label: "Climate: Temperature Step Down (-0.5°C / -1°F)" },
       { value: "clean", label: "Vacuum: Start Cleaning" },
       { value: "dock", label: "Vacuum: Return to Base / Dock" },
       { value: "locate", label: "Vacuum: Play Sound / Locate" },
       { value: "vacuum_fan_speed", label: "Vacuum: Cycle Suction Power" },
+      { value: "siren_toggle", label: "Siren: Toggle Emergency Siren/Strobe" },
       { value: "hvac_mode", label: "Climate: Cycle Operating Mode" },
       { value: "light_effect", label: "Light: Cycle Color Animation Effect" },
       { value: "dim_up", label: "Light/Number: Step Up (+10% / +Step)" },
       { value: "dim_down", label: "Light/Number: Step Down (-10% / -Step)" },
       { value: "humidity_up", label: "Humidifier: Step Target Up (+5%)" },
       { value: "humidity_down", label: "Humidifier: Step Target Down (-5%)" },
+      { value: "humidifier_mode", label: "Humidifier: Cycle Operating Mode" },
       { value: "counter_inc", label: "Counter: Increment (+1)" },
       { value: "counter_dec", label: "Counter: Decrement (-1)" },
       { value: "input_select", label: "Input Select: Cycle Next Option" },
@@ -1249,7 +1259,7 @@ function ot(a) {
     { name: `sub_button_${a}_double_tap_action`, selector: { "ui-action": {} } }
   ];
 }
-const Zi = ot(1), Ji = ot(2), Qi = ot(3), ji = ot(4), er = [
+const Qi = nt(1), ji = nt(2), er = nt(3), tr = nt(4), ir = [
   { name: "tap_action", selector: { "ui-action": {} } },
   { name: "hold_action", selector: { "ui-action": {} } },
   { name: "double_tap_action", selector: { "ui-action": {} } },
@@ -1282,7 +1292,7 @@ function P(a) {
   if (!(isNaN(t) || isNaN(i) || isNaN(r)))
     return [t, i, r];
 }
-const tr = {
+const rr = {
   entity: "Entity",
   name: "Name (Optional Override)",
   theme_preset: "Visual Design Theme Preset",
@@ -1452,7 +1462,7 @@ const tr = {
   sub_button_4_double_tap_action: "Double Tap Action",
   custom_styles: "Scoped Custom CSS Injection"
 };
-class Ae extends se {
+class Me extends le {
   constructor() {
     super(...arguments), this._openPanels = {
       core: !0,
@@ -1475,12 +1485,12 @@ class Ae extends se {
       i && t.bg_opacity === void 0 && (t.bg_opacity = Math.round(parseFloat(i[1]) * 100)), t.bg_color = L(t.bg_color);
     }
     t.card_border_color && (t.card_border_color = L(t.card_border_color)), t.active_color && (t.active_color = L(t.active_color)), t.inactive_color && (t.inactive_color = L(t.inactive_color)), t.slider_color && (t.slider_color = L(t.slider_color)), t.slider_track_color && (t.slider_track_color = L(t.slider_track_color)), t.text_color_primary && (t.text_color_primary = L(t.text_color_primary)), t.text_color_secondary && (t.text_color_secondary = L(t.text_color_secondary)), t.sub_button_1_color && (t.sub_button_1_color = L(t.sub_button_1_color)), t.sub_button_2_color && (t.sub_button_2_color = L(t.sub_button_2_color)), t.sub_button_3_color && (t.sub_button_3_color = L(t.sub_button_3_color)), t.sub_button_4_color && (t.sub_button_4_color = L(t.sub_button_4_color)), this._config = {
-      ...bt,
+      ...vt,
       ...t
     };
   }
   _computeLabel(e) {
-    return tr[e.name] || e.name;
+    return rr[e.name] || e.name;
   }
   _transformConfigForForm() {
     const e = { ...this._config };
@@ -1496,7 +1506,7 @@ class Ae extends se {
         }
     } else
       Object.assign(r, i);
-    this._config = r, Te(this, "config-changed", { config: this._config });
+    this._config = r, Ae(this, "config-changed", { config: this._config });
   }
   _togglePanel(e) {
     this._openPanels = {
@@ -1560,19 +1570,19 @@ class Ae extends se {
     return S`
       <div class="editor-container">
         <!-- 1. CORE & LAYOUT -->
-        ${this._renderSection("core", "📦", "Core & Layout", Wi, e)}
+        ${this._renderSection("core", "📦", "Core & Layout", qi, e)}
 
         <!-- 2. APPEARANCE & THEMING -->
-        ${this._renderSection("appearance", "🎨", "Appearance & Theming", Yi, e)}
+        ${this._renderSection("appearance", "🎨", "Appearance & Theming", Ki, e)}
 
         <!-- 3. SLIDERS & CONTROLS -->
-        ${this._renderSection("controls", "🎛️", "Sliders & Interactive Controls", qi, e)}
+        ${this._renderSection("controls", "🎛️", "Sliders & Interactive Controls", Xi, e)}
 
         <!-- 4. SPACING, PADDING & SIZING -->
-        ${this._renderSection("spacing", "📏", "Spacing, Padding & Sizing", Xi, e)}
+        ${this._renderSection("spacing", "📏", "Spacing, Padding & Sizing", Zi, e)}
 
         <!-- 5. TYPOGRAPHY & LIVE SCROLLING -->
-        ${this._renderSection("typography", "✍️", "Typography & Live Scrolling", Ki, e)}
+        ${this._renderSection("typography", "✍️", "Typography & Live Scrolling", Ji, e)}
 
         <!-- 6. CONSOLIDATED SUB-BUTTONS (1-4) -->
         <div class="custom-panel ${n ? "open" : ""}">
@@ -1589,28 +1599,28 @@ class Ae extends se {
               <ha-form
                 .hass=${this.hass}
                 .data=${e}
-                .schema=${Wt}
+                .schema=${Yt}
                 .computeLabel=${this._computeLabel}
-                @value-changed=${(s) => this._valueChanged(s, Wt)}
+                @value-changed=${(s) => this._valueChanged(s, Yt)}
               ></ha-form>
               
               <div class="sub-buttons-nested-list">
-                ${this._renderSubButtonPanel(1, t, Zi, e)}
-                ${this._renderSubButtonPanel(2, i, Ji, e)}
-                ${this._renderSubButtonPanel(3, r, Qi, e)}
-                ${this._renderSubButtonPanel(4, o, ji, e)}
+                ${this._renderSubButtonPanel(1, t, Qi, e)}
+                ${this._renderSubButtonPanel(2, i, ji, e)}
+                ${this._renderSubButtonPanel(3, r, er, e)}
+                ${this._renderSubButtonPanel(4, o, tr, e)}
               </div>
             </div>
           ` : w}
         </div>
 
         <!-- 7. ACTIONS & CUSTOM STYLESHEET -->
-        ${this._renderSection("actions", "⚡", "Actions & Scoped CSS", er, e)}
+        ${this._renderSection("actions", "⚡", "Actions & Scoped CSS", ir, e)}
       </div>
     `;
   }
   static get styles() {
-    return Xt`
+    return Zt`
       .editor-container {
         display: flex;
         flex-direction: column;
@@ -1729,25 +1739,25 @@ class Ae extends se {
     `;
   }
 }
-Ct([
-  it({ attribute: !1 })
-], Ae.prototype, "hass");
-Ct([
-  rt()
-], Ae.prototype, "_config");
-Ct([
-  rt()
-], Ae.prototype, "_openPanels");
-customElements.get("antigravity-no-icon-card-editor") || customElements.define("antigravity-no-icon-card-editor", Ae);
-customElements.get("antigravity-card-editor") || customElements.define("antigravity-card-editor", Ae);
-var ir = Object.defineProperty, rr = Object.getOwnPropertyDescriptor, de = (a, e, t, i) => {
-  for (var r = i > 1 ? void 0 : i ? rr(e, t) : e, o = a.length - 1, n; o >= 0; o--)
+Tt([
+  rt({ attribute: !1 })
+], Me.prototype, "hass");
+Tt([
+  ot()
+], Me.prototype, "_config");
+Tt([
+  ot()
+], Me.prototype, "_openPanels");
+customElements.get("antigravity-no-icon-card-editor") || customElements.define("antigravity-no-icon-card-editor", Me);
+customElements.get("antigravity-card-editor") || customElements.define("antigravity-card-editor", Me);
+var or = Object.defineProperty, nr = Object.getOwnPropertyDescriptor, ue = (a, e, t, i) => {
+  for (var r = i > 1 ? void 0 : i ? nr(e, t) : e, o = a.length - 1, n; o >= 0; o--)
     (n = a[o]) && (r = (i ? n(e, t, r) : n(r)) || r);
-  return i && r && ir(e, t, r), r;
+  return i && r && or(e, t, r), r;
 };
-const or = "130";
+const ar = "131";
 console.info(
-  `%c 🚀 ANTIGRAVITY-CARD (NO-ICON) %c v${or} `,
+  `%c 🚀 ANTIGRAVITY-CARD (NO-ICON) %c v${ar} `,
   "color: white; background: #6200ea; font-weight: 700; padding: 2px 6px; border-radius: 4px 0 0 4px;",
   "color: #6200ea; background: #ede7f6; font-weight: 700; padding: 2px 6px; border-radius: 0 4px 4px 0;"
 );
@@ -1764,13 +1774,13 @@ window.customCards.push({
   preview: !0,
   description: "Default Antigravity Card (No Icon)"
 });
-let ae = Date.now();
+let se = Date.now();
 typeof window < "u" && !window.__AG_RESUME_LISTENER_ATTACHED__ && (window.__AG_RESUME_LISTENER_ATTACHED__ = !0, window.addEventListener("focus", () => {
-  ae = Date.now();
+  se = Date.now();
 }, { passive: !0 }), document.addEventListener("visibilitychange", () => {
-  document.visibilityState === "visible" && (ae = Date.now());
+  document.visibilityState === "visible" && (se = Date.now());
 }, { passive: !0 }));
-const nr = /* @__PURE__ */ new Set([
+const sr = /* @__PURE__ */ new Set([
   "on",
   "home",
   "playing",
@@ -1808,7 +1818,7 @@ const nr = /* @__PURE__ */ new Set([
   "motion",
   "occupied",
   "present"
-]), ar = /* @__PURE__ */ new Set([
+]), lr = /* @__PURE__ */ new Set([
   "primary",
   "accent",
   "red",
@@ -1833,7 +1843,7 @@ const nr = /* @__PURE__ */ new Set([
   "black",
   "white",
   "disabled"
-]), sr = /* @__PURE__ */ new Set(["hs", "xy", "rgb", "rgbw", "rgbww"]), lr = /* @__PURE__ */ new Set([
+]), cr = /* @__PURE__ */ new Set(["hs", "xy", "rgb", "rgbw", "rgbww"]), dr = /* @__PURE__ */ new Set([
   "binary_sensor",
   "sensor",
   "camera",
@@ -1847,48 +1857,48 @@ const nr = /* @__PURE__ */ new Set([
   "calendar",
   "event",
   "counter"
-]), ei = /^\d+\s*,\s*\d+\s*,\s*\d+$/, cr = /^\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*[\d.]+$/, qe = /* @__PURE__ */ new Map();
-function B(a) {
+]), ii = /^\d+\s*,\s*\d+\s*,\s*\d+$/, ur = /^\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*[\d.]+$/, Ke = /* @__PURE__ */ new Map();
+function O(a) {
   (isNaN(a) || !isFinite(a)) && (a = 3e3);
-  const e = Math.max(1e3, Math.min(4e4, Math.round(a))), t = qe.get(e);
+  const e = Math.max(1e3, Math.min(4e4, Math.round(a))), t = Ke.get(e);
   if (t) return t;
   const i = e / 100;
   let r, o, n;
   if (i <= 66)
     r = 255;
   else {
-    const l = i - 60;
-    r = 329.698727446 * Math.pow(l, -0.1332047592), r = Math.max(0, Math.min(255, r));
+    const d = i - 60;
+    r = 329.698727446 * Math.pow(d, -0.1332047592), r = Math.max(0, Math.min(255, r));
   }
   if (i <= 66)
     o = i, o = 99.4708025861 * Math.log(o) - 161.1195681661, o = Math.max(0, Math.min(255, o));
   else {
-    const l = i - 60;
-    o = 288.1221695283 * Math.pow(l, -0.0755148492), o = Math.max(0, Math.min(255, o));
+    const d = i - 60;
+    o = 288.1221695283 * Math.pow(d, -0.0755148492), o = Math.max(0, Math.min(255, o));
   }
   if (i >= 66)
     n = 255;
   else if (i <= 19)
     n = 0;
   else {
-    const l = i - 10;
-    n = 138.5177312231 * Math.log(l) - 305.0447927307, n = Math.max(0, Math.min(255, n));
+    const d = i - 10;
+    n = 138.5177312231 * Math.log(d) - 305.0447927307, n = Math.max(0, Math.min(255, n));
   }
   const s = [Math.round(r), Math.round(o), Math.round(n)];
-  return qe.size > 256 && qe.clear(), qe.set(e, s), s;
+  return Ke.size > 256 && Ke.clear(), Ke.set(e, s), s;
 }
 [2e3, 2200, 2500, 2700, 3e3, 3500, 4e3, 4500, 5e3, 5500, 6e3, 6500].forEach((a) => {
-  B(a);
+  O(a);
 });
 const Xe = /* @__PURE__ */ new Map();
-function Ke(a) {
+function Ze(a) {
   if (!Array.isArray(a) || a.length < 3) return "#ffffff";
   const e = `${a[0]},${a[1]},${a[2]}`, t = Xe.get(e);
   if (t) return t;
   const i = "#" + a.slice(0, 3).map((r) => Math.round(Number(r) || 0).toString(16).padStart(2, "0")).join("");
   return Xe.size > 512 && Xe.clear(), Xe.set(e, i), i;
 }
-function dr(a, e, t) {
+function hr(a, e, t) {
   a /= 255, e /= 255, t /= 255;
   const i = Math.max(a, e, t), r = Math.min(a, e, t);
   let o = 0;
@@ -1907,33 +1917,33 @@ function dr(a, e, t) {
   }
   return Math.round(o * 60);
 }
-function ft(a, e) {
+function gt(a, e) {
   a = a % 360 / 360, e = Math.max(0, Math.min(100, e)) / 100;
   const t = 1, i = Math.floor(a * 6), r = a * 6 - i, o = t * (1 - e), n = t * (1 - r * e), s = t * (1 - (1 - r) * e);
-  let l = 0, p = 0, d = 0;
+  let d = 0, p = 0, h = 0;
   switch (i % 6) {
     case 0:
-      l = t, p = s, d = o;
+      d = t, p = s, h = o;
       break;
     case 1:
-      l = n, p = t, d = o;
+      d = n, p = t, h = o;
       break;
     case 2:
-      l = o, p = t, d = s;
+      d = o, p = t, h = s;
       break;
     case 3:
-      l = o, p = n, d = t;
+      d = o, p = n, h = t;
       break;
     case 4:
-      l = s, p = o, d = t;
+      d = s, p = o, h = t;
       break;
     case 5:
-      l = t, p = o, d = n;
+      d = t, p = o, h = n;
       break;
   }
-  return [Math.round(l * 255), Math.round(p * 255), Math.round(d * 255)];
+  return [Math.round(d * 255), Math.round(p * 255), Math.round(h * 255)];
 }
-const vt = [
+const yt = [
   { hex: "#f44336", label: "Red", rgb: [244, 67, 54] },
   { hex: "#ff9800", label: "Orange", rgb: [255, 152, 0] },
   { hex: "#ffeb3b", label: "Yellow", rgb: [255, 235, 59] },
@@ -1944,28 +1954,28 @@ const vt = [
   { hex: "#e91e63", label: "Pink", rgb: [233, 30, 99] },
   { hex: "#ffffff", label: "White", rgb: [255, 255, 255] },
   { hex: "#ffe0b2", label: "Warm", rgb: [255, 224, 178] }
-], ur = [
-  { k: 2200, label: "2200K", rgb: B(2200) },
-  { k: 2700, label: "2700K", rgb: B(2700) },
-  { k: 3e3, label: "3000K", rgb: B(3e3) },
-  { k: 4e3, label: "4000K", rgb: B(4e3) },
-  { k: 5e3, label: "5000K", rgb: B(5e3) },
-  { k: 6500, label: "6500K", rgb: B(6500) }
-], xe = /* @__PURE__ */ new Map(), hr = 200;
-function R(a) {
+], _r = [
+  { k: 2200, label: "2200K", rgb: O(2200) },
+  { k: 2700, label: "2700K", rgb: O(2700) },
+  { k: 3e3, label: "3000K", rgb: O(3e3) },
+  { k: 4e3, label: "4000K", rgb: O(4e3) },
+  { k: 5e3, label: "5000K", rgb: O(5e3) },
+  { k: 6500, label: "6500K", rgb: O(6500) }
+], we = /* @__PURE__ */ new Map(), pr = 200;
+function H(a) {
   if (!a) return null;
   const e = a.trim().toLowerCase();
   if (!e) return null;
-  const t = xe.get(e);
+  const t = we.get(e);
   if (t !== void 0) return t;
-  const i = _r(e);
-  if (xe.size >= hr) {
-    const r = xe.keys().next().value;
-    r && xe.delete(r);
+  const i = fr(e);
+  if (we.size >= pr) {
+    const r = we.keys().next().value;
+    r && we.delete(r);
   }
-  return xe.set(e, i), i;
+  return we.set(e, i), i;
 }
-function _r(a) {
+function fr(a) {
   if (a.charCodeAt(0) === 35) {
     const e = a.slice(1);
     if (e.length === 6) {
@@ -1990,19 +2000,19 @@ function _r(a) {
         ];
     }
   }
-  if (ei.test(a)) {
+  if (ii.test(a)) {
     const e = a.split(",").map((t) => parseInt(t.trim(), 10));
     if (e.length >= 3 && !e.some(isNaN))
       return [e[0], e[1], e[2]];
   }
-  for (let e = 0; e < vt.length; e++) {
-    const t = vt[e];
+  for (let e = 0; e < yt.length; e++) {
+    const t = yt[e];
     if (a === t.label.toLowerCase() || a === t.hex)
       return [t.rgb[0], t.rgb[1], t.rgb[2]];
   }
   return null;
 }
-function gt(a, e, t) {
+function mt(a, e, t) {
   const i = Math.max(0, Math.min(1, t));
   return [
     Math.round(a[0] + (e[0] - a[0]) * i),
@@ -2010,10 +2020,10 @@ function gt(a, e, t) {
     Math.round(a[2] + (e[2] - a[2]) * i)
   ];
 }
-function mt(a) {
+function bt(a) {
   return `rgb(${a[0]}, ${a[1]}, ${a[2]})`;
 }
-const Ze = Object.freeze({
+const Je = Object.freeze({
   enabled: !1,
   activeFade: !1,
   currentColor: "",
@@ -2025,32 +2035,32 @@ const Ze = Object.freeze({
 function E(a, e = !0) {
   if (!(!e || typeof window > "u"))
     try {
-      if (we(a), typeof navigator < "u" && "vibrate" in navigator && typeof navigator.vibrate == "function") {
+      if ($e(a), typeof window < "u" && window.dispatchEvent(new CustomEvent("haptic", { detail: a, bubbles: !0, composed: !0 })), typeof navigator < "u" && "vibrate" in navigator && typeof navigator.vibrate == "function") {
         let t = 6;
         a === "heavy" ? t = 20 : a === "medium" ? t = 12 : a === "success" ? t = [40, 40, 80] : a === "warning" ? t = [50, 30, 50] : a === "error" && (t = [50, 100, 50]), navigator.vibrate(t);
       }
     } catch {
     }
 }
-const oe = /* @__PURE__ */ new Map(), Yt = 250;
-function pr(a) {
+const ne = /* @__PURE__ */ new Map(), qt = 250, I = /* @__PURE__ */ new Map(), Kt = 128;
+function gr(a) {
   if (!a) return "";
-  const e = oe.get(a);
+  const e = ne.get(a);
   if (e !== void 0) return e;
   const t = a.trim();
   if (!t)
-    return oe.set(a, ""), "";
+    return ne.set(a, ""), "";
   let i = t;
-  if (t.startsWith("#") || t.startsWith("rgb") || t.startsWith("hsl") || t.startsWith("var(") ? i = t : ei.test(t) ? i = `rgb(${t})` : cr.test(t) ? i = `rgba(${t})` : t.toLowerCase() === "state" ? i = "var(--state-icon-color, var(--primary-color))" : ar.has(t.toLowerCase()) && (i = `var(--${t.toLowerCase()}-color, ${t.toLowerCase()})`), oe.size >= Yt) {
-    const r = Math.floor(Yt / 4), o = oe.keys();
+  if (t.startsWith("#") || t.startsWith("rgb") || t.startsWith("hsl") || t.startsWith("var(") ? i = t : ii.test(t) ? i = `rgb(${t})` : ur.test(t) ? i = `rgba(${t})` : t.toLowerCase() === "state" ? i = "var(--state-icon-color, var(--primary-color))" : lr.has(t.toLowerCase()) && (i = `var(--${t.toLowerCase()}-color, ${t.toLowerCase()})`), ne.size >= qt) {
+    const r = Math.floor(qt / 4), o = ne.keys();
     for (let n = 0; n < r; n++) {
       const s = o.next().value;
-      s !== void 0 && oe.delete(s);
+      s !== void 0 && ne.delete(s);
     }
   }
-  return oe.set(a, i), i;
+  return ne.set(a, i), i;
 }
-class W extends se {
+class Y extends le {
   constructor() {
     super(...arguments), this._previousLiveRgb = null, this._currentLiveRgb = null, this._lastTrackedState = null, this.preview = !1, this._collapsed = !0, this._holdTimer = null, this._held = !1, this._moved = !1, this._tapTimer = null, this._throttleMap = /* @__PURE__ */ new Map(), this._startX = 0, this._startY = 0, this._subHoldTimer = null, this._subHeld = !1, this._subMoved = !1, this._subStartX = 0, this._subStartY = 0, this._subTapTimerMap = /* @__PURE__ */ new Map(), this._monitoredEntities = [], this._staticCardStyles = "", this._staticCardClasses = "", this._textOffsetStyle = "", this._featuresOffsetStyle = "", this._mainSliderMarginOffsets = "", this._colorTempMarginOffsets = "", this._colorHueMarginOffsets = "", this._textBoxWidth = "", this._primaryTextStyle = "", this._secondaryTextStyle = "", this._primaryTextOffsetStyle = "", this._secondaryTextOffsetStyle = "", this._fadeStaticConfig = null, this._relativeTimer = null, this._cachedSubButtons = null, this._intersectionObserver = null, this._cachedHasCollapsible = !1, this._mountTime = 0, this._pointerDownReceived = !1, this._pointerDownTime = 0, this._canceled = !1, this._activePointerId = null, this._subCanceled = !1, this._subPointerDownTime = 0, this._sliderStateMap = /* @__PURE__ */ new WeakMap(), this._onSliderPointerDown = (e) => {
       const t = e.currentTarget;
@@ -2106,7 +2116,7 @@ class W extends se {
     return this.config?.card_layout === "large" ? 3 : 2;
   }
   static getStubConfig() {
-    return { ...bt };
+    return { ...vt };
   }
   static async getConfigElement() {
     return document.createElement("antigravity-no-icon-card-editor");
@@ -2115,7 +2125,7 @@ class W extends se {
     if (!e)
       throw new Error("Invalid configuration");
     this.config = {
-      ...bt,
+      ...vt,
       ...e
     }, this._cachedSubButtons = null;
     const t = /* @__PURE__ */ new Set();
@@ -2144,40 +2154,40 @@ class W extends se {
   }
   _computeStaticStylesAndClasses() {
     if (!this.config) return;
-    const e = this.config.card_padding ?? 12, t = this.config.card_padding_vertical ?? 4, i = this.config.card_padding_horizontal ?? e, r = this.config.card_padding_top ?? t, o = this.config.card_padding_bottom ?? t, n = this.config.card_padding_left ?? i, s = this.config.card_padding_right ?? i, l = this.config.card_margin, p = this.config.card_margin_vertical ?? l, d = this.config.card_margin_horizontal ?? l, c = this.config.card_margin_top ?? p, b = this.config.card_margin_bottom ?? p, f = this.config.card_margin_left ?? d, x = this.config.card_margin_right ?? d;
-    let h = "";
-    (c !== void 0 || b !== void 0 || f !== void 0 || x !== void 0) && (h = `margin: ${c ?? 0}px ${x ?? 0}px ${b ?? 0}px ${f ?? 0}px;`);
-    const m = this.config.border_radius ?? 12, $ = this.config.slider_style === "google", A = this.config.slider_style === "full", g = $ ? 42 : A ? 40 : 12, y = this.config.slider_height !== void 0 ? this.config.slider_height : g, T = $ ? 21 : A ? 0 : y / 2, u = this.config.slider_border_radius !== void 0 ? this.config.slider_border_radius : T, _ = this.config.card_border_width ?? (this.config.card_border_color ? 1 : 0), v = this.config.card_border_style ?? "solid", C = _ > 0 ? `border: ${_}px ${v} ${this._resolveColor(this.config.card_border_color) || "var(--divider-color, rgba(150, 150, 150, 0.2))"};` : "", M = this.config.card_width ? `width: ${this.config.card_width};` : "", O = this.config.card_max_width ? `max-width: ${this.config.card_max_width};` : "", Y = this.config.card_height ? `height: ${this.config.card_height};` : "", j = this.config.card_min_height !== void 0 ? `min-height: ${this.config.card_min_height}px;` : "", q = this.config.fill_container === !0 ? "height: 100%; width: 100%;" : "", ue = this.config.overflow_hidden !== !1 ? "overflow: hidden;" : "overflow: visible;", Me = this.config.backdrop_blur !== void 0 ? `backdrop-filter: blur(${this.config.backdrop_blur}px); -webkit-backdrop-filter: blur(${this.config.backdrop_blur}px);` : "", Pe = this.config.card_opacity !== void 0 ? `opacity: ${this.config.card_opacity / 100};` : "", Ee = this.config.transition_duration !== void 0 ? `transition: all ${this.config.transition_duration}ms ease;` : "", F = this.config.text_padding_vertical ?? this.config.text_padding ?? 0, De = this.config.text_padding_horizontal ?? this.config.text_padding ?? 0, Le = this.config.features_padding_vertical ?? this.config.features_padding ?? 0, Ne = this.config.features_padding_horizontal ?? this.config.features_padding ?? 0, He = this.config.sub_button_padding ?? 0, Re = this.config.sub_button_container_padding ?? 0, Be = this.config.sub_button_alignment ? `--ag-sub-button-alignment: ${this.config.sub_button_alignment};` : "", nt = this.config.text_scrolling_speed ? `--ag-scroll-speed: ${this.config.text_scrolling_speed}s;` : "", at = this.config.full_slider_opacity !== void 0 ? `--ag-full-slider-opacity: ${this.config.full_slider_opacity / 100};` : "";
+    const e = this.config.card_padding ?? 12, t = this.config.card_padding_vertical ?? 4, i = this.config.card_padding_horizontal ?? e, r = this.config.card_padding_top ?? t, o = this.config.card_padding_bottom ?? t, n = this.config.card_padding_left ?? i, s = this.config.card_padding_right ?? i, d = this.config.card_margin, p = this.config.card_margin_vertical ?? d, h = this.config.card_margin_horizontal ?? d, c = this.config.card_margin_top ?? p, v = this.config.card_margin_bottom ?? p, g = this.config.card_margin_left ?? h, x = this.config.card_margin_right ?? h;
+    let u = "";
+    (c !== void 0 || v !== void 0 || g !== void 0 || x !== void 0) && (u = `margin: ${c ?? 0}px ${x ?? 0}px ${v ?? 0}px ${g ?? 0}px;`);
+    const m = this.config.border_radius ?? 12, $ = this.config.slider_style === "google", A = this.config.slider_style === "full", f = $ ? 42 : A ? 40 : 12, y = this.config.slider_height !== void 0 ? this.config.slider_height : f, T = $ ? 21 : A ? 0 : y / 2, l = this.config.slider_border_radius !== void 0 ? this.config.slider_border_radius : T, _ = this.config.card_border_width ?? (this.config.card_border_color ? 1 : 0), b = this.config.card_border_style ?? "solid", k = _ > 0 ? `border: ${_}px ${b} ${this._resolveColor(this.config.card_border_color) || "var(--divider-color, rgba(150, 150, 150, 0.2))"};` : "", M = this.config.card_width ? `width: ${this.config.card_width};` : "", B = this.config.card_max_width ? `max-width: ${this.config.card_max_width};` : "", q = this.config.card_height ? `height: ${this.config.card_height};` : "", ee = this.config.card_min_height !== void 0 ? `min-height: ${this.config.card_min_height}px;` : "", K = this.config.fill_container === !0 ? "height: 100%; width: 100%;" : "", he = this.config.overflow_hidden !== !1 ? "overflow: hidden;" : "overflow: visible;", Pe = this.config.backdrop_blur !== void 0 ? `backdrop-filter: blur(${this.config.backdrop_blur}px); -webkit-backdrop-filter: blur(${this.config.backdrop_blur}px);` : "", Ee = this.config.card_opacity !== void 0 ? `opacity: ${this.config.card_opacity / 100};` : "", De = this.config.transition_duration !== void 0 ? `transition: all ${this.config.transition_duration}ms ease;` : "", G = this.config.text_padding_vertical ?? this.config.text_padding ?? 0, Le = this.config.text_padding_horizontal ?? this.config.text_padding ?? 0, Ne = this.config.features_padding_vertical ?? this.config.features_padding ?? 0, Re = this.config.features_padding_horizontal ?? this.config.features_padding ?? 0, He = this.config.sub_button_padding ?? 0, Oe = this.config.sub_button_container_padding ?? 0, Be = this.config.sub_button_alignment ? `--ag-sub-button-alignment: ${this.config.sub_button_alignment};` : "", at = this.config.text_scrolling_speed ? `--ag-scroll-speed: ${this.config.text_scrolling_speed}s;` : "", st = this.config.full_slider_opacity !== void 0 ? `--ag-full-slider-opacity: ${this.config.full_slider_opacity / 100};` : "";
     this._staticCardStyles = [
-      h,
+      u,
       `border-radius: ${m}px;`,
-      C,
+      k,
       M,
-      O,
-      Y,
-      j,
+      B,
       q,
-      ue,
-      Me,
+      ee,
+      K,
+      he,
       Pe,
       Ee,
+      De,
       `--ag-card-padding: ${r}px ${s}px ${o}px ${n}px;`,
-      `--ag-text-padding: ${F}px ${De}px;`,
-      `--ag-features-padding: ${Le}px ${Ne}px;`,
+      `--ag-text-padding: ${G}px ${Le}px;`,
+      `--ag-features-padding: ${Ne}px ${Re}px;`,
       `--ag-sub-button-padding: ${He}px;`,
-      `--ag-sub-button-container-padding: ${Re}px;`,
+      `--ag-sub-button-container-padding: ${Oe}px;`,
       `--ag-content-spacing: ${this.config.content_spacing ?? 12}px;`,
       `--ag-text-spacing: ${this.config.text_spacing ?? 2}px;`,
       `--ag-features-margin: ${this.config.features_margin ?? 4}px;`,
       `--ag-slider-spacing: ${this.config.slider_spacing ?? 6}px;`,
       `--ag-sub-button-spacing: ${this.config.sub_button_spacing ?? 6}px;`,
       `--ag-slider-height: ${y}px;`,
-      `--ag-slider-radius: ${u}px;`,
+      `--ag-slider-radius: ${l}px;`,
       `--ag-text-alignment: ${this.config.text_alignment ?? "left"};`,
       `--ag-content-alignment: ${this.config.content_alignment ?? "flex-start"};`,
       Be,
-      nt,
-      at
+      at,
+      st
     ].filter(Boolean).join(" "), this._staticCardClasses = [
       `layout-${this.config.layout}`,
       this.config.card_layout === "large" ? "card-large" : "",
@@ -2186,65 +2196,65 @@ class W extends se {
       `slider-style-${this.config.slider_style ?? "circle"}`,
       this.config.text_color_mode === "inverse" ? "text-color-mode-inverse" : ""
     ].filter(Boolean).join(" ");
-    const Oe = Number(this.config.text_offset_x) || 0, D = Number(this.config.text_offset_y) || 0;
-    this._textOffsetStyle = Oe !== 0 || D !== 0 ? `transform: translate(${Oe}px, ${D}px);` : "";
-    const G = Number(this.config.primary_text_start_offset ?? this.config.primary_text_offset_x) || 0, he = Number(this.config.primary_text_end_offset) || 0, N = Number(this.config.primary_text_offset_y) || 0, _e = G !== 0 || N !== 0 ? `transform: translate(${G}px, ${N}px);` : "", ee = G !== 0 || he !== 0 ? `margin-left: ${G}px; margin-right: ${he}px;` : "";
-    this._primaryTextOffsetStyle = `${_e} ${ee}`.trim();
-    const te = Number(this.config.secondary_text_start_offset ?? this.config.secondary_text_offset_x) || 0, H = Number(this.config.secondary_text_end_offset) || 0, ze = Number(this.config.secondary_text_offset_y) || 0, st = te !== 0 || ze !== 0 ? `transform: translate(${te}px, ${ze}px);` : "", lt = te !== 0 || H !== 0 ? `margin-left: ${te}px; margin-right: ${H}px;` : "";
-    this._secondaryTextOffsetStyle = `${st} ${lt}`.trim();
-    const Ie = Number(this.config.features_offset_x) || 0, Ue = Number(this.config.features_offset_y) || 0;
-    this._featuresOffsetStyle = Ie !== 0 || Ue !== 0 ? `transform: translate(${Ie}px, ${Ue}px);` : "";
-    const Fe = Number(this.config.slider_start_offset) || 0, Ge = Number(this.config.slider_end_offset) || 0;
+    const ze = Number(this.config.text_offset_x) || 0, D = Number(this.config.text_offset_y) || 0;
+    this._textOffsetStyle = ze !== 0 || D !== 0 ? `transform: translate(${ze}px, ${D}px);` : "";
+    const V = Number(this.config.primary_text_start_offset ?? this.config.primary_text_offset_x) || 0, _e = Number(this.config.primary_text_end_offset) || 0, N = Number(this.config.primary_text_offset_y) || 0, pe = V !== 0 || N !== 0 ? `transform: translate(${V}px, ${N}px);` : "", te = V !== 0 || _e !== 0 ? `margin-left: ${V}px; margin-right: ${_e}px;` : "";
+    this._primaryTextOffsetStyle = `${pe} ${te}`.trim();
+    const ie = Number(this.config.secondary_text_start_offset ?? this.config.secondary_text_offset_x) || 0, R = Number(this.config.secondary_text_end_offset) || 0, Fe = Number(this.config.secondary_text_offset_y) || 0, lt = ie !== 0 || Fe !== 0 ? `transform: translate(${ie}px, ${Fe}px);` : "", ct = ie !== 0 || R !== 0 ? `margin-left: ${ie}px; margin-right: ${R}px;` : "";
+    this._secondaryTextOffsetStyle = `${lt} ${ct}`.trim();
+    const Ue = Number(this.config.features_offset_x) || 0, Ie = Number(this.config.features_offset_y) || 0;
+    this._featuresOffsetStyle = Ue !== 0 || Ie !== 0 ? `transform: translate(${Ue}px, ${Ie}px);` : "";
+    const Ge = Number(this.config.slider_start_offset) || 0, Ve = Number(this.config.slider_end_offset) || 0;
     this._mainSliderMarginOffsets = [
-      Fe ? `margin-left: ${Fe}px !important;` : "",
-      Ge ? `margin-right: ${Ge}px !important;` : ""
+      Ge ? `margin-left: ${Ge}px !important;` : "",
+      Ve ? `margin-right: ${Ve}px !important;` : ""
     ].filter(Boolean).join(" ");
-    const ie = Number(this.config.color_temp_start_offset) || 0, z = Number(this.config.color_temp_end_offset) || 0;
+    const re = Number(this.config.color_temp_start_offset) || 0, z = Number(this.config.color_temp_end_offset) || 0;
     this._colorTempMarginOffsets = [
-      ie ? `margin-left: ${ie}px !important;` : "",
+      re ? `margin-left: ${re}px !important;` : "",
       z ? `margin-right: ${z}px !important;` : ""
     ].filter(Boolean).join(" ");
-    const I = Number(this.config.color_slider_start_offset) || 0, Ve = Number(this.config.color_slider_end_offset) || 0;
+    const F = Number(this.config.color_slider_start_offset) || 0, We = Number(this.config.color_slider_end_offset) || 0;
     this._colorHueMarginOffsets = [
-      I ? `margin-left: ${I}px !important;` : "",
-      Ve ? `margin-right: ${Ve}px !important;` : ""
+      F ? `margin-left: ${F}px !important;` : "",
+      We ? `margin-right: ${We}px !important;` : ""
     ].filter(Boolean).join(" "), this._textBoxWidth = this.config.text_box_width ? `max-width: ${this.config.text_box_width}; width: ${this.config.text_box_width};` : "width: 100%; max-width: 100%;";
-    const ct = this.config.text_transform_primary && this.config.text_transform_primary !== "none" ? `text-transform: ${this.config.text_transform_primary};` : "", We = `text-transform: ${this.config.text_transform_secondary ?? "capitalize"};`, pe = this.config.letter_spacing ? `letter-spacing: ${this.config.letter_spacing}px;` : "", fe = this.config.line_height ? `line-height: ${this.config.line_height};` : "", ge = this.config.font_weight_primary ?? "800";
-    this._primaryTextStyle = `font-size: ${this.config.font_size_primary ?? 14}px; font-weight: ${ge}; ${ct} ${pe} ${fe}`, this._secondaryTextStyle = `font-size: ${this.config.font_size_secondary ?? 15}px; ${We} ${pe} ${fe}`;
-    const dt = this.config.entity, re = [];
-    for (let k = 1; k <= 4; k++) {
-      const U = this.config[`sub_button_${k}_entity`], me = this.config[`sub_button_${k}_icon`], Ye = this.config[`sub_button_${k}_name`], ut = this.config[`sub_button_${k}_tap_action`], be = this.config[`sub_button_${k}_hold_action`], ti = this.config[`sub_button_${k}_double_tap_action`], ht = this.config[`sub_button_${k}_type`], ii = this.config[`sub_button_${k}_color`], ri = this.config[`sub_button_${k}_show_background`], Tt = this.config[`sub_button_${k}_show_state`];
-      if (!!(U || me || Ye || ht && ht !== "button" || Tt)) {
-        const At = U || dt;
-        re.push(Object.freeze({
-          key: `${At || "sub"}_${k}`,
-          entity: At,
-          type: ht || "button",
-          icon: me,
-          color: ii,
-          bg: ri,
-          name: Ye,
-          showState: Tt === !0,
-          tapAction: ut,
-          holdAction: be,
-          doubleTapAction: ti
+    const dt = this.config.text_transform_primary && this.config.text_transform_primary !== "none" ? `text-transform: ${this.config.text_transform_primary};` : "", Ye = `text-transform: ${this.config.text_transform_secondary ?? "capitalize"};`, fe = this.config.letter_spacing ? `letter-spacing: ${this.config.letter_spacing}px;` : "", ge = this.config.line_height ? `line-height: ${this.config.line_height};` : "", me = this.config.font_weight_primary ?? "800";
+    this._primaryTextStyle = `font-size: ${this.config.font_size_primary ?? 14}px; font-weight: ${me}; ${dt} ${fe} ${ge}`, this._secondaryTextStyle = `font-size: ${this.config.font_size_secondary ?? 15}px; ${Ye} ${fe} ${ge}`;
+    const ut = this.config.entity, oe = [];
+    for (let C = 1; C <= 4; C++) {
+      const U = this.config[`sub_button_${C}_entity`], be = this.config[`sub_button_${C}_icon`], qe = this.config[`sub_button_${C}_name`], ht = this.config[`sub_button_${C}_tap_action`], ve = this.config[`sub_button_${C}_hold_action`], ri = this.config[`sub_button_${C}_double_tap_action`], _t = this.config[`sub_button_${C}_type`], oi = this.config[`sub_button_${C}_color`], ni = this.config[`sub_button_${C}_show_background`], At = this.config[`sub_button_${C}_show_state`];
+      if (!!(U || be || qe || _t && _t !== "button" || At)) {
+        const Mt = U || ut;
+        oe.push(Object.freeze({
+          key: `${Mt || "sub"}_${C}`,
+          entity: Mt,
+          type: _t || "button",
+          icon: be,
+          color: oi,
+          bg: ni,
+          name: qe,
+          showState: At === !0,
+          tapAction: ht,
+          holdAction: ve,
+          doubleTapAction: ri
         }));
       }
     }
-    if (this._cachedSubButtons = Object.freeze(re), this.config.fade_transition_enabled) {
-      const k = Number(this.config.fade_stage_1_duration) || 60, U = Number(this.config.fade_stage_2_duration) || 600, me = Number(this.config.fade_stage_3_duration) || 1800, Ye = R(this.config.fade_stage_1_color) || [255, 152, 0], ut = R(this.config.fade_stage_2_color) || [205, 220, 57], be = R(this.config.fade_stage_3_color);
+    if (this._cachedSubButtons = Object.freeze(oe), this.config.fade_transition_enabled) {
+      const C = Number(this.config.fade_stage_1_duration) || 60, U = Number(this.config.fade_stage_2_duration) || 600, be = Number(this.config.fade_stage_3_duration) || 1800, qe = H(this.config.fade_stage_1_color) || [255, 152, 0], ht = H(this.config.fade_stage_2_color) || [205, 220, 57], ve = H(this.config.fade_stage_3_color);
       this._fadeStaticConfig = {
-        d1: k,
+        d1: C,
         d2: U,
-        d3: me,
-        totalDuration: k + U + me,
-        c1Rgb: Ye,
-        c2Rgb: ut,
-        c3Rgb: be,
+        d3: be,
+        totalDuration: C + U + be,
+        c1Rgb: qe,
+        c2Rgb: ht,
+        c3Rgb: ve,
         restingResult: Object.freeze({
           enabled: !0,
           activeFade: !1,
-          currentColor: be ? mt(be) : "",
+          currentColor: ve ? bt(ve) : "",
           progressPct: 100,
           remainingSeconds: 0,
           currentStage: 0,
@@ -2270,8 +2280,8 @@ class W extends se {
       this._cachedHasCollapsible = !1;
       return;
     }
-    const i = this.config.entity.split(".")[0] === "light", r = e.state === "on", o = this.config.hide_color_temp_when_off !== !1, n = this.config.hide_color_picker_when_off !== !1, s = this.config.hide_color_slider_when_off !== !1, l = e.attributes?.color_temp_kelvin ?? e.attributes?.color_temp, p = i && this.config.show_color_temp === !0 && (l !== void 0 || e.attributes?.supported_color_modes?.some(($) => ["color_temp"].includes($))) && (!o || r), d = e.attributes?.supported_color_modes, c = Array.isArray(d) && d.some(($) => ["hs", "xy", "rgb", "rgbw", "rgbww"].includes($)), b = this.config.color_picker_type !== "wheel", f = i && (this.config.show_color_slider === !0 || this.config.show_color_picker === !0 && b) && c && (!s || r), x = i && this.config.show_color_picker === !0 && !b && c && (!n || r), h = p || f || x, m = this._getSubButtons();
-    this._cachedHasCollapsible = h || m.length > 0;
+    const i = this.config.entity.split(".")[0] === "light", r = e.state === "on", o = this.config.hide_color_temp_when_off !== !1, n = this.config.hide_color_picker_when_off !== !1, s = this.config.hide_color_slider_when_off !== !1, d = e.attributes?.color_temp_kelvin ?? e.attributes?.color_temp, p = i && this.config.show_color_temp === !0 && (d !== void 0 || e.attributes?.supported_color_modes?.some(($) => ["color_temp"].includes($))) && (!o || r), h = e.attributes?.supported_color_modes, c = Array.isArray(h) && h.some(($) => ["hs", "xy", "rgb", "rgbw", "rgbww"].includes($)), v = this.config.color_picker_type !== "wheel", g = i && (this.config.show_color_slider === !0 || this.config.show_color_picker === !0 && v) && c && (!s || r), x = i && this.config.show_color_picker === !0 && !v && c && (!n || r), u = p || g || x, m = this._getSubButtons();
+    this._cachedHasCollapsible = u || m.length > 0;
   }
   connectedCallback() {
     super.connectedCallback(), this._mountTime = Date.now(), this._pointerDownReceived = !1, this._setupRelativeTimer(), this._setupIntersectionObserver();
@@ -2284,31 +2294,31 @@ class W extends se {
   }
   _setupRelativeTimer() {
     const e = this.config?.primary_info, t = this.config?.secondary_info, i = this.config?.entity, r = i ? i.split(".")[0] : "", o = (r === "binary_sensor" || r === "timer") && (e === "state" || t === "state"), n = this.config?.fade_transition_enabled === !0, s = i && this.hass ? this.hass.states[i] : null;
-    let l = !1;
+    let d = !1;
     if (n && s) {
-      const d = this._computeMultiStageFade(s);
-      l = d.enabled && d.activeFade && d.progressPct < 100;
+      const h = this._computeMultiStageFade(s);
+      d = h.enabled && h.activeFade && h.progressPct < 100;
     }
-    const p = l || o || e === "last-changed" || e === "last_changed" || e === "last-updated" || e === "last_updated" || e === "last-triggered" || t === "last-changed" || t === "last_changed" || t === "last-updated" || t === "last_updated" || t === "last-triggered";
+    const p = d || o || e === "last-changed" || e === "last_changed" || e === "last-updated" || e === "last_updated" || e === "last-triggered" || t === "last-changed" || t === "last_changed" || t === "last-updated" || t === "last_updated" || t === "last-triggered";
     if (p && !this._relativeTimer) {
-      let d = l ? 1e3 : 5e3;
+      let h = d ? 1e3 : 5e3;
       const c = s?.attributes?.last_triggered || s?.last_changed || s?.last_updated;
-      if (c && !l && !o) {
-        const b = this._parseDate(c);
-        if (b) {
-          const f = Math.max(0, (Date.now() - b.getTime()) / 1e3 | 0);
-          f > 3600 ? d = 6e4 : f > 60 && (d = 15e3);
+      if (c && !d && !o) {
+        const v = this._parseDate(c);
+        if (v) {
+          const g = Math.max(0, (Date.now() - v.getTime()) / 1e3 | 0);
+          g > 3600 ? h = 6e4 : g > 60 && (h = 15e3);
         }
       }
       this._relativeTimer = setInterval(() => {
         if (!this.hasAttribute("offscreen") && this.style.display !== "none") {
-          if (l && !this._isFadeActive()) {
+          if (d && !this._isFadeActive()) {
             this._setupRelativeTimer();
             return;
           }
           this.requestUpdate();
         }
-      }, d);
+      }, h);
     } else !p && this._relativeTimer && (clearInterval(this._relativeTimer), this._relativeTimer = null);
   }
   _isFadeActive() {
@@ -2357,49 +2367,49 @@ class W extends se {
     (e === "on" && !r || e === "off" && r) && (o = !0), this._toggleDisplay(o);
   }
   _isEntityActive(e) {
-    return e ? nr.has(e.state) : !1;
+    return e ? sr.has(e.state) : !1;
   }
   _calculateMultiStageFade(e, t, i) {
     if (!this.config?.fade_transition_enabled || !e)
-      return Ze;
+      return Je;
     const r = this._isEntityActive(e), o = this.config.fade_trigger ?? "on_inactive";
     if (!(o === "on_inactive" && !r || o === "on_active" && r || o === "both"))
-      return Ze;
-    const s = r ? this._resolveColor(this.config.inactive_color) || i || "#4caf50" : this._resolveColor(this.config.active_color) || t || "#d60000", l = r ? this._resolveColor(this.config.active_color) || t || "#d60000" : this._resolveColor(this.config.inactive_color) || i || "#03b100", p = R(s) || [214, 0, 0], d = R(l) || [3, 177, 0], c = this._fadeStaticConfig, b = c?.d1 ?? (Number(this.config.fade_stage_1_duration) || 60), f = c?.d2 ?? (Number(this.config.fade_stage_2_duration) || 600), x = c?.d3 ?? (Number(this.config.fade_stage_3_duration) || 1800), h = c?.totalDuration ?? b + f + x;
-    if (h <= 0)
-      return Ze;
+      return Je;
+    const s = r ? this._resolveColor(this.config.inactive_color) || i || "#4caf50" : this._resolveColor(this.config.active_color) || t || "#d60000", d = r ? this._resolveColor(this.config.active_color) || t || "#d60000" : this._resolveColor(this.config.inactive_color) || i || "#03b100", p = H(s) || [214, 0, 0], h = H(d) || [3, 177, 0], c = this._fadeStaticConfig, v = c?.d1 ?? (Number(this.config.fade_stage_1_duration) || 60), g = c?.d2 ?? (Number(this.config.fade_stage_2_duration) || 600), x = c?.d3 ?? (Number(this.config.fade_stage_3_duration) || 1800), u = c?.totalDuration ?? v + g + x;
+    if (u <= 0)
+      return Je;
     this._lastTrackedState !== null && this._lastTrackedState !== e.state && this._currentLiveRgb && this.config.fade_smooth_retrigger !== !1 && (this._previousLiveRgb = this._currentLiveRgb), this._lastTrackedState = e.state;
-    const m = this.config.fade_stage_1_pickup !== !1 && this._previousLiveRgb && this.config.fade_smooth_retrigger !== !1 ? this._previousLiveRgb : p, $ = c?.c1Rgb ?? (R(this.config.fade_stage_1_color) || [255, 152, 0]), A = this.config.fade_stage_2_pickup !== !1 ? $ : p, g = c?.c2Rgb ?? (R(this.config.fade_stage_2_color) || [205, 220, 57]), y = this.config.fade_stage_3_pickup !== !1 ? g : $, T = c?.c3Rgb ?? (R(this.config.fade_stage_3_color) || d), u = this._parseDate(e.last_changed || e.last_updated);
-    if (!u)
-      return Ze;
-    const _ = Math.max(0, (Date.now() - u.getTime()) / 1e3);
-    if (_ >= h)
+    const m = this.config.fade_stage_1_pickup !== !1 && this._previousLiveRgb && this.config.fade_smooth_retrigger !== !1 ? this._previousLiveRgb : p, $ = c?.c1Rgb ?? (H(this.config.fade_stage_1_color) || [255, 152, 0]), A = this.config.fade_stage_2_pickup !== !1 ? $ : p, f = c?.c2Rgb ?? (H(this.config.fade_stage_2_color) || [205, 220, 57]), y = this.config.fade_stage_3_pickup !== !1 ? f : $, T = c?.c3Rgb ?? (H(this.config.fade_stage_3_color) || h), l = this._parseDate(e.last_changed || e.last_updated);
+    if (!l)
+      return Je;
+    const _ = Math.max(0, (Date.now() - l.getTime()) / 1e3);
+    if (_ >= u)
       return this._currentLiveRgb = T, this._previousLiveRgb = null, c?.restingResult ? c.restingResult : {
         enabled: !0,
         activeFade: !1,
-        currentColor: mt(T),
+        currentColor: bt(T),
         progressPct: 100,
         remainingSeconds: 0,
         currentStage: 0,
         stageLabel: "Resting"
       };
-    let v, C = 1, M = 0;
-    const O = Math.max(0, Math.round(h - _));
-    _ < b && b > 0 ? (C = 1, M = _ / b, v = gt(m, $, M)) : _ < b + f && f > 0 ? (C = 2, M = (_ - b) / f, v = gt(A, g, M)) : x > 0 ? (C = 3, M = (_ - b - f) / x, v = gt(y, T, M)) : (C = 0, v = T), this._currentLiveRgb = v;
-    const Y = Math.min(100, Math.round(_ / h * 100)), j = mt(v);
-    let q = "";
-    return O >= 60 ? q = `${Math.ceil(O / 60)}m left` : q = `${O}s left`, {
+    let b, k = 1, M = 0;
+    const B = Math.max(0, Math.round(u - _));
+    _ < v && v > 0 ? (k = 1, M = _ / v, b = mt(m, $, M)) : _ < v + g && g > 0 ? (k = 2, M = (_ - v) / g, b = mt(A, f, M)) : x > 0 ? (k = 3, M = (_ - v - g) / x, b = mt(y, T, M)) : (k = 0, b = T), this._currentLiveRgb = b;
+    const q = Math.min(100, Math.round(_ / u * 100)), ee = bt(b);
+    let K = "";
+    return B >= 60 ? K = `${Math.ceil(B / 60)}m left` : K = `${B}s left`, {
       enabled: !0,
       activeFade: !0,
-      currentColor: j,
-      progressPct: Y,
-      remainingSeconds: O,
-      currentStage: C,
-      stageLabel: q
+      currentColor: ee,
+      progressPct: q,
+      remainingSeconds: B,
+      currentStage: k,
+      stageLabel: K
     };
   }
   _resolveColor(e) {
-    return pr(e);
+    return gr(e);
   }
   // Shared date parser — eliminates duplication between _formatRelativeTime and _formatForDuration
   _parseDate(e) {
@@ -2410,14 +2420,31 @@ class W extends se {
       return isNaN(t.getTime()) ? null : t;
     }
     if (typeof e == "string") {
-      const t = Date.parse(e);
-      if (!isNaN(t))
-        return new Date(t);
-      let i = e.trim();
-      i.includes(" ") && !i.includes("T") && (i = i.replace(" ", "T")), i.includes("T") && !i.endsWith("Z") && !/[+-]\d{2}:\d{2}$/.test(i) && !/[+-]\d{4}$/.test(i) && (i += "Z");
-      const r = Number(i);
-      let o;
-      return !isNaN(r) && i !== "" && !i.includes("T") ? o = new Date(r > 1e11 ? r : r * 1e3) : o = new Date(i), isNaN(o.getTime()) ? null : o;
+      const t = I.get(e);
+      if (t) return t;
+      const i = Date.parse(e);
+      if (!isNaN(i)) {
+        const d = new Date(i);
+        if (I.size >= Kt) {
+          const p = I.keys().next().value;
+          p !== void 0 && I.delete(p);
+        }
+        return I.set(e, d), d;
+      }
+      let r = e.trim();
+      r.includes(" ") && !r.includes("T") && (r = r.replace(" ", "T")), r.includes("T") && !r.endsWith("Z") && !/[+-]\d{2}:\d{2}$/.test(r) && !/[+-]\d{4}$/.test(r) && (r += "Z");
+      const o = Number(r);
+      let n;
+      !isNaN(o) && r !== "" && !r.includes("T") ? n = new Date(o > 1e11 ? o : o * 1e3) : n = new Date(r);
+      const s = isNaN(n.getTime()) ? null : n;
+      if (s) {
+        if (I.size >= Kt) {
+          const d = I.keys().next().value;
+          d !== void 0 && I.delete(d);
+        }
+        I.set(e, s);
+      }
+      return s;
     }
     return null;
   }
@@ -2431,12 +2458,12 @@ class W extends se {
     if (n < 60) return t ? `${n}m` : `${n} ${n === 1 ? "minute" : "minutes"} ago`;
     const s = n / 60 | 0;
     if (s < 24) return `${s}h${t ? "" : " ago"}`;
-    const l = s / 24 | 0;
-    if (l < 7) return `${l}d${t ? "" : " ago"}`;
-    const p = l / 7 | 0;
+    const d = s / 24 | 0;
+    if (d < 7) return `${d}d${t ? "" : " ago"}`;
+    const p = d / 7 | 0;
     if (p < 4) return `${p}w${t ? "" : " ago"}`;
-    const d = l / 30 | 0;
-    return d < 12 ? `${d}mo${t ? "" : " ago"}` : `${l / 365 | 0}y${t ? "" : " ago"}`;
+    const h = d / 30 | 0;
+    return h < 12 ? `${h}mo${t ? "" : " ago"}` : `${d / 365 | 0}y${t ? "" : " ago"}`;
   }
   _formatRelativeTime(e, t) {
     return this._formatTimeAgo(e, !1, t);
@@ -2457,8 +2484,8 @@ class W extends se {
           if (t.state === "active" && t.attributes?.finishes_at) {
             const o = Date.parse(t.attributes.finishes_at);
             if (!isNaN(o)) {
-              const n = Math.max(0, Math.round((o - Date.now()) / 1e3)), s = Math.floor(n / 60), l = n % 60, p = Math.floor(s / 60), d = (s % 60).toString().padStart(2, "0"), c = l.toString().padStart(2, "0");
-              return p > 0 ? `${p}:${d}:${c}` : `${d}:${c}`;
+              const n = Math.max(0, Math.round((o - Date.now()) / 1e3)), s = Math.floor(n / 60), d = n % 60, p = Math.floor(s / 60), h = (s % 60).toString().padStart(2, "0"), c = d.toString().padStart(2, "0");
+              return p > 0 ? `${p}:${h}:${c}` : `${h}:${c}`;
             }
           }
         }
@@ -2478,8 +2505,8 @@ class W extends se {
           return o !== void 0 ? `${o}${n} • ${s}` : s;
         }
         if (r === "climate") {
-          const o = t.state || "", n = t.attributes?.preset_mode, l = [t.attributes?.hvac_action, n].filter(Boolean).join(" • ");
-          return l ? `${o} (${l})` : o;
+          const o = t.state || "", n = t.attributes?.current_temperature, s = t.attributes?.temperature ?? t.attributes?.target_temp_high, d = t.attributes?.unit_of_measurement || this.hass.config?.unit_system?.temperature || "°", p = t.attributes?.preset_mode, h = t.attributes?.hvac_action, v = [n !== void 0 && s !== void 0 ? `${n}${d} → ${s}${d}` : s !== void 0 ? `${s}${d}` : "", h, p].filter(Boolean).join(" • ");
+          return v ? `${o} (${v})` : o;
         }
         if (r === "fan") {
           const o = t.attributes?.percentage, n = t.attributes?.oscillating ? "∿ Oscillating" : "", s = t.attributes?.direction === "reverse" ? "⟲ Reverse" : "";
@@ -2566,14 +2593,14 @@ class W extends se {
     }
   }
   _dispatchAction(e, t, i) {
-    const r = i || this.config.entity, o = r ? r.split(".")[0] : "", n = lr.has(o);
+    const r = i || this.config.entity, o = r ? r.split(".")[0] : "", n = dr.has(o);
     let s = t;
     if (s || (e === "double_tap" ? s = this.config.double_tap_action : e === "hold" ? s = this.config.hold_action || (n ? { action: "more-info" } : { action: "toggle" }) : this.config.tap_action && this.config.tap_action.action && this.config.tap_action.action !== "default" ? n && this.config.tap_action.action === "toggle" ? s = { action: "none" } : s = this.config.tap_action : s = n ? { action: "none" } : { action: "toggle" }), !(!s || s.action === "none")) {
       if (s.action === "more-info") {
-        const l = s.entity || r;
-        if (l) {
+        const d = s.entity || r;
+        if (d) {
           this.dispatchEvent(new CustomEvent("hass-more-info", {
-            detail: { entityId: l },
+            detail: { entityId: d },
             bubbles: !0,
             composed: !0
           }));
@@ -2583,8 +2610,8 @@ class W extends se {
       if (s.action === "toggle" && r) {
         if (n)
           return;
-        const l = o === "lock" ? this._isEntityActive(this.hass?.states[r]) ? "lock" : "unlock" : "toggle", p = ["lock", "cover"].includes(o) ? o : o === "group" ? "homeassistant" : o;
-        this.hass?.callService(p, l, { entity_id: r });
+        const d = o === "lock" ? this._isEntityActive(this.hass?.states[r]) ? "lock" : "unlock" : "toggle", p = ["lock", "cover"].includes(o) ? o : o === "group" ? "homeassistant" : o;
+        this.hass?.callService(p, d, { entity_id: r });
         return;
       }
       if (s.action === "navigate" && s.navigation_path) {
@@ -2600,16 +2627,16 @@ class W extends se {
         return;
       }
       if (s.action === "call-service" && s.service) {
-        const [l, p] = s.service.split(".", 2);
-        this.hass?.callService(l, p, s.data || s.service_data || {}, s.target);
+        const [d, p] = s.service.split(".", 2);
+        this.hass?.callService(d, p, s.data || s.service_data || {}, s.target);
         return;
       }
-      n && (!s.action || s.action === "toggle") || Gi(this, this.hass, { ...this.config, entity: r }, e);
+      n && (!s.action || s.action === "toggle") || Wi(this, this.hass, { ...this.config, entity: r }, e);
     }
   }
   _handleTap(e) {
     if (e.stopPropagation(), this._isSubElement(e)) return;
-    if (Date.now() - this._mountTime < 1500 || Date.now() - ae < 800) {
+    if (Date.now() - this._mountTime < 1500 || Date.now() - se < 800) {
       this._pointerDownReceived = !1;
       return;
     }
@@ -2639,14 +2666,14 @@ class W extends se {
     }, 250);
   }
   _handleKeyDown(e) {
-    this._isSubElement(e) || Date.now() - this._mountTime < 1500 || Date.now() - ae < 800 || (e.key === "Enter" || e.key === " ") && (e.preventDefault(), E("light", this.config.haptic_feedback !== !1), this._dispatchAction("tap"));
+    this._isSubElement(e) || Date.now() - this._mountTime < 1500 || Date.now() - se < 800 || (e.key === "Enter" || e.key === " ") && (e.preventDefault(), E("light", this.config.haptic_feedback !== !1), this._dispatchAction("tap"));
   }
   _handleContextMenu(e) {
-    if (e.preventDefault(), e.stopPropagation(), Date.now() - this._mountTime < 1500 || Date.now() - ae < 800 || this._held) return;
+    if (e.preventDefault(), e.stopPropagation(), Date.now() - this._mountTime < 1500 || Date.now() - se < 800 || this._held) return;
     E("medium", this.config.haptic_feedback !== !1), (this.config.collapse_controls_trigger || "hold") === "hold" && this._hasCollapsible() ? this._collapsed = !this._collapsed : this.config.hold_action && this.config.hold_action.action !== "none" && this._dispatchAction("hold");
   }
   _handlePointerDown(e) {
-    this._isSubElement(e) || Date.now() - this._mountTime < 1500 || Date.now() - ae < 800 || this._activePointerId !== null && this._activePointerId !== e.pointerId || (this._activePointerId = e.pointerId, this._pointerDownReceived = !0, this._pointerDownTime = Date.now(), this._held = !1, this._moved = !1, this._canceled = !1, this._startX = e.clientX, this._startY = e.clientY, this._holdTimer = setTimeout(() => {
+    this._isSubElement(e) || Date.now() - this._mountTime < 1500 || Date.now() - se < 800 || this._activePointerId !== null && this._activePointerId !== e.pointerId || (this._activePointerId = e.pointerId, this._pointerDownReceived = !0, this._pointerDownTime = Date.now(), this._held = !1, this._moved = !1, this._canceled = !1, this._startX = e.clientX, this._startY = e.clientY, this._holdTimer = setTimeout(() => {
       if (this._moved || this._canceled) return;
       this._held = !0, this._holdTimer = null, this._tapTimer && (clearTimeout(this._tapTimer), this._tapTimer = null), E("heavy", this.config.haptic_feedback !== !1), (this.config.collapse_controls_trigger || "hold") === "hold" && this._hasCollapsible() ? this._collapsed = !this._collapsed : this.config.hold_action && this.config.hold_action.action !== "none" && this._dispatchAction("hold");
     }, 500));
@@ -2693,11 +2720,11 @@ class W extends se {
     }
     if (this._subPointerDownTime && Date.now() - this._subPointerDownTime > 600)
       return;
-    const n = r && r.action !== "none", s = t || "sub_default", l = () => {
+    const n = r && r.action !== "none", s = t || "sub_default", d = () => {
       E("light", this.config.haptic_feedback !== !1), i && i.action && i.action !== "none" && i.action !== "default" ? this._dispatchAction("tap", i, t) : o ? o() : this._dispatchAction("tap", { action: "toggle" }, t);
     };
     if (!n) {
-      l();
+      d();
       return;
     }
     const p = this._subTapTimerMap.get(s);
@@ -2705,10 +2732,10 @@ class W extends se {
       clearTimeout(p), this._subTapTimerMap.delete(s), E("medium", this.config.haptic_feedback !== !1), this._dispatchAction("double_tap", r, t);
       return;
     }
-    const d = setTimeout(() => {
-      this._subTapTimerMap.delete(s), l();
+    const h = setTimeout(() => {
+      this._subTapTimerMap.delete(s), d();
     }, 250);
-    this._subTapTimerMap.set(s, d);
+    this._subTapTimerMap.set(s, h);
   }
   _handleSubContextMenu(e, t, i) {
     e.preventDefault(), e.stopPropagation(), !this._subHeld && (E("medium", this.config.haptic_feedback !== !1), this._dispatchAction("hold", i || { action: "more-info" }, t));
@@ -2734,27 +2761,27 @@ class W extends se {
   }
   _sliderInput(e, t, i, r, o, n, s) {
     e.stopPropagation();
-    const l = e.target, p = this._sliderStateMap.get(l);
+    const d = e.target, p = this._sliderStateMap.get(d);
     if (p?.isScrolling) {
-      this._revertSlider(l, p);
+      this._revertSlider(d, p);
       return;
     }
-    const d = Number(l.value), c = isNaN(d) ? 0 : d, b = n ? n(c) : c;
+    const h = Number(d.value), c = isNaN(h) ? 0 : h, v = n ? n(c) : c;
     if (p) {
       if (p.rafPending) return;
       p.rafPending = !0;
     }
     requestAnimationFrame(() => {
       if (p && (p.rafPending = !1), p?.isScrolling) {
-        this._revertSlider(l, p);
+        this._revertSlider(d, p);
         return;
       }
-      l.style.setProperty("--slider-pct", `${b}%`);
-      const f = l.closest(".slider-container, .sub-button-slider-container"), x = f?.querySelector(".slider-percent-badge, .sub-slider-pct");
-      if (x && (x.textContent = s ? s(c, b) : `${b}%`), t === "color_hue" && f) {
-        f.style.setProperty("--color-hue-val", `hsl(${c}, 100%, 50%)`);
-        const h = f.querySelector(".color-chip-badge span");
-        h && (h.style.background = `hsl(${c}, 100%, 50%)`);
+      d.style.setProperty("--slider-pct", `${v}%`);
+      const g = d.closest(".slider-container, .sub-button-slider-container"), x = g?.querySelector(".slider-percent-badge, .sub-slider-pct");
+      if (x && (x.textContent = s ? s(c, v) : `${v}%`), t === "color_hue" && g) {
+        g.style.setProperty("--color-hue-val", `hsl(${c}, 100%, 50%)`);
+        const u = g.querySelector(".color-chip-badge span");
+        u && (u.style.background = `hsl(${c}, 100%, 50%)`);
       }
     }), E("selection", this.config.haptic_feedback !== !1);
   }
@@ -2765,33 +2792,33 @@ class W extends se {
       this._revertSlider(o, n), n.isScrolling = !1;
       return;
     }
-    const s = Number(o.value), l = isNaN(s) ? 0 : s;
-    if (!(n && l === n.initialVal)) {
+    const s = Number(o.value), d = isNaN(s) ? 0 : s;
+    if (!(n && d === n.initialVal)) {
       if (t === "light" && i === "turn_on") {
-        const p = Math.round(l / 255 * 100);
-        if (l <= 3 || p <= 1) {
+        const p = Math.round(d / 255 * 100);
+        if (d <= 3 || p <= 1) {
           this.hass.callService("light", "turn_off", { entity_id: this.config.entity });
           return;
         }
       }
-      if (t === "fan" && i === "set_percentage" && l <= 0) {
+      if (t === "fan" && i === "set_percentage" && d <= 0) {
         this.hass.callService("fan", "turn_off", { entity_id: this.config.entity });
         return;
       }
-      this.hass.callService(t, i, { entity_id: this.config.entity, ...r(l) });
+      this.hass.callService(t, i, { entity_id: this.config.entity, ...r(d) });
     }
   }
   _getLightLiveColor(e) {
     if (!e || !e.attributes || e.state !== "on") return null;
     const t = e.attributes;
     if (t.color_mode === "color_temp") {
-      const r = t.color_temp_kelvin ?? (t.color_temp ? Math.round(1e6 / t.color_temp) : 3e3), [o, n, s] = B(r);
+      const r = t.color_temp_kelvin ?? (t.color_temp ? Math.round(1e6 / t.color_temp) : 3e3), [o, n, s] = O(r);
       return `rgb(${o}, ${n}, ${s})`;
     }
     if (Array.isArray(t.rgb_color) && t.rgb_color.length >= 3)
       return `rgb(${t.rgb_color[0]}, ${t.rgb_color[1]}, ${t.rgb_color[2]})`;
     if (Array.isArray(t.hs_color) && t.hs_color.length >= 2) {
-      const [r, o, n] = ft(t.hs_color[0], t.hs_color[1]);
+      const [r, o, n] = gt(t.hs_color[0], t.hs_color[1]);
       return `rgb(${r}, ${o}, ${n})`;
     }
     if (Array.isArray(t.rgbw_color) && t.rgbw_color.length >= 3)
@@ -2799,7 +2826,7 @@ class W extends se {
     if (Array.isArray(t.rgbww_color) && t.rgbww_color.length >= 3)
       return `rgb(${t.rgbww_color[0]}, ${t.rgbww_color[1]}, ${t.rgbww_color[2]})`;
     if (t.color_temp_kelvin !== void 0 || t.color_temp !== void 0) {
-      const r = t.color_temp_kelvin ?? Math.round(1e6 / t.color_temp), [o, n, s] = B(r);
+      const r = t.color_temp_kelvin ?? Math.round(1e6 / t.color_temp), [o, n, s] = O(r);
       return `rgb(${o}, ${n}, ${s})`;
     }
     return e.state === "on" ? "var(--state-light-active-color, rgb(255, 205, 120))" : null;
@@ -2808,17 +2835,17 @@ class W extends se {
     if (!e?.attributes || e.state !== "on") return "#ffffff";
     const t = e.attributes;
     if (Array.isArray(t.rgb_color) && t.rgb_color.length >= 3)
-      return Ke(t.rgb_color);
+      return Ze(t.rgb_color);
     if (Array.isArray(t.hs_color) && t.hs_color.length >= 2)
-      return Ke(ft(t.hs_color[0], t.hs_color[1]));
+      return Ze(gt(t.hs_color[0], t.hs_color[1]));
     if (t.color_temp_kelvin !== void 0 || t.color_temp !== void 0) {
       const o = t.color_temp_kelvin ?? Math.round(1e6 / t.color_temp);
-      return Ke(B(o));
+      return Ze(O(o));
     }
     const i = this._getLightLiveColor(e);
     if (!i) return "#ffffff";
-    const r = R(i);
-    return r ? Ke(r) : "#ffffff";
+    const r = H(i);
+    return r ? Ze(r) : "#ffffff";
   }
   _getLiveHue(e) {
     if (!e) return 0;
@@ -2826,7 +2853,7 @@ class W extends se {
       return Math.round(e.attributes.hs_color[0]) % 360;
     if (Array.isArray(e.attributes?.rgb_color) && e.attributes.rgb_color.length >= 3) {
       const [t, i, r] = e.attributes.rgb_color;
-      return dr(t, i, r);
+      return hr(t, i, r);
     }
     return 0;
   }
@@ -2834,12 +2861,12 @@ class W extends se {
     e.stopPropagation();
     const o = e.target.value;
     if (!o) return;
-    const n = R(o);
+    const n = H(o);
     if (!n) return;
-    const s = i || this.config.entity, l = () => {
+    const s = i || this.config.entity, d = () => {
       this.hass.callService("light", "turn_on", { entity_id: s, rgb_color: n });
     };
-    t ? this._throttledCall(r || "color_picker", l) : l();
+    t ? this._throttledCall(r || "color_picker", d) : d();
   }
   // --- RENDER ---
   render() {
@@ -2862,50 +2889,50 @@ class W extends se {
         </ha-card>
       `;
     const i = this.config.show_name !== !1 ? this._getInfoContent(this.config.primary_info, t) : "", r = this.config.show_state !== !1 ? this._getInfoContent(this.config.secondary_info, t) : "", o = this._isEntityActive(t), n = e.split(".")[0];
-    let s = "var(--primary-color)", l = null;
-    n === "climate" ? t.state === "heat" ? s = "var(--state-climate-heat-color, #ff7043)" : t.state === "cool" ? s = "var(--state-climate-cool-color, #42a5f5)" : t.state === "dry" ? s = "var(--state-climate-dry-color, #ab47bc)" : t.state === "fan_only" && (s = "var(--state-climate-fan_only-color, #26a69a)") : n === "light" ? (l = this._getLightLiveColor(t), l && (s = l)) : (n === "binary_sensor" || n === "lock" || n === "switch") && (s = "#d60000");
+    let s = "var(--primary-color)", d = null;
+    n === "climate" ? t.state === "heat" ? s = "var(--state-climate-heat-color, #ff7043)" : t.state === "cool" ? s = "var(--state-climate-cool-color, #42a5f5)" : t.state === "dry" ? s = "var(--state-climate-dry-color, #ab47bc)" : t.state === "fan_only" && (s = "var(--state-climate-fan_only-color, #26a69a)") : n === "light" ? (d = this._getLightLiveColor(t), d && (s = d)) : (n === "binary_sensor" || n === "lock" || n === "switch") && (s = "#d60000");
     const p = this.config.color_type === "card";
-    let d = this._resolveColor(this.config.active_color);
-    (!d || this.config.use_light_color) && (n === "light" && l ? d = l : d = s);
+    let h = this._resolveColor(this.config.active_color);
+    (!h || this.config.use_light_color) && (n === "light" && d ? h = d : h = s);
     let c = "var(--secondary-background-color, rgba(150, 150, 150, 0.2))";
     n === "light" ? c = "#000000" : (n === "binary_sensor" || n === "lock" || n === "switch") && (c = "#03b500");
-    const b = this._resolveColor(this.config.inactive_color) || c, f = this.config.show_slider !== !1, x = n === "light", h = n === "cover", m = n === "fan", $ = n === "humidifier", A = n === "media_player", g = n === "number" || n === "input_number", y = n === "climate", T = this.config.hide_slider_when_off !== !1, u = this.config.hide_color_temp_when_off !== !1, _ = this.config.hide_color_picker_when_off !== !1, v = this.config.hide_color_slider_when_off !== !1, C = t.attributes?.supported_color_modes;
-    let M = t.attributes?.brightness !== void 0, O = !1, Y = !1;
-    if (Array.isArray(C))
-      for (let k = 0; k < C.length; k++) {
-        const U = C[k];
-        U !== "onoff" && (M = !0), U === "color_temp" && (O = !0), sr.has(U) && (Y = !0);
+    const v = this._resolveColor(this.config.inactive_color) || c, g = this.config.show_slider !== !1, x = n === "light", u = n === "cover", m = n === "fan", $ = n === "humidifier", A = n === "media_player", f = n === "number" || n === "input_number", y = n === "climate", T = this.config.hide_slider_when_off !== !1, l = this.config.hide_color_temp_when_off !== !1, _ = this.config.hide_color_picker_when_off !== !1, b = this.config.hide_color_slider_when_off !== !1, k = t.attributes?.supported_color_modes;
+    let M = t.attributes?.brightness !== void 0, B = !1, q = !1;
+    if (Array.isArray(k))
+      for (let C = 0; C < k.length; C++) {
+        const U = k[C];
+        U !== "onoff" && (M = !0), U === "color_temp" && (B = !0), cr.has(U) && (q = !0);
       }
-    const j = x && f && M && (!T || o), q = t.attributes?.color_temp_kelvin ?? t.attributes?.color_temp, ue = x && this.config.show_color_temp === !0 && (q !== void 0 || O) && (!u || o), Me = this.config.color_picker_type !== "wheel", Pe = x && (this.config.show_color_slider === !0 || this.config.show_color_picker === !0 && Me) && Y && (!v || o), Ee = x && this.config.show_color_picker === !0 && !Me && Y && (!_ || o), F = t.state !== "unavailable" && t.state !== "unknown", De = h && F && f && t.attributes?.current_position !== void 0, Le = m && F && o && f && t.attributes?.percentage !== void 0, Ne = $ && F && o && f && (t.attributes?.humidity !== void 0 || t.attributes?.target_humidity !== void 0), He = A && F && o && f && t.attributes?.volume_level !== void 0, Re = g && F && f, Be = y && F && o && f && (t.attributes?.temperature !== void 0 || t.attributes?.target_temp_high !== void 0), nt = (this.config.bg_opacity ?? 10) / 100, at = this.config.slider_color ? `--slider-color: ${this._resolveColor(this.config.slider_color)};` : p && o && !this.config.use_light_color ? "--slider-color: rgba(255, 255, 255, 0.95);" : `--slider-color: ${d};`, Oe = this.config.slider_track_color ? `--slider-track-color: ${this._resolveColor(this.config.slider_track_color)};` : p && o ? "--slider-track-color: rgba(0, 0, 0, 0.25);" : "", D = this._calculateMultiStageFade(t, s, b), G = this.config.fade_target ?? "card", he = this._resolveColor(this.config.bg_color);
+    const ee = x && g && M && (!T || o), K = t.attributes?.color_temp_kelvin ?? t.attributes?.color_temp, he = x && this.config.show_color_temp === !0 && (K !== void 0 || B) && (!l || o), Pe = this.config.color_picker_type !== "wheel", Ee = x && (this.config.show_color_slider === !0 || this.config.show_color_picker === !0 && Pe) && q && (!b || o), De = x && this.config.show_color_picker === !0 && !Pe && q && (!_ || o), G = t.state !== "unavailable" && t.state !== "unknown", Le = u && G && g && t.attributes?.current_position !== void 0, Ne = m && G && o && g && t.attributes?.percentage !== void 0, Re = $ && G && o && g && (t.attributes?.humidity !== void 0 || t.attributes?.target_humidity !== void 0), He = A && G && o && g && t.attributes?.volume_level !== void 0, Oe = f && G && g, Be = y && G && o && g && (t.attributes?.temperature !== void 0 || t.attributes?.target_temp_high !== void 0), at = (this.config.bg_opacity ?? 10) / 100, st = this.config.slider_color ? `--slider-color: ${this._resolveColor(this.config.slider_color)};` : p && o && !this.config.use_light_color ? "--slider-color: rgba(255, 255, 255, 0.95);" : `--slider-color: ${h};`, ze = this.config.slider_track_color ? `--slider-track-color: ${this._resolveColor(this.config.slider_track_color)};` : p && o ? "--slider-track-color: rgba(0, 0, 0, 0.25);" : "", D = this._calculateMultiStageFade(t, s, v), V = this.config.fade_target ?? "card", _e = this._resolveColor(this.config.bg_color);
     let N;
-    D.activeFade && (G === "card" || G === "all" || p) ? N = D.currentColor : p ? n === "light" ? N = o ? l || d : this.config.inactive_color ? b : "#000000" : N = o ? d : b : he ? N = he : n === "light" && !o ? N = "#000000" : N = `rgba(150, 150, 150, ${nt})`;
-    let _e = this._resolveColor(this.config.active_color) || (n === "light" && l ? l : d) || "var(--primary-color)";
-    D.activeFade && (G === "all" || this.config.active_glow === !0) && (_e = D.currentColor);
-    let ee = "";
-    this.config.box_shadow === "soft" && (ee = "box-shadow: 0 4px 10px rgba(0,0,0,0.1);"), this.config.box_shadow === "deep" && (ee = "box-shadow: 0 10px 20px rgba(0,0,0,0.3);"), (this.config.box_shadow === "glow" || this.config.active_glow === !0) && (ee = o || D.activeFade ? `box-shadow: 0 0 22px ${_e}, 0 0 45px rgba(255, 255, 255, 0.18);` : "");
-    const te = this.config.active_glow === !0 || this.config.box_shadow === "glow" ? "card-active-glow" : "", H = t?.attributes?.device_class, ze = n === "binary_sensor" && (H === "motion" || H === "occupancy" || H === "presence"), st = n === "binary_sensor" && (H === "door" || H === "window" || H === "garage_door" || H === "opening"), lt = ze && (o || D.activeFade && D.currentStage === 1) ? "motion-active" : "", Ie = st && o ? "door-open" : "", Ue = n === "climate" && t?.attributes?.hvac_action ? `hvac-${t.attributes.hvac_action}` : "", Fe = n === "cover" ? t?.state === "opening" ? "cover-opening" : t?.state === "closing" ? "cover-closing" : "" : "", Ge = `${this._staticCardClasses} ${te} ${lt} ${Ie} ${Ue} ${Fe}`, ie = this._getSubButtons();
+    D.activeFade && (V === "card" || V === "all" || p) ? N = D.currentColor : p ? n === "light" ? N = o ? d || h : this.config.inactive_color ? v : "#000000" : N = o ? h : v : _e ? N = _e : n === "light" && !o ? N = "#000000" : N = `rgba(150, 150, 150, ${at})`;
+    let pe = this._resolveColor(this.config.active_color) || (n === "light" && d ? d : h) || "var(--primary-color)";
+    D.activeFade && (V === "all" || this.config.active_glow === !0) && (pe = D.currentColor);
+    let te = "";
+    this.config.box_shadow === "soft" && (te = "box-shadow: 0 4px 10px rgba(0,0,0,0.1);"), this.config.box_shadow === "deep" && (te = "box-shadow: 0 10px 20px rgba(0,0,0,0.3);"), (this.config.box_shadow === "glow" || this.config.active_glow === !0) && (te = o || D.activeFade ? `box-shadow: 0 0 22px ${pe}, 0 0 45px rgba(255, 255, 255, 0.18);` : "");
+    const ie = this.config.active_glow === !0 || this.config.box_shadow === "glow" ? "card-active-glow" : "", R = t?.attributes?.device_class, Fe = n === "binary_sensor" && (R === "motion" || R === "occupancy" || R === "presence"), lt = n === "binary_sensor" && (R === "door" || R === "window" || R === "garage_door" || R === "opening"), ct = Fe && (o || D.activeFade && D.currentStage === 1) ? "motion-active" : "", Ue = lt && o ? "door-open" : "", Ie = n === "climate" && t?.attributes?.hvac_action ? `hvac-${t.attributes.hvac_action}` : "", Ge = n === "cover" ? t?.state === "opening" ? "cover-opening" : t?.state === "closing" ? "cover-closing" : "" : "", Ve = `${this._staticCardClasses} ${ie} ${ct} ${Ue} ${Ie} ${Ge}`, re = this._getSubButtons();
     this.config.font_weight_primary;
     let z = "";
-    this.config.text_color_mode === "active_accent" && o ? z += `--primary-text-color: ${d}; ` : this.config.text_color_primary ? z += `--primary-text-color: ${this._resolveColor(this.config.text_color_primary)}; ` : p && o && (z += "--primary-text-color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.4); "), this.config.text_color_secondary ? z += `--secondary-text-color: ${this._resolveColor(this.config.text_color_secondary)}; ` : p && o && (z += "--secondary-text-color: rgba(255, 255, 255, 0.9); text-shadow: 0 1px 2px rgba(0,0,0,0.3); ");
-    const I = this.config.features_position === "inline", Ve = this.config.text_scrolling_primary || "none", ct = this.config.text_scrolling_secondary || "none", We = S`
-      ${j ? this._renderLightSlider(t) : w}
-      ${De ? this._renderCoverSlider(t) : w}
-      ${Le ? this._renderFanSlider(t) : w}
-      ${Ne ? this._renderHumidifierSlider(t) : w}
+    this.config.text_color_mode === "active_accent" && o ? z += `--primary-text-color: ${h}; ` : this.config.text_color_primary ? z += `--primary-text-color: ${this._resolveColor(this.config.text_color_primary)}; ` : p && o && (z += "--primary-text-color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.4); "), this.config.text_color_secondary ? z += `--secondary-text-color: ${this._resolveColor(this.config.text_color_secondary)}; ` : p && o && (z += "--secondary-text-color: rgba(255, 255, 255, 0.9); text-shadow: 0 1px 2px rgba(0,0,0,0.3); ");
+    const F = this.config.features_position === "inline", We = this.config.text_scrolling_primary || "none", dt = this.config.text_scrolling_secondary || "none", Ye = S`
+      ${ee ? this._renderLightSlider(t) : w}
+      ${Le ? this._renderCoverSlider(t) : w}
+      ${Ne ? this._renderFanSlider(t) : w}
+      ${Re ? this._renderHumidifierSlider(t) : w}
       ${He ? this._renderMediaSlider(t) : w}
-      ${Re ? this._renderNumberSlider(t) : w}
+      ${Oe ? this._renderNumberSlider(t) : w}
       ${Be ? this._renderClimateSlider(t) : w}
-    `, pe = S`
-      ${ue ? this._renderColorTempSlider(t) : w}
-      ${Pe ? this._renderColorSlider(t) : w}
-      ${Ee ? this._renderColorPicker(t) : w}
-    `, fe = j || De || Le || Ne || He || Re || Be, ge = ue || Pe || Ee, dt = !I && ge || ie.length > 0, re = this.config.decay_slider_position ?? "bottom";
+    `, fe = S`
+      ${he ? this._renderColorTempSlider(t) : w}
+      ${Ee ? this._renderColorSlider(t) : w}
+      ${De ? this._renderColorPicker(t) : w}
+    `, ge = ee || Le || Ne || Re || He || Oe || Be, me = he || Ee || De, ut = !F && me || re.length > 0, oe = this.config.decay_slider_position ?? "bottom";
     return S`
       ${this.config.custom_styles ? S`<style>${this.config.custom_styles}</style>` : w}
       <ha-card 
-        class="${Ge}" 
+        class="${Ve}" 
         ?active=${o}
-        style="${this._staticCardStyles} background: ${N}; ${ee} ${at} ${Oe} ${z} --ag-glow-color: ${_e}; --ag-active-color: ${d};"
+        style="${this._staticCardStyles} background: ${N}; ${te} ${st} ${ze} ${z} --ag-glow-color: ${pe}; --ag-active-color: ${h};"
         @click=${this._handleTap}
         @keydown=${this._handleKeyDown}
         @contextmenu=${this._handleContextMenu}
@@ -2914,38 +2941,38 @@ class W extends se {
         @pointerup=${this._handlePointerUp}
         @pointercancel=${this._handlePointerCancel}
       >
-        <div class="card-content ${I ? "features-inline" : ""}" style="justify-content: var(--ag-content-alignment);">
-          ${re === "top" ? this._renderDecaySlider(D) : w}
+        <div class="card-content ${F ? "features-inline" : ""}" style="justify-content: var(--ag-content-alignment);">
+          ${oe === "top" ? this._renderDecaySlider(D) : w}
 
           <div class="info-container">
             <div class="info" style="${this._textOffsetStyle} ${this._textBoxWidth} text-align: var(--ag-text-alignment);">
               ${i ? S`
-                <div class="text-marquee-container scroll-${Ve}" style="${this._primaryTextOffsetStyle}">
+                <div class="text-marquee-container scroll-${We}" style="${this._primaryTextOffsetStyle}">
                   <span class="primary scroll-content" style="${this._primaryTextStyle}">${i}</span>
                 </div>` : w}
               ${r ? S`
-                <div class="text-marquee-container scroll-${ct}" style="${this._secondaryTextOffsetStyle}">
+                <div class="text-marquee-container scroll-${dt}" style="${this._secondaryTextOffsetStyle}">
                   <span class="secondary scroll-content" style="${this._secondaryTextStyle}">${r}</span>
                 </div>` : w}
             </div>
-            ${re === "inline" ? S`<div class="inline-sliders">${this._renderDecaySlider(D)}</div>` : w}
-            ${I && fe ? S`<div class="inline-sliders" style="${this._mainSliderMarginOffsets}">${We}</div>` : w}
-            ${I && ge ? S`<div class="inline-sliders ${this._collapsed ? "collapsed" : ""}">${pe}</div>` : w}
+            ${oe === "inline" ? S`<div class="inline-sliders">${this._renderDecaySlider(D)}</div>` : w}
+            ${F && ge ? S`<div class="inline-sliders" style="${this._mainSliderMarginOffsets}">${Ye}</div>` : w}
+            ${F && me ? S`<div class="inline-sliders ${this._collapsed ? "collapsed" : ""}">${fe}</div>` : w}
           </div>
           
-          ${re === "bottom" ? this._renderDecaySlider(D) : w}
-          ${!I && fe ? S`<div class="features-container" style="${this._featuresOffsetStyle} ${this._mainSliderMarginOffsets}">${We}</div>` : w}
+          ${oe === "bottom" ? this._renderDecaySlider(D) : w}
+          ${!F && ge ? S`<div class="features-container" style="${this._featuresOffsetStyle} ${this._mainSliderMarginOffsets}">${Ye}</div>` : w}
 
-          ${dt ? S`
+          ${ut ? S`
             <div class="collapsible-wrapper ${this._collapsed ? "collapsed" : ""}">
-              ${!I && ge ? S`<div class="features-container" style="${this._featuresOffsetStyle}">${pe}</div>` : w}
+              ${!F && me ? S`<div class="features-container" style="${this._featuresOffsetStyle}">${fe}</div>` : w}
 
-              ${ie.length > 0 ? S`
+              ${re.length > 0 ? S`
                 <div class="sub-buttons-container">
-                  ${Ri(
-      ie,
-      (k) => k.key,
-      (k) => this._renderSubButton(k.entity || "", k.icon, k.color, k.bg !== !1, k.name, k.tapAction, k.holdAction, k.type, k.doubleTapAction, k.showState)
+                  ${Bi(
+      re,
+      (C) => C.key,
+      (C) => this._renderSubButton(C.entity || "", C.icon, C.color, C.bg !== !1, C.name, C.tapAction, C.holdAction, C.type, C.doubleTapAction, C.showState)
     )}
                 </div>
               ` : w}
@@ -2971,15 +2998,15 @@ class W extends se {
     `;
   }
   // --- GENERIC SLIDER COMPONENT HELPER ---
-  _renderGenericSlider(e, t, i, r, o, n, s, l, p, d, c, b, f = "", x = "", h) {
-    const m = this.config.slider_style === "google", $ = m && this.config.show_slider_percent !== !1 || this.config.show_slider_percent === !0, A = b ? b(n, s) : `${s}%`, g = h !== void 0 ? h : A, y = this.config.slider_stepped_movement === !1 ? "any" : o, T = e !== "color_temp" && e !== "color_hue", u = this.config.slider_style === "full", _ = T && u ? "main-slider-full" : "";
-    let v = "";
-    if (T && u) {
-      const C = Number(this.config.slider_start_offset) || 0, M = Number(this.config.slider_end_offset) || 0;
-      v = `left: ${C}px !important; right: ${M}px !important; width: calc(100% - ${C + M}px) !important;`;
-    } else e === "color_temp" ? v = this._colorTempMarginOffsets : e === "color_hue" ? v = this._colorHueMarginOffsets : v = this._mainSliderMarginOffsets;
+  _renderGenericSlider(e, t, i, r, o, n, s, d, p, h, c, v, g = "", x = "", u) {
+    const m = this.config.slider_style === "google", $ = m && this.config.show_slider_percent !== !1 || this.config.show_slider_percent === !0, A = v ? v(n, s) : `${s}%`, f = u !== void 0 ? u : A, y = this.config.slider_stepped_movement === !1 ? "any" : o, T = e !== "color_temp" && e !== "color_hue", l = this.config.slider_style === "full", _ = T && l ? "main-slider-full" : "";
+    let b = "";
+    if (T && l) {
+      const k = Number(this.config.slider_start_offset) || 0, M = Number(this.config.slider_end_offset) || 0;
+      b = `left: ${k}px !important; right: ${M}px !important; width: calc(100% - ${k + M}px) !important;`;
+    } else e === "color_temp" ? b = this._colorTempMarginOffsets : e === "color_hue" ? b = this._colorHueMarginOffsets : b = this._mainSliderMarginOffsets;
     return S`
-      <div class="slider-container ${f} ${_} ${m ? "slider-google-wrap" : ""}" style="${v} ${x}">
+      <div class="slider-container ${g} ${_} ${m ? "slider-google-wrap" : ""}" style="${b} ${x}">
         <input type="range" min=${i} max=${r} step=${y} .value=${n}
                aria-label="${t}"
                style="--slider-pct: ${s}%;"
@@ -2987,9 +3014,9 @@ class W extends se {
                @pointermove=${this._onSliderPointerMove}
                @pointerup=${this._onSliderPointerUp}
                @pointercancel=${this._onSliderPointerCancel}
-               @input=${(C) => this._sliderInput(C, e, l, p, d, c, b)}
-               @change=${(C) => this._sliderChange(C, l, p, d)} />
-        ${$ && g ? S`<span class="slider-percent-badge">${g}</span>` : w}
+               @input=${(k) => this._sliderInput(k, e, d, p, h, c, v)}
+               @change=${(k) => this._sliderChange(k, d, p, h)} />
+        ${$ && f ? S`<span class="slider-percent-badge">${f}</span>` : w}
       </div>
     `;
   }
@@ -3008,13 +3035,13 @@ class W extends se {
       "turn_on",
       (s) => ({ brightness: s }),
       (s) => Math.round(s / 255 * 100),
-      (s, l) => !t || l <= 0 ? "" : `${l}%`,
+      (s, d) => !t || d <= 0 ? "" : `${d}%`,
       "",
       n
     );
   }
   _renderColorTempSlider(e) {
-    const t = this.config.color_temp_type || "gradient", i = e.attributes.color_temp_kelvin !== void 0 || e.attributes.min_color_temp_kelvin !== void 0 || e.attributes.max_color_temp_kelvin !== void 0, r = i ? e.attributes.min_color_temp_kelvin || 2e3 : e.attributes.min_mireds || 153, o = i ? e.attributes.max_color_temp_kelvin || 6500 : e.attributes.max_mireds || 500, n = i ? e.attributes.color_temp_kelvin || 3e3 : e.attributes.color_temp || 300, s = o - r, l = s > 0 ? Math.max(0, Math.min(100, Math.round((n - r) / s * 100))) : 0, p = i ? "color_temp_kelvin" : "color_temp", d = t === "google" || t === "gradient" && this.config.slider_style === "google", c = d ? 42 : t === "thin" ? 6 : 12, b = d ? 21 : t === "thin" ? 3 : 6, f = this.config.color_temp_height !== void 0 ? this.config.color_temp_height : this.config.slider_height ?? c, x = this.config.color_temp_border_radius !== void 0 ? this.config.color_temp_border_radius : this.config.slider_border_radius ?? b, h = i ? `${n} K` : `${n} mireds`;
+    const t = this.config.color_temp_type || "gradient", i = e.attributes.color_temp_kelvin !== void 0 || e.attributes.min_color_temp_kelvin !== void 0 || e.attributes.max_color_temp_kelvin !== void 0, r = i ? e.attributes.min_color_temp_kelvin || 2e3 : e.attributes.min_mireds || 153, o = i ? e.attributes.max_color_temp_kelvin || 6500 : e.attributes.max_mireds || 500, n = i ? e.attributes.color_temp_kelvin || 3e3 : e.attributes.color_temp || 300, s = o - r, d = s > 0 ? Math.max(0, Math.min(100, Math.round((n - r) / s * 100))) : 0, p = i ? "color_temp_kelvin" : "color_temp", h = t === "google" || t === "gradient" && this.config.slider_style === "google", c = h ? 42 : t === "thin" ? 6 : 12, v = h ? 21 : t === "thin" ? 3 : 6, g = this.config.color_temp_height !== void 0 ? this.config.color_temp_height : this.config.slider_height ?? c, x = this.config.color_temp_border_radius !== void 0 ? this.config.color_temp_border_radius : this.config.slider_border_radius ?? v, u = i ? `${n} K` : `${n} mireds`;
     if (t === "presets") {
       const m = Number(this.config.color_temp_start_offset) || 0, $ = Number(this.config.color_temp_end_offset) || 0, A = [
         m ? `margin-left: ${m}px;` : "",
@@ -3022,26 +3049,26 @@ class W extends se {
       ].filter(Boolean).join(" ");
       return S`
         <div class="presets-row" style="display: flex; gap: 6px; overflow-x: auto; padding: 2px 0; ${A}">
-          ${ur.map((g) => {
-        const [y, T, u] = g.rgb, _ = Math.abs(n - g.k) < 200, v = () => {
-          E("light", this.config.haptic_feedback !== !1), this.hass?.callService("light", "turn_on", { entity_id: this.config.entity, [p]: g.k });
+          ${_r.map((f) => {
+        const [y, T, l] = f.rgb, _ = Math.abs(n - f.k) < 200, b = () => {
+          E("light", this.config.haptic_feedback !== !1), this.hass?.callService("light", "turn_on", { entity_id: this.config.entity, [p]: f.k });
         };
         return S`
               <button 
                 type="button"
                 role="button"
-                aria-label="Color temperature preset: ${g.label}"
+                aria-label="Color temperature preset: ${f.label}"
                 tabindex="0"
                 class="temp-preset-chip"
-                style="flex: 1; min-width: 48px; height: ${f}px; border-radius: ${x}px; border: ${_ ? "2px solid #ffffff" : "1px solid rgba(150, 150, 150, 0.3)"}; background: rgba(${y}, ${T}, ${u}, 0.2); color: var(--primary-text-color); font-size: 11px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; box-shadow: ${_ ? "0 0 8px rgba(" + y + "," + T + "," + u + ", 0.8)" : "none"};"
-                @keydown=${(C) => {
-          (C.key === "Enter" || C.key === " ") && (C.preventDefault(), C.stopPropagation(), v());
+                style="flex: 1; min-width: 48px; height: ${g}px; border-radius: ${x}px; border: ${_ ? "2px solid #ffffff" : "1px solid rgba(150, 150, 150, 0.3)"}; background: rgba(${y}, ${T}, ${l}, 0.2); color: var(--primary-text-color); font-size: 11px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; box-shadow: ${_ ? "0 0 8px rgba(" + y + "," + T + "," + l + ", 0.8)" : "none"};"
+                @keydown=${(k) => {
+          (k.key === "Enter" || k.key === " ") && (k.preventDefault(), k.stopPropagation(), b());
         }}
-                @click=${(C) => {
-          C.stopPropagation(), v();
+                @click=${(k) => {
+          k.stopPropagation(), b();
         }}>
-                <span style="width: 8px; height: 8px; border-radius: 50%; background: rgb(${y}, ${T}, ${u}); display: inline-block;"></span>
-                ${g.label}
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: rgb(${y}, ${T}, ${l}); display: inline-block;"></span>
+                ${f.label}
               </button>
             `;
       })}
@@ -3055,15 +3082,15 @@ class W extends se {
       o,
       1,
       n,
-      l,
+      d,
       "light",
       "turn_on",
       (m) => ({ [p]: m }),
       (m) => s > 0 ? Math.round((m - r) / s * 100) : 0,
       (m) => i ? `${m} K` : `${m} mireds`,
-      `color-temp ${i ? "kelvin" : "mireds"} ${d ? "slider-google-wrap" : ""}`,
-      `--ag-slider-height: ${f}px; --ag-slider-radius: ${x}px;`,
-      h
+      `color-temp ${i ? "kelvin" : "mireds"} ${h ? "slider-google-wrap" : ""}`,
+      `--ag-slider-height: ${g}px; --ag-slider-radius: ${x}px;`,
+      u
     );
   }
   _renderColorSlider(e) {
@@ -3071,14 +3098,14 @@ class W extends se {
     if (t === "wheel")
       return this._renderColorPicker(e);
     if (t === "swatches") {
-      const d = this._getLiveHex(e).toLowerCase(), c = this.config.color_slider_height !== void 0 ? this.config.color_slider_height : 32, b = this.config.color_slider_border_radius !== void 0 ? this.config.color_slider_border_radius : 8, f = Number(this.config.color_slider_start_offset) || 0, x = Number(this.config.color_slider_end_offset) || 0, h = [
-        f ? `margin-left: ${f}px;` : "",
+      const h = this._getLiveHex(e).toLowerCase(), c = this.config.color_slider_height !== void 0 ? this.config.color_slider_height : 32, v = this.config.color_slider_border_radius !== void 0 ? this.config.color_slider_border_radius : 8, g = Number(this.config.color_slider_start_offset) || 0, x = Number(this.config.color_slider_end_offset) || 0, u = [
+        g ? `margin-left: ${g}px;` : "",
         x ? `margin-right: ${x}px;` : ""
       ].filter(Boolean).join(" ");
       return S`
-        <div class="swatches-palette-row" style="display: flex; gap: 6px; overflow-x: auto; padding: 2px 0; ${h}">
-          ${vt.map((m) => {
-        const $ = d === m.hex.toLowerCase(), A = () => {
+        <div class="swatches-palette-row" style="display: flex; gap: 6px; overflow-x: auto; padding: 2px 0; ${u}">
+          ${yt.map((m) => {
+        const $ = h === m.hex.toLowerCase(), A = () => {
           E("light", this.config.haptic_feedback !== !1), this.hass?.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: m.rgb });
         };
         return S`
@@ -3089,12 +3116,12 @@ class W extends se {
                 tabindex="0"
                 class="color-swatch-chip"
                 title="${m.label}"
-                style="flex: 1; min-width: 28px; height: ${c}px; border-radius: ${b}px; background: ${m.hex}; border: ${$ ? "2px solid #ffffff" : "1px solid rgba(0,0,0,0.2)"}; cursor: pointer; box-shadow: ${$ ? "0 0 10px " + m.hex : "0 1px 3px rgba(0,0,0,0.3)"}; transition: transform 0.15s ease;"
-                @keydown=${(g) => {
-          (g.key === "Enter" || g.key === " ") && (g.preventDefault(), g.stopPropagation(), A());
+                style="flex: 1; min-width: 28px; height: ${c}px; border-radius: ${v}px; background: ${m.hex}; border: ${$ ? "2px solid #ffffff" : "1px solid rgba(0,0,0,0.2)"}; cursor: pointer; box-shadow: ${$ ? "0 0 10px " + m.hex : "0 1px 3px rgba(0,0,0,0.3)"}; transition: transform 0.15s ease;"
+                @keydown=${(f) => {
+          (f.key === "Enter" || f.key === " ") && (f.preventDefault(), f.stopPropagation(), A());
         }}
-                @click=${(g) => {
-          g.stopPropagation(), A();
+                @click=${(f) => {
+          f.stopPropagation(), A();
         }}>
               </button>
             `;
@@ -3102,49 +3129,49 @@ class W extends se {
         </div>
       `;
     }
-    const i = this.config.slider_style === "google", r = this.config.color_slider_height !== void 0 ? this.config.color_slider_height : this.config.slider_height ?? (i ? 42 : 36), o = this.config.color_slider_border_radius !== void 0 ? this.config.color_slider_border_radius : this.config.slider_border_radius ?? (i ? 21 : 8), n = this._getLiveHue(e), s = `hsl(${n}, 100%, 50%)`, l = Math.round(n / 360 * 100);
+    const i = this.config.slider_style === "google", r = this.config.color_slider_height !== void 0 ? this.config.color_slider_height : this.config.slider_height ?? (i ? 42 : 36), o = this.config.color_slider_border_radius !== void 0 ? this.config.color_slider_border_radius : this.config.slider_border_radius ?? (i ? 21 : 8), n = this._getLiveHue(e), s = `hsl(${n}, 100%, 50%)`, d = Math.round(n / 360 * 100);
     let p;
     return this.config.color_swatch_presets !== !1 && (p = S`
         <div class="color-swatch-chips">
-          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Red Color" style="background: #f44336;" @click=${(d) => {
-      d.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [244, 67, 54] });
-    }} @keydown=${(d) => {
-      (d.key === "Enter" || d.key === " ") && (d.preventDefault(), d.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [244, 67, 54] }));
+          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Red Color" style="background: #f44336;" @click=${(h) => {
+      h.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [244, 67, 54] });
+    }} @keydown=${(h) => {
+      (h.key === "Enter" || h.key === " ") && (h.preventDefault(), h.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [244, 67, 54] }));
     }}></span>
-          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Orange Color" style="background: #ff9800;" @click=${(d) => {
-      d.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [255, 152, 0] });
-    }} @keydown=${(d) => {
-      (d.key === "Enter" || d.key === " ") && (d.preventDefault(), d.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [255, 152, 0] }));
+          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Orange Color" style="background: #ff9800;" @click=${(h) => {
+      h.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [255, 152, 0] });
+    }} @keydown=${(h) => {
+      (h.key === "Enter" || h.key === " ") && (h.preventDefault(), h.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [255, 152, 0] }));
     }}></span>
-          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Yellow Color" style="background: #ffeb3b;" @click=${(d) => {
-      d.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [255, 235, 59] });
-    }} @keydown=${(d) => {
-      (d.key === "Enter" || d.key === " ") && (d.preventDefault(), d.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [255, 235, 59] }));
+          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Yellow Color" style="background: #ffeb3b;" @click=${(h) => {
+      h.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [255, 235, 59] });
+    }} @keydown=${(h) => {
+      (h.key === "Enter" || h.key === " ") && (h.preventDefault(), h.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [255, 235, 59] }));
     }}></span>
-          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Green Color" style="background: #4caf50;" @click=${(d) => {
-      d.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [76, 175, 80] });
-    }} @keydown=${(d) => {
-      (d.key === "Enter" || d.key === " ") && (d.preventDefault(), d.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [76, 175, 80] }));
+          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Green Color" style="background: #4caf50;" @click=${(h) => {
+      h.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [76, 175, 80] });
+    }} @keydown=${(h) => {
+      (h.key === "Enter" || h.key === " ") && (h.preventDefault(), h.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [76, 175, 80] }));
     }}></span>
-          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Cyan Color" style="background: #00bcd4;" @click=${(d) => {
-      d.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [0, 188, 212] });
-    }} @keydown=${(d) => {
-      (d.key === "Enter" || d.key === " ") && (d.preventDefault(), d.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [0, 188, 212] }));
+          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Cyan Color" style="background: #00bcd4;" @click=${(h) => {
+      h.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [0, 188, 212] });
+    }} @keydown=${(h) => {
+      (h.key === "Enter" || h.key === " ") && (h.preventDefault(), h.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [0, 188, 212] }));
     }}></span>
-          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Blue Color" style="background: #2196f3;" @click=${(d) => {
-      d.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [33, 150, 243] });
-    }} @keydown=${(d) => {
-      (d.key === "Enter" || d.key === " ") && (d.preventDefault(), d.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [33, 150, 243] }));
+          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Blue Color" style="background: #2196f3;" @click=${(h) => {
+      h.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [33, 150, 243] });
+    }} @keydown=${(h) => {
+      (h.key === "Enter" || h.key === " ") && (h.preventDefault(), h.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [33, 150, 243] }));
     }}></span>
-          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Purple Color" style="background: #9c27b0;" @click=${(d) => {
-      d.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [156, 39, 176] });
-    }} @keydown=${(d) => {
-      (d.key === "Enter" || d.key === " ") && (d.preventDefault(), d.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [156, 39, 176] }));
+          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Purple Color" style="background: #9c27b0;" @click=${(h) => {
+      h.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [156, 39, 176] });
+    }} @keydown=${(h) => {
+      (h.key === "Enter" || h.key === " ") && (h.preventDefault(), h.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [156, 39, 176] }));
     }}></span>
-          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Pink Color" style="background: #e91e63;" @click=${(d) => {
-      d.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [233, 30, 99] });
-    }} @keydown=${(d) => {
-      (d.key === "Enter" || d.key === " ") && (d.preventDefault(), d.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [233, 30, 99] }));
+          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Pink Color" style="background: #e91e63;" @click=${(h) => {
+      h.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [233, 30, 99] });
+    }} @keydown=${(h) => {
+      (h.key === "Enter" || h.key === " ") && (h.preventDefault(), h.stopPropagation(), this.hass.callService("light", "turn_on", { entity_id: this.config.entity, rgb_color: [233, 30, 99] }));
     }}></span>
         </div>
       `), this._renderGenericSlider(
@@ -3154,15 +3181,15 @@ class W extends se {
       360,
       1,
       n,
-      l,
+      d,
       "light",
       "turn_on",
-      (d) => {
-        const [c, b, f] = ft(d, 100);
-        return { rgb_color: [c, b, f] };
+      (h) => {
+        const [c, v, g] = gt(h, 100);
+        return { rgb_color: [c, v, g] };
       },
-      (d) => Math.round(d / 360 * 100),
-      (d) => `${d}°`,
+      (h) => Math.round(h / 360 * 100),
+      (h) => `${h}°`,
       `color-hue ${i ? "slider-google-wrap" : ""}`,
       `--ag-slider-height: ${r}px; --ag-slider-radius: ${o}px; --color-hue-val: ${s};`,
       p
@@ -3241,7 +3268,7 @@ class W extends se {
     const t = Number(e.attributes.min ?? 0);
     let i = Number(e.attributes.max ?? 100);
     t >= i && (i = t + 100);
-    const r = Number(e.attributes.step ?? 1), o = Number(e.state), n = isNaN(o) ? t : o, s = i - t, l = s > 0 ? Math.max(0, Math.min(100, Math.round((n - t) / s * 100))) : 0, p = (this.config.entity || "number").split(".")[0], d = e.attributes.unit_of_measurement ? ` ${e.attributes.unit_of_measurement}` : "", c = r.toString(), b = c.includes(".") ? c.split(".")[1].length : 0;
+    const r = Number(e.attributes.step ?? 1), o = Number(e.state), n = isNaN(o) ? t : o, s = i - t, d = s > 0 ? Math.max(0, Math.min(100, Math.round((n - t) / s * 100))) : 0, p = (this.config.entity || "number").split(".")[0], h = e.attributes.unit_of_measurement ? ` ${e.attributes.unit_of_measurement}` : "", c = r.toString(), v = c.includes(".") ? c.split(".")[1].length : 0;
     return this._renderGenericSlider(
       "number",
       "Value",
@@ -3249,32 +3276,32 @@ class W extends se {
       i,
       r,
       n,
-      l,
+      d,
       p,
       "set_value",
-      (f) => ({ value: b > 0 ? Number(f.toFixed(b)) : Math.round(f) }),
-      (f) => s > 0 ? Math.round((f - t) / s * 100) : 0,
-      (f) => `${b > 0 ? Number(f).toFixed(b) : Math.round(Number(f))}${d}`
+      (g) => ({ value: v > 0 ? Number(g.toFixed(v)) : Math.round(g) }),
+      (g) => s > 0 ? Math.round((g - t) / s * 100) : 0,
+      (g) => `${v > 0 ? Number(g).toFixed(v) : Math.round(Number(g))}${h}`
     );
   }
   _renderClimateSlider(e) {
-    const t = this.hass.config?.unit_system?.temperature === "°F" || this.hass.config?.unit_system?.temperature === "F", i = t ? "°F" : "°C", r = t ? 60 : 16, o = t ? 85 : 30, n = e.attributes.min_temp ?? r, s = e.attributes.max_temp ?? o, l = e.attributes.target_temp_step ?? e.attributes.target_temperature_step ?? (t ? 1 : 0.5), p = e.attributes.target_temp_low !== void 0 && e.attributes.target_temp_high !== void 0, d = e.attributes.temperature ?? e.attributes.target_temp_low ?? e.attributes.target_temp_high ?? n, c = s - n, b = c > 0 ? Math.max(0, Math.min(100, Math.round((d - n) / c * 100))) : 0;
+    const t = this.hass.config?.unit_system?.temperature === "°F" || this.hass.config?.unit_system?.temperature === "F", i = t ? "°F" : "°C", r = t ? 60 : 16, o = t ? 85 : 30, n = e.attributes.min_temp ?? r, s = e.attributes.max_temp ?? o, d = e.attributes.target_temp_step ?? e.attributes.target_temperature_step ?? (t ? 1 : 0.5), p = e.attributes.target_temp_low !== void 0 && e.attributes.target_temp_high !== void 0, h = e.attributes.temperature ?? e.attributes.target_temp_low ?? e.attributes.target_temp_high ?? n, c = s - n, v = c > 0 ? Math.max(0, Math.min(100, Math.round((h - n) / c * 100))) : 0;
     return this._renderGenericSlider(
       "climate",
       "Temperature",
       n,
       s,
-      l,
       d,
-      b,
+      h,
+      v,
       "climate",
       "set_temperature",
-      (f) => p ? { target_temp_low: f, target_temp_high: Math.min(s, f + (t ? 4 : 2)) } : { temperature: f },
-      (f) => c > 0 ? Math.round((f - n) / c * 100) : 0,
-      (f) => `${f}${i}`,
+      (g) => p ? { target_temp_low: g, target_temp_high: Math.min(s, g + (t ? 4 : 2)) } : { temperature: g },
+      (g) => c > 0 ? Math.round((g - n) / c * 100) : 0,
+      (g) => `${g}${i}`,
       "climate-temp",
       "",
-      `${d}${i}`
+      `${h}${i}`
     );
   }
   _renderHumidifierSlider(e) {
@@ -3291,83 +3318,83 @@ class W extends se {
       "set_humidity",
       (s) => ({ humidity: s }),
       (s) => o > 0 ? Math.round((s - t) / o * 100) : 0,
-      (s, l) => `${l}%`
+      (s, d) => `${d}%`
     );
   }
   // --- EXTRACTED SUB-BUTTON RENDERERS ---
   _renderSubSlider(e, t, i, r, o) {
-    const n = t || this.hass.states[this.config.entity || ""], s = e || this.config.entity || "", l = n?.attributes?.volume_level !== void 0 || n?.entity_id?.startsWith("media_player."), p = n?.attributes?.percentage !== void 0 || n?.entity_id?.startsWith("fan."), d = n?.attributes?.current_position !== void 0 || n?.entity_id?.startsWith("cover.");
-    let c = 0, b = 0, f = 255, x = "1", h = "turn_on", m = "light", $ = "brightness";
-    l ? (c = n?.attributes?.volume_level ?? 0, f = 1, x = "0.01", h = "set_volume_level", m = "media_player", $ = "volume_level") : p ? (c = n?.attributes?.percentage ?? 0, f = 100, x = "1", h = "set_percentage", m = "fan", $ = "percentage") : d ? (c = n?.attributes?.current_position ?? 0, f = 100, x = "1", h = "set_cover_position", m = "cover", $ = "position") : c = n?.attributes?.brightness ?? 0;
-    const A = Math.round(f === 1 ? c * 100 : f === 100 ? c : c / 255 * 100);
+    const n = t || this.hass.states[this.config.entity || ""], s = e || this.config.entity || "", d = n?.attributes?.volume_level !== void 0 || n?.entity_id?.startsWith("media_player."), p = n?.attributes?.percentage !== void 0 || n?.entity_id?.startsWith("fan."), h = n?.attributes?.current_position !== void 0 || n?.entity_id?.startsWith("cover.");
+    let c = 0, v = 0, g = 255, x = "1", u = "turn_on", m = "light", $ = "brightness";
+    d ? (c = n?.attributes?.volume_level ?? 0, g = 1, x = "0.01", u = "set_volume_level", m = "media_player", $ = "volume_level") : p ? (c = n?.attributes?.percentage ?? 0, g = 100, x = "1", u = "set_percentage", m = "fan", $ = "percentage") : h ? (c = n?.attributes?.current_position ?? 0, g = 100, x = "1", u = "set_cover_position", m = "cover", $ = "position") : c = n?.attributes?.brightness ?? 0;
+    const A = Math.round(g === 1 ? c * 100 : g === 100 ? c : c / 255 * 100);
     return i === "slider" ? S`
         <div class="sub-button-slider-container ${o}" style="${r}" title="Level: ${A}%">
           <input type="range" 
-                 min="${b}" 
-                 max=${f} 
+                 min="${v}" 
+                 max=${g} 
                  step=${x} 
                  .value=${c}
-                 @pointerdown=${(g) => g.stopPropagation()}
-                 @input=${(g) => {
-      g.stopPropagation();
-      const y = parseFloat(g.target.value), T = Math.round(f === 1 ? y * 100 : f === 100 ? y : y / 255 * 100), u = g.target.closest(".sub-button-slider-container");
-      u && u.setAttribute("title", `Level: ${T}%`), this._throttledCall("sub_slider_" + s, () => {
-        this.hass?.callService(m, h, { entity_id: s, [$]: y });
+                 @pointerdown=${(f) => f.stopPropagation()}
+                 @input=${(f) => {
+      f.stopPropagation();
+      const y = parseFloat(f.target.value), T = Math.round(g === 1 ? y * 100 : g === 100 ? y : y / 255 * 100), l = f.target.closest(".sub-button-slider-container");
+      l && l.setAttribute("title", `Level: ${T}%`), this._throttledCall("sub_slider_" + s, () => {
+        this.hass?.callService(m, u, { entity_id: s, [$]: y });
       });
     }}
-                 @change=${(g) => {
-      g.stopPropagation();
-      const y = parseFloat(g.target.value);
-      this.hass?.callService(m, h, { entity_id: s, [$]: y });
+                 @change=${(f) => {
+      f.stopPropagation();
+      const y = parseFloat(f.target.value);
+      this.hass?.callService(m, u, { entity_id: s, [$]: y });
     }} />
         </div>
       ` : S`
         <div class="sub-button-google-slider ${o}" style="${r} --slider-pct: ${A}%;" title="Level: ${A}%">
           <input type="range" 
-                 min="${b}" 
-                 max=${f} 
+                 min="${v}" 
+                 max=${g} 
                  step=${x} 
                  .value=${c}
                  style="--slider-pct: ${A}%;"
-                 @pointerdown=${(g) => g.stopPropagation()}
-                 @input=${(g) => {
-      g.stopPropagation();
-      const y = parseFloat(g.target.value), T = Math.round(f === 1 ? y * 100 : f === 100 ? y : y / 255 * 100), u = g.target;
+                 @pointerdown=${(f) => f.stopPropagation()}
+                 @input=${(f) => {
+      f.stopPropagation();
+      const y = parseFloat(f.target.value), T = Math.round(g === 1 ? y * 100 : g === 100 ? y : y / 255 * 100), l = f.target;
       requestAnimationFrame(() => {
-        u.style.setProperty("--slider-pct", `${T}%`);
-        const _ = u.closest(".sub-button-google-slider");
+        l.style.setProperty("--slider-pct", `${T}%`);
+        const _ = l.closest(".sub-button-google-slider");
         if (_) {
           _.style.setProperty("--slider-pct", `${T}%`), _.setAttribute("title", `Level: ${T}%`);
-          const v = _.querySelector(".sub-slider-pct");
-          v && (v.textContent = `${T}%`);
+          const b = _.querySelector(".sub-slider-pct");
+          b && (b.textContent = `${T}%`);
         }
       }), this._throttledCall("sub_slider_" + s, () => {
-        this.hass?.callService(m, h, { entity_id: s, [$]: y });
+        this.hass?.callService(m, u, { entity_id: s, [$]: y });
       });
     }}
-                 @change=${(g) => {
-      g.stopPropagation();
-      const y = parseFloat(g.target.value);
-      this.hass?.callService(m, h, { entity_id: s, [$]: y });
+                 @change=${(f) => {
+      f.stopPropagation();
+      const y = parseFloat(f.target.value);
+      this.hass?.callService(m, u, { entity_id: s, [$]: y });
     }} />
           <span class="sub-slider-pct">${A}%</span>
         </div>
       `;
   }
   _renderSubColorPicker(e, t, i, r, o, n) {
-    const s = t || this.hass.states[this.config.entity || ""], l = this._getLiveHex(s);
+    const s = t || this.hass.states[this.config.entity || ""], d = this._getLiveHex(s);
     return S`
       <div class="sub-button sub-color-picker ${r}" 
            tabindex="0" 
            role="button" 
-           title="Select Color (${l})" 
-           style="${i} background: ${l} !important; border: 2px solid rgba(255,255,255,0.7); box-shadow: 0 1px 4px rgba(0,0,0,0.3);"
+           title="Select Color (${d})" 
+           style="${i} background: ${d} !important; border: 2px solid rgba(255,255,255,0.7); box-shadow: 0 1px 4px rgba(0,0,0,0.3);"
            @keydown=${(p) => {
       (p.key === "Enter" || p.key === " ") && (p.preventDefault(), p.currentTarget.querySelector("input")?.click());
     }}>
         <input type="color" 
                aria-label="Color Picker"
-               .value=${l} 
+               .value=${d} 
                @input=${(p) => this._handleColorInput(p, !0, e || this.config.entity, "sub_color_picker_" + e)}
                @change=${(p) => this._handleColorInput(p, !1, e || this.config.entity)} />
         ${o ? S`<span class="sub-button-label" style="text-shadow: 0 1px 2px rgba(0,0,0,0.8);">${o}</span>` : w}
@@ -3375,292 +3402,362 @@ class W extends se {
       </div>
     `;
   }
-  _renderSubButton(e, t, i, r = !0, o, n, s, l = "button", p, d = !1) {
-    const c = e ? this.hass?.states[e] : this.hass?.states[this.config.entity || ""], b = this._isEntityActive(c);
-    if (l === "slider" || l === "google_slider") {
-      const u = i ? `--primary-color: ${i}; --slider-color: ${i};` : "", _ = r ? "" : "no-bg";
-      return this._renderSubSlider(e, c, l, u, _);
+  _renderSubButton(e, t, i, r = !0, o, n, s, d = "button", p, h = !1) {
+    const c = e ? this.hass?.states[e] : this.hass?.states[this.config.entity || ""], v = this._isEntityActive(c);
+    if (d === "slider" || d === "google_slider") {
+      const l = i ? `--primary-color: ${i}; --slider-color: ${i};` : "", _ = r ? "" : "no-bg";
+      return this._renderSubSlider(e, c, d, l, _);
     }
-    let f;
-    d && c && (f = this._getInfoContent("state", c));
+    let g;
+    h && c && (g = this._getInfoContent("state", c));
     const x = (e || this.config.entity || "").split(".")[0];
-    if (l === "color_picker" && (x === "light" || !e && this.config.entity?.startsWith("light."))) {
-      const u = i ? `color: ${i};` : "", _ = r ? "" : "no-bg";
-      return this._renderSubColorPicker(e, c, u, _, o, f);
+    if (d === "color_picker" && (x === "light" || !e && this.config.entity?.startsWith("light."))) {
+      const l = i ? `color: ${i};` : "", _ = r ? "" : "no-bg";
+      return this._renderSubColorPicker(e, c, l, _, o, g);
     }
-    let h = t, m = "", $ = b, A = "", g = o, y;
+    let u = t, m = "", $ = v, A = "", f = o, y;
     if (n && n.action && n.action !== "none" && n.action !== "default")
-      h || (h = c?.attributes?.icon || "mdi:checkbox-blank-circle");
+      u || (u = c?.attributes?.icon || "mdi:checkbox-blank-circle");
     else
-      switch (l) {
+      switch (d) {
         case "play_pause": {
-          const u = c?.state === "playing";
-          $ = u, h || (h = u ? "mdi:pause" : "mdi:play"), m = u ? "Pause" : "Play", y = () => {
+          const l = c?.state === "playing";
+          $ = l, u || (u = l ? "mdi:pause" : "mdi:play"), m = l ? "Pause" : "Play", y = () => {
             this.hass?.callService("media_player", "media_play_pause", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "next": {
-          h || (h = "mdi:skip-next"), m = "Next Track", y = () => {
+          u || (u = "mdi:skip-next"), m = "Next Track", y = () => {
             this.hass?.callService("media_player", "media_next_track", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "previous": {
-          h || (h = "mdi:skip-previous"), m = "Previous Track", y = () => {
+          u || (u = "mdi:skip-previous"), m = "Previous Track", y = () => {
             this.hass?.callService("media_player", "media_previous_track", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "vol_up": {
-          h || (h = "mdi:volume-plus"), m = "Volume +5%", g || (g = "+5%"), y = () => {
+          u || (u = "mdi:volume-plus"), m = "Volume +5%", f || (f = "+5%"), y = () => {
             this.hass?.callService("media_player", "volume_up", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "vol_down": {
-          h || (h = "mdi:volume-minus"), m = "Volume -5%", g || (g = "-5%"), y = () => {
+          u || (u = "mdi:volume-minus"), m = "Volume -5%", f || (f = "-5%"), y = () => {
             this.hass?.callService("media_player", "volume_down", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "mute": {
-          const u = c?.attributes?.is_volume_muted === !0;
-          $ = u, h || (h = u ? "mdi:volume-off" : "mdi:volume-high"), m = u ? "Unmute" : "Mute", y = () => {
-            this.hass?.callService("media_player", "volume_mute", { entity_id: e || this.config.entity, is_volume_muted: !u });
+          const l = c?.attributes?.is_volume_muted === !0;
+          $ = l, u || (u = l ? "mdi:volume-off" : "mdi:volume-high"), m = l ? "Unmute" : "Mute", y = () => {
+            this.hass?.callService("media_player", "volume_mute", { entity_id: e || this.config.entity, is_volume_muted: !l });
           };
           break;
         }
         case "source": {
-          const u = c?.attributes?.source || "", _ = c?.attributes?.source_list || [], v = _.length > 0 ? _[(_.indexOf(u) + 1) % _.length] || _[0] : u;
-          h || (h = "mdi:import"), m = `Source: ${u} -> ${v}`, g || (g = u || "Source"), y = () => {
-            v && this.hass?.callService("media_player", "select_source", { entity_id: e || this.config.entity, source: v });
+          const l = c?.attributes?.source || "", _ = c?.attributes?.source_list || [], b = _.length > 0 ? _[(_.indexOf(l) + 1) % _.length] || _[0] : l;
+          u || (u = "mdi:import"), m = `Source: ${l} -> ${b}`, f || (f = l || "Source"), y = () => {
+            b && this.hass?.callService("media_player", "select_source", { entity_id: e || this.config.entity, source: b });
           };
           break;
         }
         case "sound_mode": {
-          const u = c?.attributes?.sound_mode || "", _ = c?.attributes?.sound_mode_list || [], v = _.length > 0 ? _[(_.indexOf(u) + 1) % _.length] || _[0] : u;
-          h || (h = "mdi:surround-sound"), m = `Sound: ${u} -> ${v}`, g || (g = u || "Sound"), y = () => {
-            v && this.hass?.callService("media_player", "select_sound_mode", { entity_id: e || this.config.entity, sound_mode: v });
+          const l = c?.attributes?.sound_mode || "", _ = c?.attributes?.sound_mode_list || [], b = _.length > 0 ? _[(_.indexOf(l) + 1) % _.length] || _[0] : l;
+          u || (u = "mdi:surround-sound"), m = `Sound: ${l} -> ${b}`, f || (f = l || "Sound"), y = () => {
+            b && this.hass?.callService("media_player", "select_sound_mode", { entity_id: e || this.config.entity, sound_mode: b });
+          };
+          break;
+        }
+        case "shuffle": {
+          const l = c?.attributes?.shuffle === !0;
+          $ = l, u || (u = l ? "mdi:shuffle" : "mdi:shuffle-disabled"), m = l ? "Shuffle: On" : "Shuffle: Off", y = () => {
+            this.hass?.callService("media_player", "shuffle_set", { entity_id: e || this.config.entity, shuffle: !l });
+          };
+          break;
+        }
+        case "repeat": {
+          const l = c?.attributes?.repeat || "off", _ = ["off", "all", "one"], b = _[(_.indexOf(l) + 1) % _.length] || "off";
+          $ = l !== "off", u || (u = l === "one" ? "mdi:repeat-once" : l === "all" ? "mdi:repeat" : "mdi:repeat-off"), m = `Repeat: ${l} -> ${b}`, f || (f = l), y = () => {
+            this.hass?.callService("media_player", "repeat_set", { entity_id: e || this.config.entity, repeat: b });
+          };
+          break;
+        }
+        case "chime": {
+          u || (u = "mdi:bell-ring-outline"), m = "Play Chime", y = () => {
+            this.hass?.callService("chime_tts", "say", { entity_id: e || this.config.entity, message: "ding-dong" }).catch(() => {
+              this.hass?.callService("media_player", "media_play", { entity_id: e || this.config.entity });
+            });
+          };
+          break;
+        }
+        case "cover_preset": {
+          u || (u = "mdi:window-shutter"), m = "Go to Shading Position (50%)", y = () => {
+            this.hass?.callService("cover", "set_cover_position", { entity_id: e || this.config.entity, position: 50 });
+          };
+          break;
+        }
+        case "temp_up": {
+          const _ = this.hass?.config?.unit_system?.temperature === "°F" || this.hass?.config?.unit_system?.temperature === "F" ? 1 : 0.5, b = Number(c?.attributes?.temperature ?? c?.attributes?.target_temp_high ?? 20), k = Number(c?.attributes?.max_temp ?? 35), M = Math.min(k, b + _);
+          u || (u = "mdi:thermometer-chevron-up"), m = `Temperature +${_}°`, f || (f = `+${_}°`), y = () => {
+            this.hass?.callService("climate", "set_temperature", { entity_id: e || this.config.entity, temperature: M });
+          };
+          break;
+        }
+        case "temp_down": {
+          const _ = this.hass?.config?.unit_system?.temperature === "°F" || this.hass?.config?.unit_system?.temperature === "F" ? 1 : 0.5, b = Number(c?.attributes?.temperature ?? c?.attributes?.target_temp_low ?? 20), k = Number(c?.attributes?.min_temp ?? 10), M = Math.max(k, b - _);
+          u || (u = "mdi:thermometer-chevron-down"), m = `Temperature -${_}°`, f || (f = `-${_}°`), y = () => {
+            this.hass?.callService("climate", "set_temperature", { entity_id: e || this.config.entity, temperature: M });
+          };
+          break;
+        }
+        case "fan_oscillate": {
+          const l = c?.attributes?.oscillating === !0;
+          $ = l, u || (u = l ? "mdi:arrow-oscillating" : "mdi:fan-off"), m = l ? "Stop Oscillation" : "Start Oscillation", y = () => {
+            this.hass?.callService("fan", "oscillate", { entity_id: e || this.config.entity, oscillating: !l });
+          };
+          break;
+        }
+        case "fan_direction": {
+          const l = c?.attributes?.direction || "forward", _ = l === "forward" ? "reverse" : "forward";
+          $ = l === "reverse", u || (u = l === "reverse" ? "mdi:rotate-left" : "mdi:rotate-right"), m = `Direction: ${l} -> ${_}`, f || (f = l), y = () => {
+            this.hass?.callService("fan", "set_direction", { entity_id: e || this.config.entity, direction: _ });
+          };
+          break;
+        }
+        case "humidifier_mode": {
+          const l = c?.attributes?.mode || c?.state || "auto", _ = c?.attributes?.available_modes || ["auto", "eco", "boost", "sleep"], b = _[(_.indexOf(l) + 1) % _.length] || "auto";
+          u || (u = "mdi:water-sync"), m = `Humidifier Mode: ${l} -> ${b}`, f || (f = l), y = () => {
+            this.hass?.callService("humidifier", "set_mode", { entity_id: e || this.config.entity, mode: b });
+          };
+          break;
+        }
+        case "siren_toggle": {
+          const l = c?.state === "on";
+          $ = l, u || (u = l ? "mdi:bullhorn" : "mdi:bullhorn-outline"), m = l ? "Turn Off Siren" : "Trigger Siren", y = () => {
+            this.hass?.callService("siren", "toggle", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "open_close": {
-          const u = c?.state === "open" || c?.state === "on" || c?.attributes?.current_position !== void 0 && c.attributes.current_position > 0;
-          $ = u;
+          const l = c?.state === "open" || c?.state === "on" || c?.attributes?.current_position !== void 0 && c.attributes.current_position > 0;
+          $ = l;
           const _ = c?.attributes?.device_class;
-          h || (_ === "garage" || _ === "garage_door" ? h = u ? "mdi:garage-open" : "mdi:garage" : _ === "blind" || _ === "shade" ? h = u ? "mdi:blinds-open" : "mdi:blinds" : _ === "curtain" ? h = u ? "mdi:curtains-open" : "mdi:curtains" : _ === "damper" ? h = u ? "mdi:circle-slice-8" : "mdi:circle-outline" : h = u ? "mdi:window-shutter-open" : "mdi:window-shutter"), m = u ? "Close" : "Open", y = () => {
+          u || (_ === "garage" || _ === "garage_door" ? u = l ? "mdi:garage-open" : "mdi:garage" : _ === "blind" || _ === "shade" ? u = l ? "mdi:blinds-open" : "mdi:blinds" : _ === "curtain" ? u = l ? "mdi:curtains-open" : "mdi:curtains" : _ === "damper" ? u = l ? "mdi:circle-slice-8" : "mdi:circle-outline" : u = l ? "mdi:window-shutter-open" : "mdi:window-shutter"), m = l ? "Close" : "Open", y = () => {
             this.hass?.callService("cover", "toggle", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "stop": {
-          h || (h = "mdi:stop"), m = "Stop", y = () => {
+          u || (u = "mdi:stop"), m = "Stop", y = () => {
             this.hass?.callService("cover", "stop_cover", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "open_tilt": {
-          h || (h = "mdi:arrow-top-right-bottom-left"), m = "Open Tilt", y = () => {
+          u || (u = "mdi:arrow-top-right-bottom-left"), m = "Open Tilt", y = () => {
             this.hass?.callService("cover", "open_cover_tilt", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "close_tilt": {
-          h || (h = "mdi:arrow-bottom-left-top-right"), m = "Close Tilt", y = () => {
+          u || (u = "mdi:arrow-bottom-left-top-right"), m = "Close Tilt", y = () => {
             this.hass?.callService("cover", "close_cover_tilt", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "stop_tilt": {
-          h || (h = "mdi:stop"), m = "Stop Tilt", y = () => {
+          u || (u = "mdi:stop"), m = "Stop Tilt", y = () => {
             this.hass?.callService("cover", "stop_cover_tilt", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "lock_unlock": {
-          const u = c?.state === "locked", _ = c?.state === "jammed";
-          $ = !u, _ && (A = "lock-jammed"), h || (h = _ ? "mdi:lock-alert" : u ? "mdi:lock" : "mdi:lock-open-variant"), m = _ ? "Jammed (Alert!)" : u ? "Unlock" : "Lock", y = () => {
-            this.hass?.callService("lock", u ? "unlock" : "lock", { entity_id: e || this.config.entity });
+          const l = c?.state === "locked", _ = c?.state === "jammed";
+          $ = !l, _ && (A = "lock-jammed"), u || (u = _ ? "mdi:lock-alert" : l ? "mdi:lock" : "mdi:lock-open-variant"), m = _ ? "Jammed (Alert!)" : l ? "Unlock" : "Lock", y = () => {
+            this.hass?.callService("lock", l ? "unlock" : "lock", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "fan_speed": {
-          const u = c?.attributes?.percentage ?? 0;
-          h || (h = "mdi:fan"), b && (A = "anim-spin"), m = `Speed: ${u}%`, g || (g = u > 0 ? `${u}%` : "Off"), y = () => {
+          const l = c?.attributes?.percentage ?? 0;
+          u || (u = "mdi:fan"), v && (A = "anim-spin"), m = `Speed: ${l}%`, f || (f = l > 0 ? `${l}%` : "Off"), y = () => {
             let _ = 33;
-            u >= 90 ? _ = 0 : u >= 60 ? _ = 100 : u >= 30 && (_ = 66), this.hass?.callService("fan", "set_percentage", { entity_id: e || this.config.entity, percentage: _ });
+            l >= 90 ? _ = 0 : l >= 60 ? _ = 100 : l >= 30 && (_ = 66), this.hass?.callService("fan", "set_percentage", { entity_id: e || this.config.entity, percentage: _ });
           };
           break;
         }
         case "fan_mode": {
-          const u = c?.attributes?.fan_mode || "auto", _ = c?.attributes?.fan_modes || ["auto", "low", "medium", "high"], v = _[(_.indexOf(u) + 1) % _.length] || "auto";
-          h || (h = "mdi:fan"), m = `Fan Mode: ${u} -> ${v}`, g || (g = u), y = () => {
-            this.hass?.callService("climate", "set_fan_mode", { entity_id: e || this.config.entity, fan_mode: v });
+          const l = c?.attributes?.fan_mode || "auto", _ = c?.attributes?.fan_modes || ["auto", "low", "medium", "high"], b = _[(_.indexOf(l) + 1) % _.length] || "auto";
+          u || (u = "mdi:fan"), m = `Fan Mode: ${l} -> ${b}`, f || (f = l), y = () => {
+            this.hass?.callService("climate", "set_fan_mode", { entity_id: e || this.config.entity, fan_mode: b });
           };
           break;
         }
         case "swing_mode": {
-          const u = c?.attributes?.swing_mode || "off", _ = c?.attributes?.swing_modes || ["off", "vertical", "horizontal", "both"], v = _[(_.indexOf(u) + 1) % _.length] || "off";
-          h || (h = "mdi:arrow-split-horizontal"), m = `Swing: ${u} -> ${v}`, g || (g = u), y = () => {
-            this.hass?.callService("climate", "set_swing_mode", { entity_id: e || this.config.entity, swing_mode: v });
+          const l = c?.attributes?.swing_mode || "off", _ = c?.attributes?.swing_modes || ["off", "vertical", "horizontal", "both"], b = _[(_.indexOf(l) + 1) % _.length] || "off";
+          u || (u = "mdi:arrow-split-horizontal"), m = `Swing: ${l} -> ${b}`, f || (f = l), y = () => {
+            this.hass?.callService("climate", "set_swing_mode", { entity_id: e || this.config.entity, swing_mode: b });
           };
           break;
         }
         case "climate_preset": {
-          const u = c?.attributes?.preset_mode || "none", _ = c?.attributes?.preset_modes || ["eco", "comfort", "boost", "away", "sleep", "none"], v = _[(_.indexOf(u) + 1) % _.length] || "none";
-          h || (u === "eco" ? h = "mdi:leaf" : u === "boost" ? h = "mdi:rocket-launch" : u === "away" ? h = "mdi:home-export-outline" : u === "sleep" ? h = "mdi:bed" : h = "mdi:thermostat"), m = `Preset: ${u} -> ${v}`, g || (g = u), y = () => {
-            this.hass?.callService("climate", "set_preset_mode", { entity_id: e || this.config.entity, preset_mode: v });
+          const l = c?.attributes?.preset_mode || "none", _ = c?.attributes?.preset_modes || ["eco", "comfort", "boost", "away", "sleep", "none"], b = _[(_.indexOf(l) + 1) % _.length] || "none";
+          u || (l === "eco" ? u = "mdi:leaf" : l === "boost" ? u = "mdi:rocket-launch" : l === "away" ? u = "mdi:home-export-outline" : l === "sleep" ? u = "mdi:bed" : u = "mdi:thermostat"), m = `Preset: ${l} -> ${b}`, f || (f = l), y = () => {
+            this.hass?.callService("climate", "set_preset_mode", { entity_id: e || this.config.entity, preset_mode: b });
           };
           break;
         }
         case "clean": {
-          const u = c?.state === "cleaning";
-          $ = u, h || (h = u ? "mdi:pause" : "mdi:robot-vacuum"), m = u ? "Pause Vacuum" : "Start Vacuum", y = () => {
-            this.hass?.callService("vacuum", u ? "pause" : "start", { entity_id: e || this.config.entity });
+          const l = c?.state === "cleaning";
+          $ = l, u || (u = l ? "mdi:pause" : "mdi:robot-vacuum"), m = l ? "Pause Vacuum" : "Start Vacuum", y = () => {
+            this.hass?.callService("vacuum", l ? "pause" : "start", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "dock": {
-          h || (h = "mdi:home-import-outline"), m = "Return to Dock", y = () => {
+          u || (u = "mdi:home-import-outline"), m = "Return to Dock", y = () => {
             this.hass?.callService("vacuum", "return_to_base", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "locate": {
-          h || (h = "mdi:map-marker-question-outline"), m = "Locate", y = () => {
+          u || (u = "mdi:map-marker-question-outline"), m = "Locate", y = () => {
             this.hass?.callService("vacuum", "locate", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "vacuum_fan_speed": {
-          const u = c?.attributes?.fan_speed || "standard", _ = c?.attributes?.fan_speed_list || ["quiet", "standard", "strong", "turbo"], v = _[(_.indexOf(u) + 1) % _.length] || "standard";
-          h || (h = "mdi:fan"), m = `Suction: ${u} -> ${v}`, g || (g = u), y = () => {
-            this.hass?.callService("vacuum", "set_fan_speed", { entity_id: e || this.config.entity, fan_speed: v });
+          const l = c?.attributes?.fan_speed || "standard", _ = c?.attributes?.fan_speed_list || ["quiet", "standard", "strong", "turbo"], b = _[(_.indexOf(l) + 1) % _.length] || "standard";
+          u || (u = "mdi:fan"), m = `Suction: ${l} -> ${b}`, f || (f = l), y = () => {
+            this.hass?.callService("vacuum", "set_fan_speed", { entity_id: e || this.config.entity, fan_speed: b });
           };
           break;
         }
         case "counter_inc": {
-          h || (h = "mdi:plus-box"), m = "Increment Counter (+1)", g || (g = "+1"), y = () => {
+          u || (u = "mdi:plus-box"), m = "Increment Counter (+1)", f || (f = "+1"), y = () => {
             this.hass?.callService("counter", "increment", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "counter_dec": {
-          h || (h = "mdi:minus-box"), m = "Decrement Counter (-1)", g || (g = "-1"), y = () => {
+          u || (u = "mdi:minus-box"), m = "Decrement Counter (-1)", f || (f = "-1"), y = () => {
             this.hass?.callService("counter", "decrement", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "hvac_mode": {
-          const u = c?.state || "off", _ = c?.attributes?.hvac_modes || ["off", "heat", "cool", "auto"], v = _[(_.indexOf(u) + 1) % _.length] || "auto";
-          $ = u !== "off", h || (u === "heat" ? h = "mdi:fire" : u === "cool" ? h = "mdi:snowflake" : u === "dry" ? h = "mdi:water-percent" : u === "fan_only" ? h = "mdi:fan" : u === "auto" ? h = "mdi:thermostat-auto" : h = "mdi:power"), m = `Mode: ${u} -> Next: ${v}`, g || (g = u), y = () => {
-            this.hass?.callService("climate", "set_hvac_mode", { entity_id: e || this.config.entity, hvac_mode: v });
+          const l = c?.state || "off", _ = c?.attributes?.hvac_modes || ["off", "heat", "cool", "auto"], b = _[(_.indexOf(l) + 1) % _.length] || "auto";
+          $ = l !== "off", u || (l === "heat" ? u = "mdi:fire" : l === "cool" ? u = "mdi:snowflake" : l === "dry" ? u = "mdi:water-percent" : l === "fan_only" ? u = "mdi:fan" : l === "auto" ? u = "mdi:thermostat-auto" : u = "mdi:power"), m = `Mode: ${l} -> Next: ${b}`, f || (f = l), y = () => {
+            this.hass?.callService("climate", "set_hvac_mode", { entity_id: e || this.config.entity, hvac_mode: b });
           };
           break;
         }
         case "light_effect": {
-          const u = c?.attributes?.effect_list || [], _ = c?.attributes?.effect || "None", v = u.length > 0 ? u[(u.indexOf(_) + 1) % u.length] || u[0] : "None";
-          h || (h = "mdi:creation"), $ = _ !== "None" && _ !== "off" && b, m = `Effect: ${_} -> Next: ${v}`, g || (g = _ !== "None" ? _ : "Effect"), y = () => {
-            u.length > 0 && this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, effect: v });
+          const l = c?.attributes?.effect_list || [], _ = c?.attributes?.effect || "None", b = l.length > 0 ? l[(l.indexOf(_) + 1) % l.length] || l[0] : "None";
+          u || (u = "mdi:creation"), $ = _ !== "None" && _ !== "off" && v, m = `Effect: ${_} -> Next: ${b}`, f || (f = _ !== "None" ? _ : "Effect"), y = () => {
+            l.length > 0 && this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, effect: b });
           };
           break;
         }
         case "brightness": {
-          const u = c?.attributes?.brightness, _ = u !== void 0 ? Math.round(u / 255 * 100) : 0;
-          h || (h = "mdi:brightness-6"), m = `Brightness: ${_}%`, g || (g = `${_}%`), y = () => {
-            let v = 25;
-            _ >= 85 ? v = 0 : _ >= 60 ? v = 100 : _ >= 35 ? v = 75 : _ >= 10 && (v = 50), v === 0 ? this.hass?.callService("light", "turn_off", { entity_id: e || this.config.entity }) : this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, brightness_pct: v });
+          const l = c?.attributes?.brightness, _ = l !== void 0 ? Math.round(l / 255 * 100) : 0;
+          u || (u = "mdi:brightness-6"), m = `Brightness: ${_}%`, f || (f = `${_}%`), y = () => {
+            let b = 25;
+            _ >= 85 ? b = 0 : _ >= 60 ? b = 100 : _ >= 35 ? b = 75 : _ >= 10 && (b = 50), b === 0 ? this.hass?.callService("light", "turn_off", { entity_id: e || this.config.entity }) : this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, brightness_pct: b });
           };
           break;
         }
         case "garage_toggle": {
-          const u = c?.state === "open" || c?.state === "opening";
-          $ = u, h || (h = u ? "mdi:garage-open" : "mdi:garage"), m = u ? "Close Garage" : "Open Garage", y = () => {
+          const l = c?.state === "open" || c?.state === "opening";
+          $ = l, u || (u = l ? "mdi:garage-open" : "mdi:garage"), m = l ? "Close Garage" : "Open Garage", y = () => {
             this.hass?.callService("cover", "toggle", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "dim_up": {
-          const u = (e || this.config.entity || "").split(".")[0];
-          if (u === "number" || u === "input_number") {
-            const _ = Number(c?.state) || 0, v = Number(c?.attributes?.step) || 1, C = Number(c?.attributes?.max) || 100, M = Math.min(C, _ + v);
-            h || (h = "mdi:plus-circle-outline"), m = `Value +${v}`, g || (g = `+${v}`), y = () => {
-              this.hass?.callService(u, "set_value", { entity_id: e || this.config.entity, value: M });
+          const l = (e || this.config.entity || "").split(".")[0];
+          if (l === "number" || l === "input_number") {
+            const _ = Number(c?.state) || 0, b = Number(c?.attributes?.step) || 1, k = Number(c?.attributes?.max) || 100, M = Math.min(k, _ + b);
+            u || (u = "mdi:plus-circle-outline"), m = `Value +${b}`, f || (f = `+${b}`), y = () => {
+              this.hass?.callService(l, "set_value", { entity_id: e || this.config.entity, value: M });
             };
           } else {
-            const _ = c?.attributes?.brightness ?? 0, v = Math.min(255, _ + 26);
-            h || (h = "mdi:brightness-5"), m = "Brightness +10%", g || (g = "+10%"), y = () => {
-              this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, brightness: v });
+            const _ = c?.attributes?.brightness ?? 0, b = Math.min(255, _ + 26);
+            u || (u = "mdi:brightness-5"), m = "Brightness +10%", f || (f = "+10%"), y = () => {
+              this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, brightness: b });
             };
           }
           break;
         }
         case "dim_down": {
-          const u = (e || this.config.entity || "").split(".")[0];
-          if (u === "number" || u === "input_number") {
-            const _ = Number(c?.state) || 0, v = Number(c?.attributes?.step) || 1, C = Number(c?.attributes?.min) || 0, M = Math.max(C, _ - v);
-            h || (h = "mdi:minus-circle-outline"), m = `Value -${v}`, g || (g = `-${v}`), y = () => {
-              this.hass?.callService(u, "set_value", { entity_id: e || this.config.entity, value: M });
+          const l = (e || this.config.entity || "").split(".")[0];
+          if (l === "number" || l === "input_number") {
+            const _ = Number(c?.state) || 0, b = Number(c?.attributes?.step) || 1, k = Number(c?.attributes?.min) || 0, M = Math.max(k, _ - b);
+            u || (u = "mdi:minus-circle-outline"), m = `Value -${b}`, f || (f = `-${b}`), y = () => {
+              this.hass?.callService(l, "set_value", { entity_id: e || this.config.entity, value: M });
             };
           } else {
-            const _ = c?.attributes?.brightness ?? 0, v = Math.max(1, _ - 26);
-            h || (h = "mdi:brightness-4"), m = "Brightness -10%", g || (g = "-10%"), y = () => {
-              this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, brightness: v });
+            const _ = c?.attributes?.brightness ?? 0, b = Math.max(1, _ - 26);
+            u || (u = "mdi:brightness-4"), m = "Brightness -10%", f || (f = "-10%"), y = () => {
+              this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, brightness: b });
             };
           }
           break;
         }
         case "humidity_up": {
-          const u = Number(c?.attributes?.humidity ?? c?.attributes?.target_humidity ?? 50), _ = Math.min(100, u + 5);
-          h || (h = "mdi:water-plus"), m = `Humidity +5% (${_}%)`, g || (g = "+5%"), y = () => {
+          const l = Number(c?.attributes?.humidity ?? c?.attributes?.target_humidity ?? 50), _ = Math.min(100, l + 5);
+          u || (u = "mdi:water-plus"), m = `Humidity +5% (${_}%)`, f || (f = "+5%"), y = () => {
             this.hass?.callService("humidifier", "set_humidity", { entity_id: e || this.config.entity, humidity: _ });
           };
           break;
         }
         case "humidity_down": {
-          const u = Number(c?.attributes?.humidity ?? c?.attributes?.target_humidity ?? 50), _ = Math.max(0, u - 5);
-          h || (h = "mdi:water-minus"), m = `Humidity -5% (${_}%)`, g || (g = "-5%"), y = () => {
+          const l = Number(c?.attributes?.humidity ?? c?.attributes?.target_humidity ?? 50), _ = Math.max(0, l - 5);
+          u || (u = "mdi:water-minus"), m = `Humidity -5% (${_}%)`, f || (f = "-5%"), y = () => {
             this.hass?.callService("humidifier", "set_humidity", { entity_id: e || this.config.entity, humidity: _ });
           };
           break;
         }
         case "input_select": {
-          const u = c?.state || "", _ = c?.attributes?.options || [], v = _.length > 0 ? _[(_.indexOf(u) + 1) % _.length] || _[0] : u;
-          h || (h = "mdi:form-dropdown"), m = `Option: ${u} -> Next: ${v}`, g || (g = u), y = () => {
-            const C = (e || this.config.entity || "").split(".")[0] === "select" ? "select" : "input_select";
-            this.hass?.callService(C, "select_next", { entity_id: e || this.config.entity });
+          const l = c?.state || "", _ = c?.attributes?.options || [], b = _.length > 0 ? _[(_.indexOf(l) + 1) % _.length] || _[0] : l;
+          u || (u = "mdi:form-dropdown"), m = `Option: ${l} -> Next: ${b}`, f || (f = l), y = () => {
+            const k = (e || this.config.entity || "").split(".")[0] === "select" ? "select" : "input_select";
+            this.hass?.callService(k, "select_next", { entity_id: e || this.config.entity });
           };
           break;
         }
         case "temp_warm": {
-          h || (h = "mdi:weather-sunny"), m = "Warm White (2700K)", g || (g = "2700K"), y = () => {
+          u || (u = "mdi:weather-sunny"), m = "Warm White (2700K)", f || (f = "2700K"), y = () => {
             this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, color_temp_kelvin: 2700 });
           };
           break;
         }
         case "temp_cool": {
-          h || (h = "mdi:weather-sunset-up"), m = "Cool Daylight (6000K)", g || (g = "6000K"), y = () => {
+          u || (u = "mdi:weather-sunset-up"), m = "Cool Daylight (6000K)", f || (f = "6000K"), y = () => {
             this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, color_temp_kelvin: 6e3 });
           };
           break;
         }
         case "color_temp": {
-          h || (h = "mdi:palette-swatch-outline"), m = "Color Temperature", g || (g = "Temp"), y = () => {
-            const u = c?.attributes?.color_temp_kelvin || 3e3;
+          u || (u = "mdi:palette-swatch-outline"), m = "Color Temperature", f || (f = "Temp"), y = () => {
+            const l = c?.attributes?.color_temp_kelvin || 3e3;
             let _ = 2700;
-            u < 3300 ? _ = 4e3 : u < 5e3 ? _ = 6e3 : _ = 2700, this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, color_temp_kelvin: _ });
+            l < 3300 ? _ = 4e3 : l < 5e3 ? _ = 6e3 : _ = 2700, this.hass?.callService("light", "turn_on", { entity_id: e || this.config.entity, color_temp_kelvin: _ });
           };
           break;
         }
         case "button":
         default: {
-          h || (h = c?.attributes?.icon || "mdi:checkbox-blank-circle"), m = o || (c?.attributes?.friendly_name ?? "");
+          u || (u = c?.attributes?.icon || "mdi:checkbox-blank-circle"), m = o || (c?.attributes?.friendly_name ?? "");
           break;
         }
       }
-    const T = (u) => {
-      this._handleSubTap(u, e, n, p, y);
+    const T = (l) => {
+      this._handleSubTap(l, e, n, p, y);
     };
     return S`
       <div 
@@ -3671,24 +3768,24 @@ class W extends se {
         style="${colorStyle} ${$ && dynamicSubColor && r ? `background: ${dynamicSubColor}; color: #fff;` : ""}"
         title="${m}"
         @click=${T}
-        @dblclick=${(u) => u.stopPropagation()}
-        @keydown=${(u) => {
-      (u.key === "Enter" || u.key === " ") && (u.preventDefault(), u.stopPropagation(), T(u));
+        @dblclick=${(l) => l.stopPropagation()}
+        @keydown=${(l) => {
+      (l.key === "Enter" || l.key === " ") && (l.preventDefault(), l.stopPropagation(), T(l));
     }}
-        @pointerdown=${(u) => this._handleSubPointerDown(u, e, s)}
+        @pointerdown=${(l) => this._handleSubPointerDown(l, e, s)}
         @pointermove=${this._handleSubPointerMove}
         @pointerup=${this._handleSubPointerUp}
         @pointercancel=${this._handleSubPointerCancel}
-        @contextmenu=${(u) => this._handleSubContextMenu(u, e, s)}>
-        <ha-icon .icon=${h} class="${A}"></ha-icon>
-        ${g ? S`<span class="sub-button-label">${g}</span>` : w}
-        ${f ? S`<span class="sub-button-state">${f}</span>` : w}
+        @contextmenu=${(l) => this._handleSubContextMenu(l, e, s)}>
+        <ha-icon .icon=${u} class="${A}"></ha-icon>
+        ${f ? S`<span class="sub-button-label">${f}</span>` : w}
+        ${g ? S`<span class="sub-button-state">${g}</span>` : w}
       </div>
     `;
   }
   // --- STATIC STYLES ---
   static get styles() {
-    return Xt`
+    return Zt`
       :host([hidden]),
       :host([offscreen]) *,
       :host([offscreen]) .anim-spin,
@@ -3758,11 +3855,18 @@ class W extends se {
       .sub-buttons-container {
         scrollbar-width: none;
         -ms-overflow-style: none;
+        contain: layout style;
       }
       .color-temp-chips::-webkit-scrollbar,
       .color-swatch-chips::-webkit-scrollbar,
       .sub-buttons-container::-webkit-scrollbar {
         display: none;
+      }
+      .active-border-gradient {
+        border: 2px solid transparent !important;
+        background-image: linear-gradient(var(--card-background-color, #1e1e1e), var(--card-background-color, #1e1e1e)), linear-gradient(135deg, #6200ea, #00e5ff, #76ff03) !important;
+        background-origin: border-box !important;
+        background-clip: padding-box, border-box !important;
       }
       .color-swatch-chip[active] {
         outline: 2px solid #ffffff;
@@ -4679,27 +4783,27 @@ class W extends se {
     `;
   }
 }
-de([
-  it({ attribute: !1 })
-], W.prototype, "hass", 2);
-de([
-  it({ type: Boolean })
-], W.prototype, "preview", 2);
-de([
-  rt()
-], W.prototype, "config", 2);
-de([
-  rt()
-], W.prototype, "_collapsed", 2);
-de([
-  jt({ passive: !0 })
-], W.prototype, "_handlePointerMove", 1);
-de([
-  jt({ passive: !0 })
-], W.prototype, "_handleSubPointerMove", 1);
-customElements.get("antigravity-no-icon-card") || customElements.define("antigravity-no-icon-card", W);
-customElements.get("antigravity-card") || customElements.define("antigravity-card", W);
+ue([
+  rt({ attribute: !1 })
+], Y.prototype, "hass", 2);
+ue([
+  rt({ type: Boolean })
+], Y.prototype, "preview", 2);
+ue([
+  ot()
+], Y.prototype, "config", 2);
+ue([
+  ot()
+], Y.prototype, "_collapsed", 2);
+ue([
+  ti({ passive: !0 })
+], Y.prototype, "_handlePointerMove", 1);
+ue([
+  ti({ passive: !0 })
+], Y.prototype, "_handleSubPointerMove", 1);
+customElements.get("antigravity-no-icon-card") || customElements.define("antigravity-no-icon-card", Y);
+customElements.get("antigravity-card") || customElements.define("antigravity-card", Y);
 export {
-  W as AntigravityCard,
-  or as CARD_VERSION
+  Y as AntigravityCard,
+  ar as CARD_VERSION
 };
