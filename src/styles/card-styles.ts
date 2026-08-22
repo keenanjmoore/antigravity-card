@@ -43,9 +43,6 @@ export const antigravityCardStyles: CSSResult = css`
     -webkit-user-select: none;
     -webkit-touch-callout: none;
   }
-  :host([hidden]) {
-    display: none !important;
-  }
   input[type="range"] {
     touch-action: pan-y;
     -webkit-appearance: none;

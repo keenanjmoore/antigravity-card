@@ -1,6 +1,6 @@
 /**
  * Multi-Stage Physical-Time Fade & Decay Transition Manager for Antigravity Cards
- * Computes 3-stage temporal decays with invalid timestamp guards and duration memoization.
+ * Computes 3-stage temporal decays with invalid timestamp guards, remaining time formatting, and duration memoization.
  */
 
 import { AntigravityCardConfig, FadeCalculationResult, RGBTuple } from './types';
@@ -28,10 +28,12 @@ export interface FadeStaticDurations {
 const DISABLED_FADE_RESULT: FadeCalculationResult = Object.freeze({
   enabled: false,
   activeFade: false,
-  currentColor: [0, 0, 0] as RGBTuple,
-  colorHex: '',
+  currentColor: 'rgb(0, 0, 0)',
+  colorHex: '#000000',
   progressPct: 0,
+  remainingSeconds: 0,
   currentStage: 0,
+  stageLabel: '',
 });
 
 export class FadeTransitionManager {
@@ -118,7 +120,7 @@ export class FadeTransitionManager {
     }
     this._lastTrackedState = stateObj.state;
 
-    // Parse and validate timestamp safely (Fix #1: null/empty string/invalid date check)
+    // Parse and validate timestamp safely
     const rawTs = stateObj.attributes?.last_triggered || stateObj.last_changed || stateObj.last_updated;
     const tsStr = (typeof rawTs === 'string' ? rawTs : '').trim();
     if (!tsStr) {
@@ -172,13 +174,24 @@ export class FadeTransitionManager {
 
     this._currentLiveRgb = currentColor;
 
+    const remainingSeconds = Math.max(0, totalDuration - ageSeconds);
+    let stageLabel = '';
+    if (remainingSeconds >= 60) {
+      const mins = Math.ceil(remainingSeconds / 60);
+      stageLabel = `${mins}m left`;
+    } else {
+      stageLabel = `${remainingSeconds}s left`;
+    }
+
     return {
       enabled: true,
       activeFade: true,
-      currentColor,
+      currentColor: `rgb(${currentColor[0]}, ${currentColor[1]}, ${currentColor[2]})`,
       colorHex: rgbToHex(currentColor),
       progressPct: Math.min(100, progressPct),
+      remainingSeconds,
       currentStage,
+      stageLabel,
     };
   }
 

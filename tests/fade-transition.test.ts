@@ -63,7 +63,7 @@ describe('FadeTransitionManager', () => {
     };
     const res = fadeTransitionManager.calculateFade(config as any, stateObj, staticDurations, '#d60000', '#03b500');
     expect(res.enabled).toBe(true);
-    expect(res.currentColor).toEqual([3, 181, 0]);
+    expect(res.currentColor).toBe('rgb(3, 181, 0)');
     expect(res.progressPct).toBe(100);
   });
 });

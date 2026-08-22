@@ -3,6 +3,8 @@
  * Resolves icons, titles, labels, active states, animations, and service call dispatches across all HA domains.
  */
 
+import { html, nothing, TemplateResult } from 'lit';
+
 export interface SubButtonResolution {
   icon?: string;
   title: string;
@@ -755,5 +757,134 @@ export class SubButtonController {
       animClass: subAnimClass,
       defaultAction
     };
+  }
+
+  /**
+   * Render sub button template with complete styles, icons, labels, and gesture events.
+   */
+  public static renderSubButton(
+    config: any,
+    hass: any,
+    entityId: string,
+    customIcon?: string,
+    customColor?: string,
+    showBg = true,
+    label?: string,
+    tapAction?: any,
+    holdAction?: any,
+    subType: string = 'button',
+    doubleTapAction?: any,
+    _showState = false,
+    isActive = false,
+    dynamicSubColor?: string,
+    liveStateText?: string | TemplateResult,
+    callbacks?: {
+      onTap: (e: Event, entityId: string, tapAction?: any, doubleTapAction?: any, defaultAction?: () => void) => void;
+      onPointerDown: (e: PointerEvent, entityId: string, holdAction?: any) => void;
+      onPointerMove: (e: PointerEvent) => void;
+      onPointerUp: (e: Event) => void;
+      onPointerCancel: (e: Event) => void;
+      onContextMenu: (e: Event, entityId: string, holdAction?: any) => void;
+    }
+  ): TemplateResult {
+    const stateObj = entityId ? hass?.states[entityId] : hass?.states[config.entity || ''];
+    const resolved = this.resolve(
+      subType,
+      entityId,
+      config.entity,
+      stateObj,
+      customIcon,
+      label,
+      isActive,
+      hass?.config?.unit_system?.temperature,
+      tapAction
+    );
+
+    const subIcon = resolved.icon;
+    const subTitle = resolved.title;
+    const subLabel = resolved.label;
+    const subIsActive = resolved.isActive;
+    const subAnimClass = resolved.animClass;
+    let defaultAction: (() => void) | undefined = undefined;
+
+    if (resolved.defaultAction) {
+      defaultAction = () => resolved.defaultAction!(hass, config.entity);
+    }
+
+    const clickHandler = (e: Event) => {
+      callbacks?.onTap(e, entityId, tapAction, doubleTapAction, defaultAction);
+    };
+
+    const colorStyle = customColor ? `color: ${customColor};` : '';
+    const bgClass = showBg ? '' : 'no-bg';
+    const dynamicBgStyle = subIsActive && dynamicSubColor && showBg ? `background: ${dynamicSubColor}; color: #fff;` : '';
+
+    return html`
+      <div 
+        tabindex="0"
+        data-ag-sub
+        class="sub-button ${bgClass}" 
+        ?active=${subIsActive} 
+        style="${colorStyle} ${dynamicBgStyle}"
+        title="${subTitle}"
+        @click=${clickHandler}
+        @dblclick=${(e: Event) => e.stopPropagation()}
+        @keydown=${(e: KeyboardEvent) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            e.stopPropagation();
+            clickHandler(e);
+          }
+        }}
+        @pointerdown=${(e: PointerEvent) => callbacks?.onPointerDown(e, entityId, holdAction)}
+        @pointermove=${(e: PointerEvent) => callbacks?.onPointerMove(e)}
+        @pointerup=${(e: Event) => callbacks?.onPointerUp(e)}
+        @pointercancel=${(e: Event) => callbacks?.onPointerCancel(e)}
+        @contextmenu=${(e: Event) => callbacks?.onContextMenu(e, entityId, holdAction)}>
+        <ha-icon .icon=${subIcon} class="${subAnimClass}"></ha-icon>
+        ${subLabel ? html`<span class="sub-button-label">${subLabel}</span>` : nothing}
+        ${liveStateText ? html`<span class="sub-button-state">${liveStateText}</span>` : nothing}
+      </div>
+    `;
+  }
+
+  /**
+   * Precompute and freeze the configured sub-buttons array from card config.
+   */
+  public static extractSubButtons(config: any): readonly any[] {
+    if (!config) return [];
+    const entityId = config.entity;
+    const buttons: any[] = [];
+    for (let i = 1; i <= 4; i++) {
+      const e = config[`sub_button_${i}_entity`];
+      const icon = config[`sub_button_${i}_icon`];
+      const name = config[`sub_button_${i}_name`];
+      const tap = config[`sub_button_${i}_tap_action`];
+      const hold = config[`sub_button_${i}_hold_action`];
+      const dbl = config[`sub_button_${i}_double_tap_action`];
+      const type = config[`sub_button_${i}_type`];
+      const color = config[`sub_button_${i}_color`];
+      const bg = config[`sub_button_${i}_show_background`];
+      const showState = config[`sub_button_${i}_show_state`];
+
+      const isConfigured = !!(e || icon || name || (type && type !== 'button') || showState);
+      if (isConfigured) {
+        const resolvedEntity = e || entityId;
+        buttons.push(Object.freeze({
+          key: `${resolvedEntity || 'sub'}_${i}`,
+          entity: resolvedEntity,
+          type: type || 'button',
+          icon,
+          color,
+          bg,
+          name,
+          showState: showState === true,
+          tapAction: tap,
+          holdAction: hold,
+          doubleTapAction: dbl
+        }));
+      }
+    }
+    return Object.freeze(buttons);
   }
 }

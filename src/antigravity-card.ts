@@ -1,9 +1,8 @@
 import { LitElement, html, unsafeCSS, PropertyValues, nothing, TemplateResult } from 'lit';
-import { property, state, eventOptions } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import type { HomeAssistant } from 'custom-card-helpers';
-import { handleAction, forwardHaptic } from 'custom-card-helpers';
-import type { AntigravityCardConfig } from './types';
+import type { AntigravityCardConfig, FadeCalculationResult } from './types';
 import { DEFAULT_CARD_CONFIG } from './types';
 import { StyleBuilder } from './style-builder';
 import { memoryTracker } from './memory-tracker';
@@ -14,11 +13,11 @@ import { antigravityCardStyles } from './styles/card-styles';
 import { SubButtonController } from './controllers/sub-button-controller';
 import { InfoFormatter } from './controllers/info-formatter';
 import { EntityController } from './controllers/entity-controller';
-import { SliderController, SliderCallbacks } from './controllers/slider-controller';
-import {
-  parseColorToRgb,
-  lerpRgb
-} from './color-converter';
+import { SliderController, SliderCallbacks, SliderDragManager } from './controllers/slider-controller';
+import { InteractionController, InteractionCallbacks } from './controllers/interaction-controller';
+import { fadeTransitionManager } from './fade-transition';
+import { parseColorToRgb, resolveColorCached, safeForwardHaptic } from './color-converter';
+import { ACTIVE_STATES, COLOR_MODES_SET, SLIDER_THROTTLE_MS, SLIDER_THROTTLE_POWER_SAVE_MS } from './constants';
 import './editor';
 
 // Augment HomeAssistant type for newer HA APIs not yet in custom-card-helpers
@@ -91,145 +90,7 @@ window.customCards.push({
   description: "Default Antigravity Card (No Icon)"
 });
 
-// ---- Global Resume & Gesture Debounce State ----
-let LAST_APP_RESUME_TIME = Date.now();
-if (typeof window !== 'undefined' && !(window as any).__AG_RESUME_LISTENER_ATTACHED__) {
-  (window as any).__AG_RESUME_LISTENER_ATTACHED__ = true;
-  window.addEventListener('focus', () => { LAST_APP_RESUME_TIME = Date.now(); }, { passive: true });
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') {
-      LAST_APP_RESUME_TIME = Date.now();
-    }
-  }, { passive: true });
-}
-
-// ---- Active States (Domain-Aware) ----
-const ACTIVE_STATES = new Set([
-  'on', 'home', 'playing', 'paused', 'buffering',
-  'open', 'opening', 'closing',
-  'unlocked', 'locking', 'unlocking',
-  'heat', 'cool', 'heat_cool', 'auto', 'fan_only', 'dry',
-  'armed_home', 'armed_away', 'armed_night', 'armed_vacation', 'armed_custom_bypass',
-  'triggered', 'pending', 'arming',
-  'cleaning', 'returning',
-  'above_horizon',
-  'active', 'electric', 'gas', 'heat_pump',
-  'running', 'detected', 'motion', 'occupied', 'present'
-]);
-
-// ---- HA Named Colors (Module-Level Constant for Performance) ----
-const HA_NAMED_COLORS = new Set([
-  'primary', 'accent', 'red', 'pink', 'purple', 'deep-purple', 'indigo',
-  'blue', 'light-blue', 'cyan', 'teal', 'green', 'light-green', 'lime',
-  'yellow', 'amber', 'orange', 'deep-orange', 'brown', 'grey', 'blue-grey',
-  'black', 'white', 'disabled'
-]);
-
-const COLOR_MODES_SET = new Set(['hs', 'xy', 'rgb', 'rgbw', 'rgbww']);
-const NON_TOGGLEABLE_DOMAINS = new Set([
-  'binary_sensor', 'sensor', 'camera', 'weather', 'sun', 'zone', 
-  'person', 'device_tracker', 'update', 'image', 'calendar', 'event', 'counter'
-]);
-
-// ---- Regex Constants (Module-Level for Performance) ----
-const RGB_TRIPLET_REGEX = /^\d+\s*,\s*\d+\s*,\s*\d+$/;
-const RGBA_QUADRUPLET_REGEX = /^\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*[\d.]+$/;
-
-// ---- Color Utilities ----
-
-
-function formatRgb(rgb: [number, number, number]): string {
-  return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
-}
-
-export interface FadeCalculationResult {
-  enabled: boolean;
-  activeFade: boolean;
-  currentColor: string;
-  progressPct: number;
-  remainingSeconds: number;
-  currentStage: number;
-  stageLabel: string;
-}
-
-const DISABLED_FADE_RESULT: FadeCalculationResult = Object.freeze({
-  enabled: false,
-  activeFade: false,
-  currentColor: '',
-  progressPct: 0,
-  remainingSeconds: 0,
-  currentStage: 0,
-  stageLabel: ''
-});
-
-// ---- Safe Haptic Dispatcher ----
-function safeForwardHaptic(type: any, enabled = true) {
-  if (!enabled || typeof window === 'undefined') return;
-  try {
-    forwardHaptic(type);
-    if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('haptic', { detail: type, bubbles: true, composed: true }));
-    }
-    if (typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function') {
-      let pattern: number | number[] = 6;
-      if (type === 'heavy') pattern = 20;
-      else if (type === 'medium') pattern = 12;
-      else if (type === 'success') pattern = [40, 40, 80];
-      else if (type === 'warning') pattern = [50, 30, 50];
-      else if (type === 'error') pattern = [50, 100, 50];
-      navigator.vibrate(pattern);
-    }
-  } catch {
-    // Ignore haptic errors on unsupported web views (e.g. wall tablets, desktop)
-  }
-}
-
-// ---- Color Parsing Cache (O(1) Lookup, LRU Eviction) ----
-const COLOR_CACHE = new Map<string, string>();
-const COLOR_CACHE_MAX = 250;
-
-function resolveColorCached(colorStr: string | undefined): string {
-  if (!colorStr) return '';
-  const cached = COLOR_CACHE.get(colorStr);
-  if (cached !== undefined) return cached;
-
-  const trimmed = colorStr.trim();
-  if (!trimmed) {
-    COLOR_CACHE.set(colorStr, '');
-    return '';
-  }
-
-  let res = trimmed;
-  if (trimmed.startsWith('#') || trimmed.startsWith('rgb') || trimmed.startsWith('hsl') || trimmed.startsWith('var(')) {
-    res = trimmed;
-  } else if (RGB_TRIPLET_REGEX.test(trimmed)) {
-    res = `rgb(${trimmed})`;
-  } else if (RGBA_QUADRUPLET_REGEX.test(trimmed)) {
-    res = `rgba(${trimmed})`;
-  } else if (trimmed.toLowerCase() === 'state') {
-    res = 'var(--state-icon-color, var(--primary-color))';
-  } else if (HA_NAMED_COLORS.has(trimmed.toLowerCase())) {
-    res = `var(--${trimmed.toLowerCase()}-color, ${trimmed.toLowerCase()})`;
-  }
-
-  // LRU eviction: delete oldest 25% when limit is reached instead of full wipe
-  if (COLOR_CACHE.size >= COLOR_CACHE_MAX) {
-    const evictCount = Math.floor(COLOR_CACHE_MAX / 4);
-    const iter = COLOR_CACHE.keys();
-    for (let i = 0; i < evictCount; i++) {
-      const key = iter.next().value;
-      if (key !== undefined) COLOR_CACHE.delete(key);
-    }
-  }
-  COLOR_CACHE.set(colorStr, res);
-  return res;
-}
-
 export class AntigravityCard extends LitElement {
-  private _previousLiveRgb: [number, number, number] | null = null;
-  private _currentLiveRgb: [number, number, number] | null = null;
-  private _lastTrackedState: string | null = null;
-
   // --- SECTIONS LAYOUT SUPPORT ---
   public getGridOptions() {
     const isLarge = this.config?.card_layout === 'large';
@@ -257,21 +118,9 @@ export class AntigravityCard extends LitElement {
   @state() private config!: AntigravityCardConfig;
   @state() private _collapsed = true;
 
-  private _holdTimer: any = null;
-  private _held = false;
-  private _moved = false;
-  private _tapTimer: any = null;
+  private _interaction = new InteractionController();
+  private _sliderDrag = new SliderDragManager();
   private _throttleMap = new Map<string, number>();
-  private _startX = 0;
-  private _startY = 0;
-
-  // Sub-button mobile hold & double-tap state
-  private _subHoldTimer: any = null;
-  private _subHeld = false;
-  private _subMoved = false;
-  private _subStartX = 0;
-  private _subStartY = 0;
-  private _subTapTimerMap = new Map<string, any>();
 
   private _monitoredEntities: string[] = [];
   private _powerUnsubscribe: (() => void) | null = null;
@@ -355,220 +204,65 @@ export class AntigravityCard extends LitElement {
   private _computeStaticStylesAndClasses() {
     if (!this.config) return;
 
-    const cardPaddingVert = this.config.card_padding_vertical ?? this.config.card_padding ?? 0;
-    const cardPaddingHoriz = this.config.card_padding_horizontal ?? this.config.card_padding ?? 15;
+    const computed = StyleBuilder.computeStaticStyles(this.config);
+    this._staticCardStyles = computed.staticCardStyles;
+    this._staticCardClasses = computed.staticCardClasses;
+    this._textOffsetStyle = computed.textOffsetStyle;
+    this._primaryTextOffsetStyle = computed.primaryTextOffsetStyle;
+    this._secondaryTextOffsetStyle = computed.secondaryTextOffsetStyle;
+    this._featuresOffsetStyle = computed.featuresOffsetStyle;
+    this._mainSliderMarginOffsets = computed.mainSliderMarginOffsets;
+    this._colorTempMarginOffsets = computed.colorTempMarginOffsets;
+    this._colorHueMarginOffsets = computed.colorHueMarginOffsets;
+    this._textBoxWidth = computed.textBoxWidth;
+    this._primaryTextStyle = computed.primaryTextStyle;
+    this._secondaryTextStyle = computed.secondaryTextStyle;
 
-    const pTop = this.config.card_padding_top ?? cardPaddingVert;
-    const pBottom = this.config.card_padding_bottom ?? cardPaddingVert;
-    const pLeft = this.config.card_padding_left ?? cardPaddingHoriz;
-    const pRight = this.config.card_padding_right ?? cardPaddingHoriz;
-
-    const baseMargin = this.config.card_margin ?? -1;
-    const marginVert = this.config.card_margin_vertical ?? baseMargin;
-    const marginHoriz = this.config.card_margin_horizontal ?? baseMargin;
-    const mTop = this.config.card_margin_top ?? marginVert;
-    const mBottom = this.config.card_margin_bottom ?? marginVert;
-    const mLeft = this.config.card_margin_left ?? marginHoriz;
-    const mRight = this.config.card_margin_right ?? marginHoriz;
-
-    let cardMarginStyle = '';
-    if (mTop !== undefined || mBottom !== undefined || mLeft !== undefined || mRight !== undefined) {
-      cardMarginStyle = `margin: ${mTop ?? 0}px ${mRight ?? 0}px ${mBottom ?? 0}px ${mLeft ?? 0}px;`;
-    }
-    const borderRadius = this.config.border_radius ?? 12;
-
-    const isGoogleSlider = this.config.slider_style === 'google';
-    const isFullSlider = this.config.slider_style === 'full';
-    const defaultSliderHeight = isGoogleSlider ? 42 : isFullSlider ? 40 : 12;
-    const sliderHeight = this.config.slider_height !== undefined ? this.config.slider_height : defaultSliderHeight;
-    const defaultSliderRadius = isGoogleSlider ? 21 : isFullSlider ? 0 : (sliderHeight / 2);
-    const sliderRadius = this.config.slider_border_radius !== undefined ? this.config.slider_border_radius : defaultSliderRadius;
-
-    const borderWidth = this.config.card_border_width ?? (this.config.card_border_color ? 1 : 0);
-    const borderStyle = this.config.card_border_style ?? 'solid';
-    const borderProp = borderWidth > 0 ? `border: ${borderWidth}px ${borderStyle} ${this._resolveColor(this.config.card_border_color) || 'var(--divider-color, rgba(150, 150, 150, 0.2))'};` : '';
-
-    const widthStyle = this.config.card_width ? `width: ${this.config.card_width};` : '';
-    const maxWidthStyle = this.config.card_max_width ? `max-width: ${this.config.card_max_width};` : '';
-    const heightStyle = this.config.card_height ? `height: ${this.config.card_height};` : '';
-    const minHeightStyle = this.config.card_min_height !== undefined ? `min-height: ${this.config.card_min_height}px;` : '';
-    const fillStyle = this.config.fill_container === true ? 'height: 100%; width: 100%;' : '';
-    const overflowStyle = this.config.overflow_hidden !== false ? 'overflow: hidden;' : 'overflow: visible;';
-    const blurStyle = this.config.backdrop_blur !== undefined ? `backdrop-filter: blur(${this.config.backdrop_blur}px); -webkit-backdrop-filter: blur(${this.config.backdrop_blur}px);` : '';
-    const cardOpacityStyle = this.config.card_opacity !== undefined ? `opacity: ${this.config.card_opacity / 100};` : '';
-    const transitionStyle = this.config.transition_duration !== undefined ? `transition: all ${this.config.transition_duration}ms ease;` : '';
-
-    const textPaddingVert = this.config.text_padding_vertical ?? this.config.text_padding ?? 0;
-    const textPaddingHoriz = this.config.text_padding_horizontal ?? this.config.text_padding ?? 0;
-    const featuresPaddingVert = this.config.features_padding_vertical ?? this.config.features_padding ?? 0;
-    const featuresPaddingHoriz = this.config.features_padding_horizontal ?? this.config.features_padding ?? 0;
-    const subBtnPadding = this.config.sub_button_padding ?? 6;
-    const subBtnContainerPadding = this.config.sub_button_container_padding ?? 0;
-
-    const subBtnAlign = this.config.sub_button_alignment ? `--ag-sub-button-alignment: ${this.config.sub_button_alignment};` : '--ag-sub-button-alignment: flex-end;';
-    const scrollSpeedVar = this.config.text_scrolling_speed ? `--ag-scroll-speed: ${this.config.text_scrolling_speed}s;` : '';
-    const fullSliderOpacity = this.config.full_slider_opacity !== undefined ? `--ag-full-slider-opacity: ${this.config.full_slider_opacity / 100};` : '';
-
-    this._staticCardStyles = [
-      cardMarginStyle,
-      `border-radius: ${borderRadius}px;`,
-      borderProp,
-      widthStyle,
-      maxWidthStyle,
-      heightStyle,
-      minHeightStyle,
-      fillStyle,
-      overflowStyle,
-      blurStyle,
-      cardOpacityStyle,
-      transitionStyle,
-      `--ag-card-padding: ${pTop}px ${pRight}px ${pBottom}px ${pLeft}px;`,
-      `--ag-text-padding: ${textPaddingVert}px ${textPaddingHoriz}px;`,
-      `--ag-features-padding: ${featuresPaddingVert}px ${featuresPaddingHoriz}px;`,
-      `--ag-sub-button-padding: ${subBtnPadding}px;`,
-      `--ag-sub-button-container-padding: ${subBtnContainerPadding}px;`,
-      `--ag-content-spacing: ${this.config.content_spacing ?? 6}px;`,
-      `--ag-text-spacing: ${this.config.text_spacing ?? -1}px;`,
-      `--ag-features-margin: ${this.config.features_margin ?? -3}px;`,
-      `--ag-slider-spacing: ${this.config.slider_spacing ?? 6}px;`,
-      `--ag-sub-button-spacing: ${this.config.sub_button_spacing ?? -4}px;`,
-      `--ag-slider-height: ${sliderHeight}px;`,
-      `--ag-slider-radius: ${sliderRadius}px;`,
-      `--ag-text-alignment: ${this.config.text_alignment ?? 'left'};`,
-      `--ag-content-alignment: ${this.config.content_alignment ?? 'flex-start'};`,
-      subBtnAlign,
-      scrollSpeedVar,
-      fullSliderOpacity
-    ].filter(Boolean).join(' ');
-
-    this._staticCardClasses = [
-      `layout-${this.config.layout}`,
-      this.config.card_layout === 'large' ? 'card-large' : '',
-      `theme-${this.config.theme_preset ?? 'default'}`,
-      `hover-${this.config.hover_effect ?? 'glow'}`,
-      `slider-style-${this.config.slider_style ?? 'circle'}`,
-      this.config.text_color_mode === 'inverse' ? 'text-color-mode-inverse' : ''
-    ].filter(Boolean).join(' ');
-
-    const textOffsetX = this.config.text_offset_x !== undefined ? Number(this.config.text_offset_x) : -28;
-    const textOffsetY = this.config.text_offset_y !== undefined ? Number(this.config.text_offset_y) : 2;
-    this._textOffsetStyle = textOffsetX !== 0 || textOffsetY !== 0 ? `transform: translate(${textOffsetX}px, ${textOffsetY}px);` : '';
-
-    const pStartX = Number(this.config.primary_text_start_offset ?? this.config.primary_text_offset_x ?? 8);
-    const pEndX = Number(this.config.primary_text_end_offset ?? 250);
-    const pOffsetY = Number(this.config.primary_text_offset_y) || 0;
-    const pTrans = (pStartX !== 0 || pOffsetY !== 0) ? `transform: translate(${pStartX}px, ${pOffsetY}px);` : '';
-    const pMargin = (pStartX !== 0 || pEndX !== 0) ? `margin-left: ${pStartX}px; margin-right: ${pEndX}px;` : '';
-    this._primaryTextOffsetStyle = `${pTrans} ${pMargin}`.trim();
-
-    const sStartX = Number(this.config.secondary_text_start_offset ?? this.config.secondary_text_offset_x ?? 8);
-    const sEndX = Number(this.config.secondary_text_end_offset ?? 250);
-    const sOffsetY = Number(this.config.secondary_text_offset_y) || 0;
-    const sTrans = (sStartX !== 0 || sOffsetY !== 0) ? `transform: translate(${sStartX}px, ${sOffsetY}px);` : '';
-    const sMargin = (sStartX !== 0 || sEndX !== 0) ? `margin-left: ${sStartX}px; margin-right: ${sEndX}px;` : '';
-    this._secondaryTextOffsetStyle = `${sTrans} ${sMargin}`.trim();
-
-    const featuresOffsetX = Number(this.config.features_offset_x) || 0;
-    const featuresOffsetY = Number(this.config.features_offset_y) || 0;
-    this._featuresOffsetStyle = featuresOffsetX !== 0 || featuresOffsetY !== 0 ? `transform: translate(${featuresOffsetX}px, ${featuresOffsetY}px);` : '';
-
-    const mainStartOffset = Number(this.config.slider_start_offset) || 0;
-    const mainEndOffset = Number(this.config.slider_end_offset) || 0;
-    this._mainSliderMarginOffsets = [
-      mainStartOffset ? `margin-left: ${mainStartOffset}px !important;` : '',
-      mainEndOffset ? `margin-right: ${mainEndOffset}px !important;` : ''
-    ].filter(Boolean).join(' ');
-
-    const ctStartOffset = Number(this.config.color_temp_start_offset) || 0;
-    const ctEndOffset = Number(this.config.color_temp_end_offset) || 0;
-    this._colorTempMarginOffsets = [
-      ctStartOffset ? `margin-left: ${ctStartOffset}px !important;` : '',
-      ctEndOffset ? `margin-right: ${ctEndOffset}px !important;` : ''
-    ].filter(Boolean).join(' ');
-
-    const csStartOffset = Number(this.config.color_slider_start_offset) || 0;
-    const csEndOffset = Number(this.config.color_slider_end_offset) || 0;
-    this._colorHueMarginOffsets = [
-      csStartOffset ? `margin-left: ${csStartOffset}px !important;` : '',
-      csEndOffset ? `margin-right: ${csEndOffset}px !important;` : ''
-    ].filter(Boolean).join(' ');
-
-    this._textBoxWidth = this.config.text_box_width ? `max-width: ${this.config.text_box_width}; width: ${this.config.text_box_width};` : 'width: 100%; max-width: 100%;';
-
-    const txtTransformPrimary = `text-transform: ${this.config.text_transform_primary ?? 'capitalize'};`;
-    const txtTransformSecondary = `text-transform: ${this.config.text_transform_secondary ?? 'capitalize'};`;
-    const letterSpacingStyle = `letter-spacing: ${this.config.letter_spacing ?? -0.5}px;`;
-    const lineHeightStyle = `line-height: ${this.config.line_height ?? 1.1};`;
-    const primaryWeight = this.config.font_weight_primary ?? '800';
-
-    this._primaryTextStyle = `font-size: ${this.config.font_size_primary ?? 14}px; font-weight: ${primaryWeight}; ${txtTransformPrimary} ${letterSpacingStyle} ${lineHeightStyle}`;
-    this._secondaryTextStyle = `font-size: ${this.config.font_size_secondary ?? 15}px; ${txtTransformSecondary} ${letterSpacingStyle} ${lineHeightStyle}`;
-
-    // Pre-calculate sub-buttons array once
-    const entityId = this.config.entity;
-    const buttons: any[] = [];
-    for (let i = 1; i <= 4; i++) {
-      const e = (this.config as any)[`sub_button_${i}_entity`];
-      const icon = (this.config as any)[`sub_button_${i}_icon`];
-      const name = (this.config as any)[`sub_button_${i}_name`];
-      const tap = (this.config as any)[`sub_button_${i}_tap_action`];
-      const hold = (this.config as any)[`sub_button_${i}_hold_action`];
-      const dbl = (this.config as any)[`sub_button_${i}_double_tap_action`];
-      const type = (this.config as any)[`sub_button_${i}_type`];
-      const color = (this.config as any)[`sub_button_${i}_color`];
-      const bg = (this.config as any)[`sub_button_${i}_show_background`];
-      const showState = (this.config as any)[`sub_button_${i}_show_state`];
-      
-      const isConfigured = !!(e || icon || name || (type && type !== 'button') || showState);
-      if (isConfigured) {
-        const resolvedEntity = e || entityId;
-        buttons.push(Object.freeze({
-          key: `${resolvedEntity || 'sub'}_${i}`,
-          entity: resolvedEntity,
-          type: type || 'button',
-          icon,
-          color,
-          bg,
-          name,
-          showState: showState === true,
-          tapAction: tap,
-          holdAction: hold,
-          doubleTapAction: dbl
-        }));
-      }
-    }
-    this._cachedSubButtons = Object.freeze(buttons) as any[];
-
-    // Pre-calculate Multi-Stage Fade static settings
-    if (this.config.fade_transition_enabled) {
-      const d1 = Number(this.config.fade_stage_1_duration) || 60;
-      const d2 = Number(this.config.fade_stage_2_duration) || 600;
-      const d3 = Number(this.config.fade_stage_3_duration) || 1800;
-      const c1Rgb = parseColorToRgb(this.config.fade_stage_1_color) || [255, 152, 0];
-      const c2Rgb = parseColorToRgb(this.config.fade_stage_2_color) || [205, 220, 57];
-      const c3Rgb = parseColorToRgb(this.config.fade_stage_3_color);
-      this._fadeStaticConfig = {
-        d1,
-        d2,
-        d3,
-        totalDuration: d1 + d2 + d3,
-        c1Rgb,
-        c2Rgb,
-        c3Rgb,
-        restingResult: Object.freeze({
-          enabled: true,
-          activeFade: false,
-          currentColor: c3Rgb ? formatRgb(c3Rgb) : '',
-          progressPct: 100,
-          remainingSeconds: 0,
-          currentStage: 0,
-          stageLabel: 'Resting'
-        })
-      };
-    } else {
-      this._fadeStaticConfig = null;
-    }
+    this._cachedSubButtons = SubButtonController.extractSubButtons(this.config) as any[];
+    this._fadeStaticConfig = fadeTransitionManager.precomputeDurations(this.config);
+    this._sanitizedCustomStyles = StyleBuilder.sanitizeCustomStyles(this.config.custom_styles);
   }
+
+  private _sanitizedCustomStyles = '';
+
+  private _interactionCallbacks: InteractionCallbacks = {
+    dispatchAction: (actionType, actionConfigOverride, entityOverride) =>
+      this._dispatchAction(actionType, actionConfigOverride, entityOverride),
+    toggleCollapse: () => {
+      if (this._hasCollapsible()) {
+        this._collapsed = !this._collapsed;
+      }
+    },
+    callService: (domain, service, data) =>
+      this.hass?.callService(domain, service, data)
+  };
+
+  private _sliderCallbacks: SliderCallbacks = {
+    onPointerDown: (e) => this._onSliderPointerDown(e),
+    onPointerMove: (e) => this._onSliderPointerMove(e),
+    onPointerUp: (e) => this._onSliderPointerUp(e),
+    onPointerCancel: (e) => this._onSliderPointerCancel(e),
+    onSliderInput: (e, key, domain, service, dataFn, pctCalc, labelFormatter) =>
+      this._sliderInput(e, key, domain, service, dataFn, pctCalc, labelFormatter),
+    onSliderChange: (e, domain, service, dataFn) =>
+      this._sliderChange(e, domain, service, dataFn),
+    onColorInput: (e, throttle, entityOverride, throttleKey) =>
+      this._handleColorInput(e, throttle, entityOverride, throttleKey),
+    callService: (domain, service, data) =>
+      this.hass.callService(domain, service, data),
+    forwardHaptic: (type) =>
+      safeForwardHaptic(type, this.config.haptic_feedback !== false)
+  };
+
+  private _subButtonCallbacks = {
+    onTap: (e: Event, id: string, tap: any, dbl: any, def?: () => void) => this._handleSubTap(e, id, tap, dbl, def),
+    onPointerDown: (e: PointerEvent, id: string, hold: any) => this._handleSubPointerDown(e, id, hold),
+    onPointerMove: (e: PointerEvent) => this._handleSubPointerMove(e),
+    onPointerUp: (e: Event) => this._handleSubPointerUp(e),
+    onPointerCancel: (e: Event) => this._handleSubPointerCancel(e),
+    onContextMenu: (e: Event, id: string, hold: any) => this._handleSubContextMenu(e, id, hold)
+  };
+
 
   private _relativeTimer: any = null;
   private _cachedSubButtons: any[] | null = null;
@@ -614,8 +308,6 @@ export class AntigravityCard extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     memoryTracker.registerCard(this);
-    this._mountTime = Date.now();
-    this._pointerDownReceived = false;
     
     // Subscribe to battery / power-save changes
     this._powerUnsubscribe = powerHelper.addChangeListener(() => {
@@ -729,8 +421,7 @@ export class AntigravityCard extends LitElement {
       this._gl = null;
     }
     this._throttleMap.clear();
-    this._subTapTimerMap.forEach(t => clearTimeout(t));
-    this._subTapTimerMap.clear();
+    this._interaction.cleanup();
     if (this._intersectionObserver) {
       this._intersectionObserver.disconnect();
       this._intersectionObserver = null;
@@ -738,18 +429,6 @@ export class AntigravityCard extends LitElement {
     if (this._relativeTimer) {
       clearInterval(this._relativeTimer);
       this._relativeTimer = null;
-    }
-    if (this._holdTimer) {
-      clearTimeout(this._holdTimer);
-      this._holdTimer = null;
-    }
-    if (this._tapTimer) {
-      clearTimeout(this._tapTimer);
-      this._tapTimer = null;
-    }
-    if (this._subHoldTimer) {
-      clearTimeout(this._subHoldTimer);
-      this._subHoldTimer = null;
     }
   }
 
@@ -830,133 +509,13 @@ export class AntigravityCard extends LitElement {
     defaultActiveStr: string = '',
     defaultInactiveStr: string = ''
   ): FadeCalculationResult {
-    if (!this.config?.fade_transition_enabled || !stateObj) {
-      return DISABLED_FADE_RESULT;
-    }
-
-    const isActive = this._isEntityActive(stateObj);
-    const trigger = this.config.fade_trigger ?? 'on_inactive';
-
-    // Check if current state triggers fading
-    const shouldFade = (trigger === 'on_inactive' && !isActive) ||
-                       (trigger === 'on_active' && isActive) ||
-                       (trigger === 'both');
-
-    if (!shouldFade) {
-      return DISABLED_FADE_RESULT;
-    }
-
-    // Determine base colors
-    const startColorStr = isActive 
-      ? (this._resolveColor(this.config.inactive_color) || defaultInactiveStr || '#4caf50')
-      : (this._resolveColor(this.config.active_color) || defaultActiveStr || '#d60000');
-    
-    const finalColorStr = isActive
-      ? (this._resolveColor(this.config.active_color) || defaultActiveStr || '#d60000')
-      : (this._resolveColor(this.config.inactive_color) || defaultInactiveStr || '#03b100');
-
-    const startRgb = parseColorToRgb(startColorStr) || [214, 0, 0];
-    const finalRgb = parseColorToRgb(finalColorStr) || [3, 177, 0];
-
-    const cfg = this._fadeStaticConfig;
-    const d1 = cfg?.d1 ?? (Number(this.config.fade_stage_1_duration) || 60);
-    const d2 = cfg?.d2 ?? (Number(this.config.fade_stage_2_duration) || 600);
-    const d3 = cfg?.d3 ?? (Number(this.config.fade_stage_3_duration) || 1800);
-    const totalDuration = cfg?.totalDuration ?? (d1 + d2 + d3);
-    if (totalDuration <= 0) {
-      return DISABLED_FADE_RESULT;
-    }
-
-    // Check if state changed to capture live color continuity
-    if (this._lastTrackedState !== null && this._lastTrackedState !== stateObj.state) {
-      if (this._currentLiveRgb && this.config.fade_smooth_retrigger !== false) {
-        this._previousLiveRgb = this._currentLiveRgb;
-      }
-    }
-    this._lastTrackedState = stateObj.state;
-
-    // Base start color (Stage 1)
-    const stage1StartRgb = (this.config.fade_stage_1_pickup !== false && this._previousLiveRgb && this.config.fade_smooth_retrigger !== false)
-      ? this._previousLiveRgb
-      : startRgb;
-
-    // Stage targets & continuous pickups
-    const c1Rgb = cfg?.c1Rgb ?? (parseColorToRgb(this.config.fade_stage_1_color) || [255, 152, 0]);
-    const stage2StartRgb = (this.config.fade_stage_2_pickup !== false) ? c1Rgb : startRgb;
-
-    const c2Rgb = cfg?.c2Rgb ?? (parseColorToRgb(this.config.fade_stage_2_color) || [205, 220, 57]);
-    const stage3StartRgb = (this.config.fade_stage_3_pickup !== false) ? c2Rgb : c1Rgb;
-
-    const c3Rgb = cfg?.c3Rgb ?? (parseColorToRgb(this.config.fade_stage_3_color) || finalRgb);
-
-    const lastChangedDate = this._parseDate(stateObj.attributes?.last_triggered || stateObj.last_changed || stateObj.last_updated);
-    if (!lastChangedDate) {
-      return DISABLED_FADE_RESULT;
-    }
-
-    const elapsed = Math.max(0, (Date.now() - lastChangedDate.getTime()) / 1000);
-
-    if (elapsed >= totalDuration) {
-      this._currentLiveRgb = c3Rgb;
-      this._previousLiveRgb = null;
-      if (cfg?.restingResult) {
-        return cfg.restingResult;
-      }
-      return {
-        enabled: true,
-        activeFade: false,
-        currentColor: formatRgb(c3Rgb),
-        progressPct: 100,
-        remainingSeconds: 0,
-        currentStage: 0,
-        stageLabel: 'Resting'
-      };
-    }
-
-    let interpolatedRgb: [number, number, number];
-    let currentStage = 1;
-    let stageProgress = 0;
-    const remainingSeconds = Math.max(0, Math.round(totalDuration - elapsed));
-
-    if (elapsed < d1 && d1 > 0) {
-      currentStage = 1;
-      stageProgress = elapsed / d1;
-      interpolatedRgb = lerpRgb(stage1StartRgb, c1Rgb, stageProgress);
-    } else if (elapsed < (d1 + d2) && d2 > 0) {
-      currentStage = 2;
-      stageProgress = (elapsed - d1) / d2;
-      interpolatedRgb = lerpRgb(stage2StartRgb, c2Rgb, stageProgress);
-    } else if (d3 > 0) {
-      currentStage = 3;
-      stageProgress = (elapsed - d1 - d2) / d3;
-      interpolatedRgb = lerpRgb(stage3StartRgb, c3Rgb, stageProgress);
-    } else {
-      currentStage = 0;
-      interpolatedRgb = c3Rgb;
-    }
-
-    this._currentLiveRgb = interpolatedRgb;
-
-    const totalProgressPct = Math.min(100, Math.round((elapsed / totalDuration) * 100));
-    const currentColor = formatRgb(interpolatedRgb);
-
-    let stageLabel = '';
-    if (remainingSeconds >= 60) {
-      const mins = Math.ceil(remainingSeconds / 60);
-      stageLabel = `${mins}m left`;
-    } else {
-      stageLabel = `${remainingSeconds}s left`;
-    }
-
-    return {
-      enabled: true,
-      activeFade: true,
-      currentColor,
-      progressPct: totalProgressPct,
-      remainingSeconds,
-      currentStage,
-      stageLabel
-    };
+    return fadeTransitionManager.calculateFade(
+      this.config,
+      stateObj,
+      this._fadeStaticConfig,
+      this._resolveColor(this.config.active_color) || defaultActiveStr || '#d60000',
+      this._resolveColor(this.config.inactive_color) || defaultInactiveStr || '#03b100'
+    );
   }
 
   private _resolveColor(colorStr: string | undefined): string {
@@ -973,394 +532,88 @@ export class AntigravityCard extends LitElement {
 
   // --- NATIVE ACTION ROUTING & TOUCH GESTURE HANDLING ---
 
-  private _mountTime = 0;
-  private _pointerDownReceived = false;
-  private _pointerDownTime = 0;
-  private _canceled = false;
-
   private _dispatchAction(actionType: 'tap' | 'hold' | 'double_tap', actionConfigOverride?: any, entityOverride?: string) {
-    const entity = entityOverride || this.config.entity;
-    const domain = entity ? entity.split('.')[0] : '';
-    const isNonToggleable = NON_TOGGLEABLE_DOMAINS.has(domain);
-
-    let actionConfig = actionConfigOverride;
-    if (!actionConfig) {
-      if (actionType === 'double_tap') actionConfig = this.config.double_tap_action;
-      else if (actionType === 'hold') {
-        actionConfig = this.config.hold_action || (isNonToggleable ? { action: 'more-info' } : { action: 'toggle' });
-      }
-      else {
-        if (this.config.tap_action && this.config.tap_action.action && (this.config.tap_action.action as string) !== 'default') {
-          // If explicit tap_action is toggle on a non-toggleable domain, safely treat as none
-          if (isNonToggleable && this.config.tap_action.action === 'toggle') {
-            actionConfig = { action: 'none' };
-          } else {
-            actionConfig = this.config.tap_action;
-          }
-        } else {
-          // Default tap on read-only status sensors (motion, doors) is 'none' to prevent unwanted dialog popups!
-          actionConfig = isNonToggleable ? { action: 'none' } : { action: 'toggle' };
-        }
-      }
-    }
-
-    if (!actionConfig || actionConfig.action === 'none') return;
-
-    if (actionConfig.action === 'more-info') {
-      const targetEntity = actionConfig.entity || entity;
-      if (targetEntity) {
-        this.dispatchEvent(new CustomEvent('hass-more-info', {
-          detail: { entityId: targetEntity },
-          bubbles: true,
-          composed: true,
-        }));
-        return;
-      }
-    }
-
-    if (actionConfig.action === 'toggle' && entity) {
-      if (isNonToggleable) {
-        return;
-      }
-      const service = domain === 'lock' ? (this._isEntityActive(this.hass?.states[entity]) ? 'lock' : 'unlock')
-                    : 'toggle';
-      const sDomain = ['lock', 'cover'].includes(domain) ? domain : (domain === 'group' ? 'homeassistant' : domain);
-      this.hass?.callService(sDomain, service, { entity_id: entity });
-      return;
-    }
-
-    if (actionConfig.action === 'navigate' && actionConfig.navigation_path) {
-      history.pushState(null, '', actionConfig.navigation_path);
-      window.dispatchEvent(new CustomEvent('location-changed', {
-        detail: { replace: false },
-        bubbles: true,
-        composed: true,
-      }));
-      return;
-    }
-
-    if (actionConfig.action === 'url' && actionConfig.url_path) {
-      window.open(actionConfig.url_path, '_blank');
-      return;
-    }
-
-    if (actionConfig.action === 'call-service' && actionConfig.service) {
-      const [sDomain, sName] = actionConfig.service.split('.', 2);
-      this.hass?.callService(sDomain, sName, actionConfig.data || actionConfig.service_data || {}, actionConfig.target);
-      return;
-    }
-
-    // Fallback to custom-card-helpers (with non-toggleable guard)
-    if (isNonToggleable && (!actionConfig.action || actionConfig.action === 'toggle')) {
-      return;
-    }
-
-    handleAction(this, this.hass, { ...this.config, entity }, actionType);
+    InteractionController.dispatchAction(
+      this,
+      this.hass,
+      this.config,
+      actionType,
+      actionConfigOverride,
+      entityOverride,
+      (s) => this._isEntityActive(s)
+    );
   }
 
   private _handleTap(e: Event) {
-    e.stopPropagation();
-    if (this._isSubElement(e)) return;
-    if (Date.now() - this._mountTime < 1500 || Date.now() - LAST_APP_RESUME_TIME < 800) {
-      // Ignore startup / app resume ghost clicks from Android swipe-up gestures
-      this._pointerDownReceived = false;
-      return;
-    }
-    if (!this._pointerDownReceived) {
-      return;
-    }
-    this._pointerDownReceived = false;
-    if (this._moved || this._canceled) {
-      this._moved = false;
-      this._canceled = false;
-      return;
-    }
-    if (this._held) {
-      this._held = false;
-      return;
-    }
-    if (this._pointerDownTime && (Date.now() - this._pointerDownTime > 600)) {
-      return;
-    }
-
-    const trigger = this.config.collapse_controls_trigger || 'hold';
-    const isDoubleTapCollapse = trigger === 'double_tap';
-
-    // Zero-latency tap execution when double_tap_action is not set or 'none' AND not double_tap collapse trigger
-    const hasDoubleTap = isDoubleTapCollapse || (this.config.double_tap_action && this.config.double_tap_action.action !== 'none');
-
-    if (!hasDoubleTap) {
-      safeForwardHaptic('light', this.config.haptic_feedback !== false);
-      this._dispatchAction('tap');
-      return;
-    }
-
-    // Double-tap debounce: if a tap timer is already running, this is a double-tap
-    if (this._tapTimer) {
-      clearTimeout(this._tapTimer);
-      this._tapTimer = null;
-      safeForwardHaptic('medium', this.config.haptic_feedback !== false);
-
-      if (isDoubleTapCollapse && this._hasCollapsible()) {
-        this._collapsed = !this._collapsed;
-      }
-      this._dispatchAction('double_tap');
-      return;
-    }
-
-    // Start the debounce — wait 250ms for a possible second tap
-    this._tapTimer = setTimeout(() => {
-      this._tapTimer = null;
-      safeForwardHaptic('light', this.config.haptic_feedback !== false);
-      this._dispatchAction('tap');
-    }, 250);
+    this._interaction.handleTap(e, this.config, this._interactionCallbacks);
   }
 
   private _handleKeyDown(e: KeyboardEvent) {
-    if (this._isSubElement(e)) return;
-    if (Date.now() - this._mountTime < 1500 || Date.now() - LAST_APP_RESUME_TIME < 800) return;
-
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      safeForwardHaptic('light', this.config.haptic_feedback !== false);
-      this._dispatchAction('tap');
-    }
+    this._interaction.handleKeyDown(e, this.config, this._interactionCallbacks);
   }
 
   private _handleContextMenu(e: Event) {
-    e.preventDefault();
-    e.stopPropagation();
-    if (Date.now() - this._mountTime < 1500 || Date.now() - LAST_APP_RESUME_TIME < 800 || this._held) return;
-    safeForwardHaptic('medium', this.config.haptic_feedback !== false);
-    const trigger = this.config.collapse_controls_trigger || 'hold';
-    if (trigger === 'hold' && this._hasCollapsible()) {
-      this._collapsed = !this._collapsed;
-    } else if (this.config.hold_action && this.config.hold_action.action !== 'none') {
-      this._dispatchAction('hold');
-    }
+    this._interaction.handleContextMenu(e, this.config, this._interactionCallbacks);
   }
-
-  private _activePointerId: number | null = null;
 
   private _handlePointerDown(e: PointerEvent) {
-    if (this._isSubElement(e)) return;
-    if (Date.now() - this._mountTime < 1500 || Date.now() - LAST_APP_RESUME_TIME < 800) {
-      return;
-    }
-    if (this._activePointerId !== null && this._activePointerId !== e.pointerId) {
-      return; // Ignore secondary simultaneous multi-touch touches on the same card
-    }
-    this._activePointerId = e.pointerId;
-    this._pointerDownReceived = true;
-    this._pointerDownTime = Date.now();
-    this._held = false;
-    this._moved = false;
-    this._canceled = false;
-    this._startX = e.clientX;
-    this._startY = e.clientY;
-    this._holdTimer = setTimeout(() => {
-      if (this._moved || this._canceled) return;
-      this._held = true;
-      this._holdTimer = null;
-      if (this._tapTimer) {
-        clearTimeout(this._tapTimer);
-        this._tapTimer = null;
-      }
-      safeForwardHaptic('heavy', this.config.haptic_feedback !== false);
-      const trigger = this.config.collapse_controls_trigger || 'hold';
-      if (trigger === 'hold' && this._hasCollapsible()) {
-        this._collapsed = !this._collapsed;
-      } else if (this.config.hold_action && this.config.hold_action.action !== 'none') {
-        this._dispatchAction('hold');
-      }
-    }, 500);
+    this._interaction.handlePointerDown(e, this.config, this._interactionCallbacks);
   }
 
-  @eventOptions({ passive: true })
   private _handlePointerMove(e: PointerEvent) {
-    if (this._isSubElement(e)) return;
-    if (this._activePointerId !== null && this._activePointerId !== e.pointerId) return;
-    const dx = e.clientX - this._startX;
-    const dy = e.clientY - this._startY;
-    const dist = Math.hypot(dx, dy);
-    const dt = Math.max(1, Date.now() - this._pointerDownTime);
-    const velocity = dist / dt;
-    if (dist > 8 || velocity > 0.5) {
-      this._moved = true;
-      this._pointerDownReceived = false;
-      if (this._holdTimer) {
-        clearTimeout(this._holdTimer);
-        this._holdTimer = null;
-      }
-    }
+    this._interaction.handlePointerMove(e);
   }
 
   private _handlePointerUp(e: PointerEvent | Event) {
-    if (this._isSubElement(e)) return;
-    this._activePointerId = null;
-    if (this._holdTimer) {
-      clearTimeout(this._holdTimer);
-      this._holdTimer = null;
-    }
+    this._interaction.handlePointerUp(e);
   }
 
   private _handlePointerCancel(e: PointerEvent | Event) {
-    if (this._isSubElement(e)) return;
-    this._activePointerId = null;
-    this._canceled = true;
-    this._moved = true;
-    this._pointerDownReceived = false;
-    if (this._holdTimer) {
-      clearTimeout(this._holdTimer);
-      this._holdTimer = null;
-    }
+    this._interaction.handlePointerCancel(e);
   }
 
-  private _isSubElement(e: Event): boolean {
-    const target = e.target as HTMLElement;
-    if (!target) return false;
-    // Fast check: see if the event target itself or a parent is an interactive sub-element
-    if (target.tagName === 'INPUT') return true;
-    if (target.hasAttribute('data-ag-sub')) return true;
-    const closest = target.closest?.('[data-ag-sub], .sub-button, .sub-color-picker, .sub-button-slider-container, .slider-container, .slider-google-wrap, .sub-button-google-slider, .color-picker');
-    return !!closest;
-  }
-
-  // --- SUB BUTTON ROUTING (with mobile touch hold support) ---
-
-  private _subCanceled = false;
-  private _subPointerDownTime = 0;
+  // --- SUB BUTTON ROUTING ---
 
   private _handleSubPointerDown(e: PointerEvent, entityId: string, holdAction?: any) {
-    e.stopPropagation();
-    this._subHeld = false;
-    this._subMoved = false;
-    this._subCanceled = false;
-    this._subPointerDownTime = Date.now();
-    this._subStartX = e.clientX;
-    this._subStartY = e.clientY;
-    this._subHoldTimer = setTimeout(() => {
-      if (this._subMoved || this._subCanceled) return;
-      this._subHeld = true;
-      this._subHoldTimer = null;
-      safeForwardHaptic('heavy', this.config.haptic_feedback !== false);
-      this._dispatchAction('hold', holdAction || { action: 'more-info' }, entityId);
-    }, 500);
+    this._interaction.handleSubPointerDown(e, entityId, holdAction, this.config, this._interactionCallbacks);
   }
 
-  @eventOptions({ passive: true })
   private _handleSubPointerMove(e: PointerEvent) {
-    e.stopPropagation();
-    const dx = e.clientX - this._subStartX;
-    const dy = e.clientY - this._subStartY;
-    const dist = Math.hypot(dx, dy);
-    const dt = Math.max(1, Date.now() - this._subPointerDownTime);
-    const velocity = dist / dt;
-    if (dist > 8 || velocity > 0.5) {
-      this._subMoved = true;
-      if (this._subHoldTimer) {
-        clearTimeout(this._subHoldTimer);
-        this._subHoldTimer = null;
-      }
-    }
+    this._interaction.handleSubPointerMove(e);
   }
 
-  private _handleSubPointerUp(e: Event) {
-    e.stopPropagation();
-    if (this._subHoldTimer) {
-      clearTimeout(this._subHoldTimer);
-      this._subHoldTimer = null;
-    }
+  private _handleSubPointerUp(_e: Event) {
+    this._interaction.handleSubPointerUp();
   }
 
-  private _handleSubPointerCancel(e: Event) {
-    e.stopPropagation();
-    this._subCanceled = true;
-    this._subMoved = true;
-    if (this._subHoldTimer) {
-      clearTimeout(this._subHoldTimer);
-      this._subHoldTimer = null;
-    }
+  private _handleSubPointerCancel(_e: Event) {
+    this._interaction.handleSubPointerCancel();
   }
 
   private _handleSubTap(e: Event, entityId: string, tapAction?: any, doubleTapAction?: any, defaultAction?: () => void) {
-    e.stopPropagation();
-    if (this._subHoldTimer) {
-      clearTimeout(this._subHoldTimer);
-      this._subHoldTimer = null;
-    }
-    if (this._subMoved || this._subCanceled) {
-      this._subMoved = false;
-      this._subCanceled = false;
-      return;
-    }
-    if (this._subHeld) {
-      this._subHeld = false;
-      return;
-    }
-    if (this._subPointerDownTime && Date.now() - this._subPointerDownTime > 600) {
-      return;
-    }
-
-    const hasDoubleTap = doubleTapAction && doubleTapAction.action !== 'none';
-    const timerKey = entityId || 'sub_default';
-
-    const executeTap = () => {
-      safeForwardHaptic('light', this.config.haptic_feedback !== false);
-      if (tapAction && tapAction.action && tapAction.action !== 'none' && tapAction.action !== 'default') {
-        this._dispatchAction('tap', tapAction, entityId);
-      } else if (defaultAction) {
-        defaultAction();
-      } else {
-        this._dispatchAction('tap', { action: 'toggle' }, entityId);
-      }
-    };
-
-    if (!hasDoubleTap) {
-      executeTap();
-      return;
-    }
-
-    const existingTimer = this._subTapTimerMap.get(timerKey);
-    if (existingTimer) {
-      clearTimeout(existingTimer);
-      this._subTapTimerMap.delete(timerKey);
-      safeForwardHaptic('medium', this.config.haptic_feedback !== false);
-      this._dispatchAction('double_tap', doubleTapAction, entityId);
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      this._subTapTimerMap.delete(timerKey);
-      executeTap();
-    }, 250);
-
-    this._subTapTimerMap.set(timerKey, timer);
+    this._interaction.handleSubTap(e, entityId, tapAction, doubleTapAction, defaultAction, this.config, this._interactionCallbacks);
   }
 
   private _handleSubContextMenu(e: Event, entityId: string, holdAction?: any) {
-    e.preventDefault();
-    e.stopPropagation();
-    if (this._subHeld) return;
-    safeForwardHaptic('medium', this.config.haptic_feedback !== false);
-    this._dispatchAction('hold', holdAction || { action: 'more-info' }, entityId);
+    this._interaction.handleSubContextMenu(e, entityId, holdAction, this.config, this._interactionCallbacks);
   }
 
   // --- THROTTLED SERVICE CALL HELPER ---
 
   private _throttledCall(key: string, fn: () => void, delayMs?: number): void {
-    const effectiveDelay = delayMs ?? (powerHelper.isPowerSaveActive(this.hass) ? 60 : 30);
-    const last = this._throttleMap.get(key) ?? 0;
     const now = Date.now();
-    if (now - last < effectiveDelay) return;
-    this._throttleMap.set(key, now);
-    try {
+    const effectiveDelay = delayMs ?? (powerHelper.isPowerSaveActive(this.hass) ? SLIDER_THROTTLE_POWER_SAVE_MS : SLIDER_THROTTLE_MS);
+    const last = this._throttleMap.get(key) || 0;
+    if (now - last >= effectiveDelay) {
+      this._throttleMap.set(key, now);
       fn();
-    } finally {
-      // Auto-prune throttle entry after cooldown to keep memory clean
+    } else {
       setTimeout(() => {
-        if (this._throttleMap.get(key) === now) {
-          this._throttleMap.delete(key);
+        const lateNow = Date.now();
+        const lateLast = this._throttleMap.get(key) || 0;
+        if (lateNow - lateLast >= effectiveDelay) {
+          this._throttleMap.set(key, lateNow);
+          fn();
         }
       }, effectiveDelay + 50);
     }
@@ -1368,100 +621,24 @@ export class AntigravityCard extends LitElement {
 
   // --- GENERIC SLIDER GESTURE & SCROLL DISAMBIGUATION ---
 
-  private _sliderStateMap = new WeakMap<HTMLInputElement, {
-    startX: number;
-    startY: number;
-    initialVal: number;
-    initialPct: string;
-    initialBadge: string;
-    isScrolling: boolean;
-    isSliding: boolean;
-    rafPending?: boolean;
-  }>();
-
   private _onSliderPointerDown = (e: PointerEvent) => {
-    const input = e.currentTarget as HTMLInputElement;
-    if (!input) return;
-    const container = input.closest('.slider-container, .sub-button-slider-container');
-    const badge = container?.querySelector('.slider-percent-badge, .sub-slider-pct');
-    const initialVal = Number(input.value) || 0;
-    const initialPct = input.style.getPropertyValue('--slider-pct') || '';
-    const initialBadge = badge?.textContent || '';
-
-    this._sliderStateMap.set(input, {
-      startX: e.clientX,
-      startY: e.clientY,
-      initialVal,
-      initialPct,
-      initialBadge,
-      isScrolling: false,
-      isSliding: false,
-    });
+    this._sliderDrag.handlePointerDown(e);
   };
 
   private _onSliderPointerMove = (e: PointerEvent) => {
-    const input = e.currentTarget as HTMLInputElement;
-    if (!input) return;
-    const state = this._sliderStateMap.get(input);
-    if (!state) return;
-
-    const dx = Math.abs(e.clientX - state.startX);
-    const dy = Math.abs(e.clientY - state.startY);
-
-    if (!state.isSliding && !state.isScrolling) {
-      if (dy > 6 && dy > dx) {
-        // Vertical scroll gesture detected: lock to scroll and revert slider!
-        state.isScrolling = true;
-        this._revertSlider(input, state);
-      } else if (dx > 6 && dx >= dy) {
-        // Intentional horizontal drag: lock to slide
-        state.isSliding = true;
-      }
-    } else if (state.isScrolling) {
-      this._revertSlider(input, state);
-    }
+    this._sliderDrag.handlePointerMove(e);
   };
 
   private _onSliderPointerCancel = (e: Event) => {
-    const input = e.currentTarget as HTMLInputElement;
-    if (!input) return;
-    const state = this._sliderStateMap.get(input);
-    if (!state) return;
-    state.isScrolling = true;
-    this._revertSlider(input, state);
-    this._sliderStateMap.delete(input);
+    this._sliderDrag.handlePointerCancel(e);
   };
 
   private _onSliderPointerUp = (e: PointerEvent) => {
-    const input = e.currentTarget as HTMLInputElement;
-    if (!input) return;
-    const state = this._sliderStateMap.get(input);
-    if (!state) return;
-    if (state.isScrolling) {
-      this._revertSlider(input, state);
-      this._sliderStateMap.delete(input);
-      return;
-    }
-
-    // Tap-to-toggle feature from Slider Button Card: if user tapped slider without dragging
-    if (this.config.tap_slider_to_toggle && !state.isSliding) {
-      const dx = Math.abs(e.clientX - state.startX);
-      const dy = Math.abs(e.clientY - state.startY);
-      if (dx < 6 && dy < 6) {
-        this._revertSlider(input, state);
-        safeForwardHaptic('light', this.config.haptic_feedback !== false);
-        this._dispatchAction('tap');
-      }
-    }
+    this._sliderDrag.handlePointerUp(e, this.config, () => {
+      safeForwardHaptic('light', this.config.haptic_feedback !== false);
+      this._dispatchAction('tap');
+    });
   };
-
-  private _revertSlider(input: HTMLInputElement, state: any) {
-    input.value = String(state.initialVal);
-    input.style.setProperty('--slider-pct', state.initialPct);
-    const container = input.closest('.slider-container, .sub-button-slider-container');
-    const badge = container?.querySelector('.slider-percent-badge, .sub-slider-pct');
-    if (badge) badge.textContent = state.initialBadge;
-  }
 
   private _sliderInput(
     e: Event, 
@@ -1472,78 +649,11 @@ export class AntigravityCard extends LitElement {
     pctCalc?: (val: number) => number,
     labelFormatter?: (val: number, pct: number) => string
   ) {
-    e.stopPropagation();
-    const input = e.target as HTMLInputElement;
-    const state = this._sliderStateMap.get(input);
-    
-    if (state?.isScrolling) {
-      this._revertSlider(input, state);
-      return;
-    }
-
-    const rawVal = Number(input.value);
-    const value = isNaN(rawVal) ? 0 : rawVal;
-    const pct = pctCalc ? pctCalc(value) : value;
-    
-    if (state) {
-      if (state.rafPending) return;
-      state.rafPending = true;
-    }
-
-    requestAnimationFrame(() => {
-      if (state) state.rafPending = false;
-      if (state?.isScrolling) {
-        this._revertSlider(input, state);
-        return;
-      }
-      input.style.setProperty('--slider-pct', `${pct}%`);
-      const container = input.closest('.slider-container, .sub-button-slider-container') as HTMLElement;
-      const badge = container?.querySelector('.slider-percent-badge, .sub-slider-pct');
-      if (badge) {
-        badge.textContent = labelFormatter ? labelFormatter(value, pct) : `${pct}%`;
-      }
-      if (key === 'color_hue' && container) {
-        container.style.setProperty('--color-hue-val', `hsl(${value}, 100%, 50%)`);
-        const chip = container.querySelector('.color-chip-badge span') as HTMLElement;
-        if (chip) chip.style.background = `hsl(${value}, 100%, 50%)`;
-      }
-    });
-
-    safeForwardHaptic('selection', this.config.haptic_feedback !== false);
+    this._sliderDrag.handleSliderInput(e, key, this.config, pctCalc, labelFormatter);
   }
 
   private _sliderChange(e: Event, domain: string, service: string, dataFn: (val: number) => Record<string, any>) {
-    e.stopPropagation();
-    const input = e.target as HTMLInputElement;
-    const state = this._sliderStateMap.get(input);
-
-    if (state?.isScrolling) {
-      this._revertSlider(input, state);
-      state.isScrolling = false;
-      return;
-    }
-
-    const rawVal = Number(input.value);
-    const value = isNaN(rawVal) ? 0 : rawVal;
-
-    if (state && value === state.initialVal) {
-      return;
-    }
-
-    // Auto-off: if slider reaches minimum, turn off the device
-    if (domain === 'light' && service === 'turn_on') {
-      const pct = Math.round((value / 255) * 100);
-      if (value <= 3 || pct <= 1) {
-        this.hass.callService('light', 'turn_off', { entity_id: this.config.entity });
-        return;
-      }
-    }
-    if (domain === 'fan' && service === 'set_percentage' && value <= 0) {
-      this.hass.callService('fan', 'turn_off', { entity_id: this.config.entity });
-      return;
-    }
-
-    this.hass.callService(domain, service, { entity_id: this.config.entity, ...dataFn(value) });
+    this._sliderDrag.handleSliderChange(e, domain, service, this.config, this.hass, dataFn);
   }
 
   private _getLightLiveColor(stateObj: any): string | null {
@@ -1709,9 +819,13 @@ export class AntigravityCard extends LitElement {
 
     // Card background: when color_type is 'card' or multi-stage fade is active on card
     const resolvedBg = this._resolveColor(this.config.bg_color);
+    const fadeColorStr = typeof multiStageFade.currentColor === 'string' 
+      ? multiStageFade.currentColor 
+      : (Array.isArray(multiStageFade.currentColor) ? `rgb(${multiStageFade.currentColor.join(',')})` : '');
+
     let rawBgStyle: string;
     if (multiStageFade.activeFade && (fadeTarget === 'card' || fadeTarget === 'all' || colorTypeIsCard)) {
-      rawBgStyle = multiStageFade.currentColor;
+      rawBgStyle = fadeColorStr;
     } else if (colorTypeIsCard) {
       if (domain === 'light') {
         rawBgStyle = isActive ? (liveLightColor || activeColor) : (this.config.inactive_color ? inactiveColor : '#000000');
@@ -1726,11 +840,9 @@ export class AntigravityCard extends LitElement {
       rawBgStyle = `rgba(150, 150, 150, ${bgOpacity})`;
     }
 
-
-
     let effectiveGlowColor = this._resolveColor(this.config.active_color) || (domain === 'light' && liveLightColor ? liveLightColor : activeColor) || 'var(--primary-color)';
     if (multiStageFade.activeFade && (fadeTarget === 'all' || this.config.active_glow === true)) {
-      effectiveGlowColor = multiStageFade.currentColor;
+      effectiveGlowColor = fadeColorStr;
     }
 
     let shadowStyle = '';
@@ -1795,7 +907,7 @@ export class AntigravityCard extends LitElement {
     const hasSecondarySliders = showColorTemp || showColorSlider || showColorWheel;
     const hasCollapsible = (!isInline && hasSecondarySliders) || subButtons.length > 0;
     const decayPos = this.config.decay_slider_position ?? 'bottom';
-    const sanitizedStyles = StyleBuilder.sanitizeCustomStyles(this.config.custom_styles);
+    const sanitizedStyles = this._sanitizedCustomStyles;
 
     return html`
       ${sanitizedStyles ? html`<style>${unsafeCSS(sanitizedStyles)}</style>` : nothing}
@@ -1854,25 +966,6 @@ export class AntigravityCard extends LitElement {
     `;
   }
 
-  private _getSliderCallbacks(): SliderCallbacks {
-    return {
-      onPointerDown: this._onSliderPointerDown,
-      onPointerMove: this._onSliderPointerMove,
-      onPointerUp: this._onSliderPointerUp,
-      onPointerCancel: this._onSliderPointerCancel,
-      onSliderInput: (e, key, domain, service, dataFn, pctCalc, labelFormatter) =>
-        this._sliderInput(e, key, domain, service, dataFn, pctCalc, labelFormatter),
-      onSliderChange: (e, domain, service, dataFn) =>
-        this._sliderChange(e, domain, service, dataFn),
-      onColorInput: (e, throttle, entityOverride, throttleKey) =>
-        this._handleColorInput(e, throttle, entityOverride, throttleKey),
-      callService: (domain, service, data) =>
-        this.hass.callService(domain, service, data),
-      forwardHaptic: (type) =>
-        safeForwardHaptic(type, this.config.haptic_feedback !== false)
-    };
-  }
-
   // --- DECAY / COOLDOWN SLIDER COMPONENT ---
   private _renderDecaySlider(fade: FadeCalculationResult) {
     if (!this.config.show_decay_slider || !fade.enabled || !fade.activeFade) {
@@ -1896,43 +989,43 @@ export class AntigravityCard extends LitElement {
   // --- MULTI-DOMAIN SLIDER RENDERERS ---
 
   private _renderLightSlider(stateObj: any) {
-    return SliderController.renderLightSlider(this.config, stateObj, this._getSliderCallbacks(), this._mainSliderMarginOffsets);
+    return SliderController.renderLightSlider(this.config, stateObj, this._sliderCallbacks, this._mainSliderMarginOffsets);
   }
 
   private _renderColorTempSlider(stateObj: any) {
-    return SliderController.renderColorTempSlider(this.config, stateObj, this._getSliderCallbacks(), this._colorTempMarginOffsets);
+    return SliderController.renderColorTempSlider(this.config, stateObj, this._sliderCallbacks, this._colorTempMarginOffsets);
   }
 
   private _renderColorSlider(stateObj: any) {
-    return SliderController.renderColorSlider(this.config, stateObj, this._getSliderCallbacks(), this._colorHueMarginOffsets);
+    return SliderController.renderColorSlider(this.config, stateObj, this._sliderCallbacks, this._colorHueMarginOffsets);
   }
 
   private _renderColorPicker(stateObj: any) {
-    return SliderController.renderColorPicker(this.config, stateObj, this._getSliderCallbacks());
+    return SliderController.renderColorPicker(this.config, stateObj, this._sliderCallbacks);
   }
 
   private _renderCoverSlider(stateObj: any) {
-    return SliderController.renderCoverSlider(this.config, stateObj, this._getSliderCallbacks(), this._mainSliderMarginOffsets);
+    return SliderController.renderCoverSlider(this.config, stateObj, this._sliderCallbacks, this._mainSliderMarginOffsets);
   }
 
   private _renderFanSlider(stateObj: any) {
-    return SliderController.renderFanSlider(this.config, stateObj, this._getSliderCallbacks(), this._mainSliderMarginOffsets);
+    return SliderController.renderFanSlider(this.config, stateObj, this._sliderCallbacks, this._mainSliderMarginOffsets);
   }
 
   private _renderMediaSlider(stateObj: any) {
-    return SliderController.renderMediaSlider(this.config, stateObj, this._getSliderCallbacks(), this._mainSliderMarginOffsets);
+    return SliderController.renderMediaSlider(this.config, stateObj, this._sliderCallbacks, this._mainSliderMarginOffsets);
   }
 
   private _renderNumberSlider(stateObj: any) {
-    return SliderController.renderNumberSlider(this.config, stateObj, this._getSliderCallbacks(), this._mainSliderMarginOffsets);
+    return SliderController.renderNumberSlider(this.config, stateObj, this._sliderCallbacks, this._mainSliderMarginOffsets);
   }
 
   private _renderClimateSlider(stateObj: any) {
-    return SliderController.renderClimateSlider(this.config, stateObj, this.hass, this._getSliderCallbacks(), this._mainSliderMarginOffsets);
+    return SliderController.renderClimateSlider(this.config, stateObj, this.hass, this._sliderCallbacks, this._mainSliderMarginOffsets);
   }
 
   private _renderHumidifierSlider(stateObj: any) {
-    return SliderController.renderHumidifierSlider(this.config, stateObj, this._getSliderCallbacks(), this._mainSliderMarginOffsets);
+    return SliderController.renderHumidifierSlider(this.config, stateObj, this._sliderCallbacks, this._mainSliderMarginOffsets);
   }
 
   // --- EXTRACTED SUB-BUTTON RENDERERS ---
@@ -1953,7 +1046,7 @@ export class AntigravityCard extends LitElement {
     label?: string, liveStateText?: string | TemplateResult
   ) {
     return SliderController.renderSubColorPicker(
-      this.hass, entityId, stateObj, colorStyle, bgClass, this._getSliderCallbacks(),
+      this.hass, entityId, stateObj, colorStyle, bgClass, this._sliderCallbacks,
       label, liveStateText
     );
   }
@@ -1992,60 +1085,24 @@ export class AntigravityCard extends LitElement {
       return this._renderSubColorPicker(entityId, stateObj, colorStyle, bgClass, label, liveStateText);
     }
 
-    const resolved = SubButtonController.resolve(
-      subType,
+    return SubButtonController.renderSubButton(
+      this.config,
+      this.hass,
       entityId,
-      this.config.entity,
-      stateObj,
       customIcon,
+      customColor,
+      showBg,
       label,
+      tapAction,
+      holdAction,
+      subType,
+      doubleTapAction,
+      showState,
       isActive,
-      this.hass?.config?.unit_system?.temperature,
-      tapAction
+      dynamicSubColor,
+      liveStateText,
+      this._subButtonCallbacks
     );
-
-    const subIcon = resolved.icon;
-    const subTitle = resolved.title;
-    const subLabel = resolved.label;
-    const subIsActive = resolved.isActive;
-    const subAnimClass = resolved.animClass;
-    let defaultAction: (() => void) | undefined = undefined;
-
-    if (resolved.defaultAction) {
-      defaultAction = () => resolved.defaultAction!(this.hass, this.config.entity);
-    }
-
-    const clickHandler = (e: Event) => {
-      this._handleSubTap(e, entityId, tapAction, doubleTapAction, defaultAction);
-    };
-
-    return html`
-      <div 
-        tabindex="0"
-        data-ag-sub
-        class="sub-button ${bgClass}" 
-        ?active=${subIsActive} 
-        style="${colorStyle} ${subIsActive && dynamicSubColor && showBg ? `background: ${dynamicSubColor}; color: #fff;` : ''}"
-        title="${subTitle}"
-        @click=${clickHandler}
-        @dblclick=${(e: Event) => e.stopPropagation()}
-        @keydown=${(e: KeyboardEvent) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            e.stopPropagation();
-            clickHandler(e);
-          }
-        }}
-        @pointerdown=${(e: PointerEvent) => this._handleSubPointerDown(e, entityId, holdAction)}
-        @pointermove=${this._handleSubPointerMove}
-        @pointerup=${this._handleSubPointerUp}
-        @pointercancel=${this._handleSubPointerCancel}
-        @contextmenu=${(e: Event) => this._handleSubContextMenu(e, entityId, holdAction)}>
-        <ha-icon .icon=${subIcon} class="${subAnimClass}"></ha-icon>
-        ${subLabel ? html`<span class="sub-button-label">${subLabel}</span>` : nothing}
-        ${liveStateText ? html`<span class="sub-button-state">${liveStateText}</span>` : nothing}
-      </div>
-    `;
   }
 
   // --- STATIC STYLES ---

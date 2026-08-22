@@ -5,7 +5,7 @@
 
 import { html, nothing, TemplateResult } from 'lit';
 import type { AntigravityCardConfig, FadeCalculationResult } from '../types';
-import { COLOR_SWATCHES, COLOR_TEMP_PRESETS, hsToRgb } from '../color-converter';
+import { COLOR_SWATCHES, COLOR_TEMP_PRESETS, hsToRgb, safeForwardHaptic } from '../color-converter';
 import { EntityController } from './entity-controller';
 
 export interface SliderCallbacks {
@@ -284,14 +284,28 @@ export class SliderController {
     if (config.color_swatch_presets !== false) {
       badgeContent = html`
         <div class="color-swatch-chips">
-          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Red Color" style="background: #f44336;" @click=${(e: Event) => { e.stopPropagation(); callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: [244, 67, 54] }); }} @keydown=${(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: [244, 67, 54] }); } }}></span>
-          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Orange Color" style="background: #ff9800;" @click=${(e: Event) => { e.stopPropagation(); callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: [255, 152, 0] }); }} @keydown=${(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: [255, 152, 0] }); } }}></span>
-          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Yellow Color" style="background: #ffeb3b;" @click=${(e: Event) => { e.stopPropagation(); callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: [255, 235, 59] }); }} @keydown=${(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: [255, 235, 59] }); } }}></span>
-          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Green Color" style="background: #4caf50;" @click=${(e: Event) => { e.stopPropagation(); callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: [76, 175, 80] }); }} @keydown=${(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: [76, 175, 80] }); } }}></span>
-          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Cyan Color" style="background: #00bcd4;" @click=${(e: Event) => { e.stopPropagation(); callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: [0, 188, 212] }); }} @keydown=${(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: [0, 188, 212] }); } }}></span>
-          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Blue Color" style="background: #2196f3;" @click=${(e: Event) => { e.stopPropagation(); callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: [33, 150, 243] }); }} @keydown=${(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: [33, 150, 243] }); } }}></span>
-          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Purple Color" style="background: #9c27b0;" @click=${(e: Event) => { e.stopPropagation(); callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: [156, 39, 176] }); }} @keydown=${(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: [156, 39, 176] }); } }}></span>
-          <span class="color-swatch-chip" role="button" tabindex="0" aria-label="Set Pink Color" style="background: #e91e63;" @click=${(e: Event) => { e.stopPropagation(); callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: [233, 30, 99] }); }} @keydown=${(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: [233, 30, 99] }); } }}></span>
+          ${COLOR_SWATCHES.slice(0, 8).map(s => html`
+            <span 
+              class="color-swatch-chip" 
+              role="button" 
+              tabindex="0" 
+              aria-label="Set ${s.label} Color" 
+              style="background: ${s.hex};" 
+              @click=${(e: Event) => {
+                e.stopPropagation();
+                if (callbacks.forwardHaptic) callbacks.forwardHaptic('light');
+                callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: s.rgb });
+              }} 
+              @keydown=${(e: KeyboardEvent) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (callbacks.forwardHaptic) callbacks.forwardHaptic('light');
+                  callbacks.callService('light', 'turn_on', { entity_id: config.entity, rgb_color: s.rgb });
+                }
+              }}>
+            </span>
+          `)}
         </div>
       `;
     }
@@ -614,5 +628,183 @@ export class SliderController {
         ${liveStateText ? html`<span class="sub-button-state" style="text-shadow: 0 1px 2px rgba(0,0,0,0.8);">${liveStateText}</span>` : nothing}
       </div>
     `;
+  }
+}
+
+export class SliderDragManager {
+  private _sliderStateMap = new WeakMap<HTMLInputElement, {
+    startX: number;
+    startY: number;
+    initialVal: number;
+    initialPct: string;
+    initialBadge: string;
+    isScrolling: boolean;
+    isSliding: boolean;
+    rafPending?: boolean;
+  }>();
+
+  public handlePointerDown(e: PointerEvent) {
+    const input = e.currentTarget as HTMLInputElement;
+    if (!input) return;
+    const container = input.closest('.slider-container, .sub-button-slider-container');
+    const badge = container?.querySelector('.slider-percent-badge, .sub-slider-pct');
+    const initialVal = Number(input.value) || 0;
+    const initialPct = input.style.getPropertyValue('--slider-pct') || '';
+    const initialBadge = badge?.textContent || '';
+
+    this._sliderStateMap.set(input, {
+      startX: e.clientX,
+      startY: e.clientY,
+      initialVal,
+      initialPct,
+      initialBadge,
+      isScrolling: false,
+      isSliding: false,
+    });
+  }
+
+  public handlePointerMove(e: PointerEvent) {
+    const input = e.currentTarget as HTMLInputElement;
+    if (!input) return;
+    const state = this._sliderStateMap.get(input);
+    if (!state) return;
+
+    const dx = Math.abs(e.clientX - state.startX);
+    const dy = Math.abs(e.clientY - state.startY);
+
+    if (!state.isSliding && !state.isScrolling) {
+      if (dy > 6 && dy > dx) {
+        state.isScrolling = true;
+        this.revertSlider(input, state);
+      } else if (dx > 6 && dx >= dy) {
+        state.isSliding = true;
+      }
+    } else if (state.isScrolling) {
+      this.revertSlider(input, state);
+    }
+  }
+
+  public handlePointerCancel(e: Event) {
+    const input = e.currentTarget as HTMLInputElement;
+    if (!input) return;
+    const state = this._sliderStateMap.get(input);
+    if (!state) return;
+    state.isScrolling = true;
+    this.revertSlider(input, state);
+    this._sliderStateMap.delete(input);
+  }
+
+  public handlePointerUp(e: PointerEvent, config: any, onTapToggle?: () => void) {
+    const input = e.currentTarget as HTMLInputElement;
+    if (!input) return;
+    const state = this._sliderStateMap.get(input);
+    if (!state) return;
+    if (state.isScrolling) {
+      this.revertSlider(input, state);
+      this._sliderStateMap.delete(input);
+      return;
+    }
+
+    if (config?.tap_slider_to_toggle && !state.isSliding) {
+      const dx = Math.abs(e.clientX - state.startX);
+      const dy = Math.abs(e.clientY - state.startY);
+      if (dx < 6 && dy < 6) {
+        this.revertSlider(input, state);
+        if (onTapToggle) onTapToggle();
+      }
+    }
+  }
+
+  public revertSlider(input: HTMLInputElement, state: any) {
+    input.value = String(state.initialVal);
+    input.style.setProperty('--slider-pct', state.initialPct);
+    const container = input.closest('.slider-container, .sub-button-slider-container');
+    const badge = container?.querySelector('.slider-percent-badge, .sub-slider-pct');
+    if (badge) badge.textContent = state.initialBadge;
+  }
+
+  public handleSliderInput(
+    e: Event,
+    key: string,
+    config: any,
+    pctCalc?: (val: number) => number,
+    labelFormatter?: (val: number, pct: number) => string
+  ) {
+    e.stopPropagation();
+    const input = e.target as HTMLInputElement;
+    const state = this._sliderStateMap.get(input);
+
+    if (state?.isScrolling) {
+      this.revertSlider(input, state);
+      return;
+    }
+
+    const rawVal = Number(input.value);
+    const value = isNaN(rawVal) ? 0 : rawVal;
+    const pct = pctCalc ? pctCalc(value) : value;
+
+    if (state) {
+      if (state.rafPending) return;
+      state.rafPending = true;
+    }
+
+    requestAnimationFrame(() => {
+      if (state) state.rafPending = false;
+      if (state?.isScrolling) {
+        this.revertSlider(input, state);
+        return;
+      }
+      input.style.setProperty('--slider-pct', `${pct}%`);
+      const container = input.closest('.slider-container, .sub-button-slider-container') as HTMLElement;
+      const badge = container?.querySelector('.slider-percent-badge, .sub-slider-pct');
+      if (badge) {
+        badge.textContent = labelFormatter ? labelFormatter(value, pct) : `${pct}%`;
+      }
+      if (key === 'color_hue' && container) {
+        container.style.setProperty('--color-hue-val', `hsl(${value}, 100%, 50%)`);
+      }
+    });
+
+    safeForwardHaptic('selection', config?.haptic_feedback !== false);
+  }
+
+  public handleSliderChange(
+    e: Event,
+    domain: string,
+    service: string,
+    config: any,
+    hass: any,
+    dataFn: (val: number) => Record<string, any>
+  ) {
+    e.stopPropagation();
+    const input = e.target as HTMLInputElement;
+    const state = this._sliderStateMap.get(input);
+
+    if (state?.isScrolling) {
+      this.revertSlider(input, state);
+      state.isScrolling = false;
+      return;
+    }
+
+    const rawVal = Number(input.value);
+    const value = isNaN(rawVal) ? 0 : rawVal;
+
+    if (state && value === state.initialVal) {
+      return;
+    }
+
+    if (domain === 'light' && service === 'turn_on') {
+      const pct = Math.round((value / 255) * 100);
+      if (value <= 3 || pct <= 1) {
+        hass.callService('light', 'turn_off', { entity_id: config.entity });
+        return;
+      }
+    }
+    if (domain === 'fan' && service === 'set_percentage' && value <= 0) {
+      hass.callService('fan', 'turn_off', { entity_id: config.entity });
+      return;
+    }
+
+    hass.callService(domain, service, { entity_id: config.entity, ...dataFn(value) });
   }
 }

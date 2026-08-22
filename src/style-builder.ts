@@ -23,18 +23,28 @@ export interface ComputedCardStyles {
 }
 
 export class StyleBuilder {
+  private static _weakStylesCache = new WeakMap<AntigravityCardConfig, ComputedCardStyles>();
   private static _computedStylesCache = new Map<string, ComputedCardStyles>();
+  private static _sanitizedStylesCache = new Map<string, string>();
 
   /**
-   * Sanitize custom styles string to reject tag breakouts and script tags.
+   * Sanitize custom styles string to reject tag breakouts and script tags with memoization.
    */
   public static sanitizeCustomStyles(css?: string): string {
     if (!css || typeof css !== 'string') return '';
+    const cached = this._sanitizedStylesCache.get(css);
+    if (cached !== undefined) return cached;
+
     // Disallow closing style tags, script elements, and HTML tags
     if (/<\/?(script|style|iframe|object|embed)/i.test(css)) {
       console.warn('[Antigravity] custom_styles contains invalid HTML tags. Ignored for security.');
+      this._sanitizedStylesCache.set(css, '');
       return '';
     }
+    if (this._sanitizedStylesCache.size > 50) {
+      this._sanitizedStylesCache.clear();
+    }
+    this._sanitizedStylesCache.set(css, css);
     return css;
   }
 
@@ -59,42 +69,17 @@ export class StyleBuilder {
       };
     }
 
-    // Fast memoization hash based on layout, spacing, colors, and offsets
-    const cacheKey = [
-      config.theme_preset,
-      config.card_padding,
-      config.card_padding_vertical,
-      config.card_padding_horizontal,
-      config.card_margin,
-      config.border_radius,
-      config.slider_style,
-      config.slider_height,
-      config.slider_border_radius,
-      config.content_spacing,
-      config.text_spacing,
-      config.features_margin,
-      config.sub_button_spacing,
-      config.sub_button_padding,
-      config.text_offset_x,
-      config.text_offset_y,
-      config.primary_text_start_offset,
-      config.primary_text_end_offset,
-      config.secondary_text_start_offset,
-      config.secondary_text_end_offset,
-      config.font_size_primary,
-      config.font_size_secondary,
-      config.font_weight_primary,
-      config.letter_spacing,
-      config.line_height,
-      config.layout,
-      config.card_layout,
-      config.full_slider_opacity,
-      config.text_color_mode,
-      config.hover_effect,
-    ].join('|');
+    // 1. Instant O(1) object reference lookup (Zero-Allocation)
+    const weakHit = this._weakStylesCache.get(config);
+    if (weakHit) return weakHit;
+
+    // 2. Fallback hash lookup for cloned config objects
+    const cacheKey = `${config.theme_preset}|${config.card_padding}|${config.card_padding_vertical}|${config.card_padding_horizontal}|${config.card_margin}|${config.border_radius}|${config.slider_style}|${config.slider_height}|${config.slider_border_radius}|${config.content_spacing}|${config.text_spacing}|${config.features_margin}|${config.sub_button_spacing}|${config.sub_button_padding}|${config.text_offset_x}|${config.text_offset_y}|${config.primary_text_start_offset}|${config.primary_text_end_offset}|${config.secondary_text_start_offset}|${config.secondary_text_end_offset}|${config.font_size_primary}|${config.font_size_secondary}|${config.font_weight_primary}|${config.letter_spacing}|${config.line_height}|${config.layout}|${config.card_layout}|${config.full_slider_opacity}|${config.text_color_mode}|${config.hover_effect}`;
 
     if (this._computedStylesCache.has(cacheKey)) {
-      return this._computedStylesCache.get(cacheKey)!;
+      const hit = this._computedStylesCache.get(cacheKey)!;
+      this._weakStylesCache.set(config, hit);
+      return hit;
     }
 
     const cardPaddingVert = config.card_padding_vertical ?? config.card_padding ?? 0;

@@ -96,7 +96,8 @@ export const HA_NAMED_COLORS: ReadonlySet<string> = Object.freeze(
     'primary', 'accent', 'red', 'pink', 'purple', 'deep-purple', 'indigo',
     'blue', 'light-blue', 'cyan', 'teal', 'green', 'light-green', 'lime',
     'yellow', 'amber', 'orange', 'deep-orange', 'brown', 'grey', 'blue-grey',
-    'black', 'white', 'disabled'
   ])
 );
 
+export const RGB_TRIPLET_REGEX = /^\d+\s*,\s*\d+\s*,\s*\d+$/;
+export const RGBA_QUADRUPLET_REGEX = /^\d+\s*,\s*\d+\s*,\s*\d+\s*,[\d.]+$/;

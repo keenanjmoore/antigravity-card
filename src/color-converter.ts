@@ -4,10 +4,53 @@
  */
 
 import { RGBTuple } from './types';
-import { COLOR_CACHE_MAX_ENTRIES } from './constants';
+import { COLOR_CACHE_MAX_ENTRIES, HA_NAMED_COLORS, RGB_TRIPLET_REGEX, RGBA_QUADRUPLET_REGEX } from './constants';
+import { forwardHaptic } from 'custom-card-helpers';
 
 const RGB_RGBA_REGEX = /rgba?\((\d+)[,\s]+(\d+)[,\s]+(\d+)/i;
 const ARRAY_STR_REGEX = /^\[\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\]$/;
+
+const RESOLVED_COLOR_CACHE = new Map<string, string>();
+const RESOLVED_COLOR_CACHE_MAX = 250;
+
+export function resolveColorCached(colorStr: string | undefined): string {
+  if (!colorStr) return '';
+  const cached = RESOLVED_COLOR_CACHE.get(colorStr);
+  if (cached !== undefined) return cached;
+
+  const trimmed = colorStr.trim();
+  if (!trimmed) {
+    RESOLVED_COLOR_CACHE.set(colorStr, '');
+    return '';
+  }
+
+  let res = trimmed;
+  if (trimmed.startsWith('#') || trimmed.startsWith('rgb') || trimmed.startsWith('hsl') || trimmed.startsWith('var(')) {
+    res = trimmed;
+  } else if (RGB_TRIPLET_REGEX.test(trimmed)) {
+    res = `rgb(${trimmed})`;
+  } else if (RGBA_QUADRUPLET_REGEX.test(trimmed)) {
+    res = `rgba(${trimmed})`;
+  } else if (trimmed.toLowerCase() === 'state') {
+    res = 'var(--state-icon-color, var(--primary-color))';
+  } else if (HA_NAMED_COLORS.has(trimmed.toLowerCase())) {
+    res = `var(--${trimmed.toLowerCase()}-color, ${trimmed.toLowerCase()})`;
+  }
+
+  // LRU eviction: delete oldest 25% when limit is reached
+  if (RESOLVED_COLOR_CACHE.size >= RESOLVED_COLOR_CACHE_MAX) {
+    const evictCount = Math.floor(RESOLVED_COLOR_CACHE_MAX / 4);
+    const iter = RESOLVED_COLOR_CACHE.keys();
+    for (let i = 0; i < evictCount; i++) {
+      const key = iter.next().value;
+      if (key !== undefined) RESOLVED_COLOR_CACHE.delete(key);
+    }
+  }
+  RESOLVED_COLOR_CACHE.set(colorStr, res);
+  return res;
+}
+
+export const resolveColor = resolveColorCached;
 
 class ColorConverterService {
   private _cache = new Map<string, RGBTuple | null>();
@@ -256,3 +299,12 @@ export const COLOR_TEMP_PRESETS = [
   { k: 5000, label: '5000K', rgb: kelvinToRgb(5000) },
   { k: 6500, label: '6500K', rgb: kelvinToRgb(6500) },
 ];
+
+export function safeForwardHaptic(type = 'light', enabled = true) {
+  if (!enabled) return;
+  try {
+    forwardHaptic(type as any);
+  } catch {
+    // Non-touch or test environment
+  }
+}
