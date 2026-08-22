@@ -699,7 +699,7 @@ const kt = {
   hide_slider_when_off: !1,
   show_slider_percent: !0,
   color_type: "card",
-  theme_preset: "glassmorphism",
+  theme_preset: "default",
   glassmorphism_blur: 16,
   glassmorphism_opacity: 0.25,
   fade_transition_enabled: !1,
@@ -748,6 +748,12 @@ const kt = {
   active_color: "rgb(214, 0, 0)",
   inactive_color: "rgb(3, 181, 0)"
 }, ti = {
+  default: {
+    name: "default",
+    label: "Default (Card Colors)",
+    cssClass: "theme-default",
+    generateStyles: () => ""
+  },
   glassmorphism: {
     name: "glassmorphism",
     label: "Frosted Glassmorphism",
@@ -938,7 +944,7 @@ const kt = {
     const i = e.card_padding_vertical ?? e.card_padding ?? 0, r = e.card_padding_horizontal ?? e.card_padding ?? 15, o = e.card_padding_top ?? i, a = e.card_padding_bottom ?? i, l = e.card_padding_left ?? r, d = e.card_padding_right ?? r, _ = e.card_margin ?? -1, h = e.card_margin_vertical ?? _, c = e.card_margin_horizontal ?? _, v = e.card_margin_top ?? h, g = e.card_margin_bottom ?? h, x = e.card_margin_left ?? c, w = e.card_margin_right ?? c;
     let $ = "";
     (v !== void 0 || g !== void 0 || x !== void 0 || w !== void 0) && ($ = `margin: ${v ?? 0}px ${w ?? 0}px ${g ?? 0}px ${x ?? 0}px;`);
-    const T = e.border_radius ?? 12, u = e.slider_style === "google", f = e.slider_style === "full", k = u ? 42 : f ? 40 : 12, A = e.slider_height !== void 0 ? e.slider_height : k, m = u ? 21 : f ? 0 : A / 2, b = e.slider_border_radius !== void 0 ? e.slider_border_radius : m, M = e.card_border_width ?? (e.card_border_color ? 1 : 0), n = e.card_border_style ?? "solid", p = M > 0 ? `border: ${M}px ${n} ${e.card_border_color || "var(--divider-color, rgba(150, 150, 150, 0.2))"};` : "", y = e.card_width ? `width: ${e.card_width};` : "", L = e.card_max_width ? `max-width: ${e.card_max_width};` : "", N = e.card_height ? `height: ${e.card_height};` : "", K = e.card_min_height !== void 0 ? `min-height: ${e.card_min_height}px;` : "", se = e.fill_container === !0 ? "height: 100%; width: 100%;" : "", me = e.overflow_hidden !== !1 ? "overflow: hidden;" : "overflow: visible;", be = e.backdrop_blur !== void 0 ? `backdrop-filter: blur(${e.backdrop_blur}px); -webkit-backdrop-filter: blur(${e.backdrop_blur}px);` : "", ve = e.card_opacity !== void 0 ? `opacity: ${e.card_opacity / 100};` : "", V = e.transition_duration !== void 0 ? `transition: all ${e.transition_duration}ms ease;` : "", ye = e.card_padding_vertical ?? 0, xe = e.card_padding_horizontal ?? 0, we = 0, Se = 0, $e = e.sub_button_padding ?? 6, ke = e.sub_button_container_padding ?? 0, Ie = e.sub_button_alignment ? `--ag-sub-button-alignment: ${e.sub_button_alignment};` : "--ag-sub-button-alignment: flex-end;", Ce = e.text_scrolling_speed ? `--ag-scroll-speed: ${e.text_scrolling_speed}s;` : "", Te = e.full_slider_opacity !== void 0 ? `--ag-full-slider-opacity: ${e.full_slider_opacity / 100};` : "", D = e.theme_preset || "glassmorphism", q = ti[D] || ti.glassmorphism, ne = q.generateStyles(e), F = [
+    const T = e.border_radius ?? 12, u = e.slider_style === "google", f = e.slider_style === "full", k = u ? 42 : f ? 40 : 12, A = e.slider_height !== void 0 ? e.slider_height : k, m = u ? 21 : f ? 0 : A / 2, b = e.slider_border_radius !== void 0 ? e.slider_border_radius : m, M = e.card_border_width ?? (e.card_border_color ? 1 : 0), n = e.card_border_style ?? "solid", p = M > 0 ? `border: ${M}px ${n} ${e.card_border_color || "var(--divider-color, rgba(150, 150, 150, 0.2))"};` : "", y = e.card_width ? `width: ${e.card_width};` : "", L = e.card_max_width ? `max-width: ${e.card_max_width};` : "", N = e.card_height ? `height: ${e.card_height};` : "", K = e.card_min_height !== void 0 ? `min-height: ${e.card_min_height}px;` : "", se = e.fill_container === !0 ? "height: 100%; width: 100%;" : "", me = e.overflow_hidden !== !1 ? "overflow: hidden;" : "overflow: visible;", be = e.backdrop_blur !== void 0 ? `backdrop-filter: blur(${e.backdrop_blur}px); -webkit-backdrop-filter: blur(${e.backdrop_blur}px);` : "", ve = e.card_opacity !== void 0 ? `opacity: ${e.card_opacity / 100};` : "", V = e.transition_duration !== void 0 ? `transition: all ${e.transition_duration}ms ease;` : "", ye = e.card_padding_vertical ?? 0, xe = e.card_padding_horizontal ?? 0, we = 0, Se = 0, $e = e.sub_button_padding ?? 6, ke = e.sub_button_container_padding ?? 0, Ie = e.sub_button_alignment ? `--ag-sub-button-alignment: ${e.sub_button_alignment};` : "--ag-sub-button-alignment: flex-end;", Ce = e.text_scrolling_speed ? `--ag-scroll-speed: ${e.text_scrolling_speed}s;` : "", Te = e.full_slider_opacity !== void 0 ? `--ag-full-slider-opacity: ${e.full_slider_opacity / 100};` : "", D = e.theme_preset || "default", q = ti[D] || ti.default, ne = q.generateStyles(e), F = [
       $,
       `border-radius: ${T}px;`,
       p,
