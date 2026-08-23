@@ -8,7 +8,8 @@
     "dev": "vite build --watch",
     "check": "tsc --noEmit",
     "test": "vitest run",
-    "benchmark": "vitest run tests/benchmark.test.ts"
+    "benchmark": "vitest run tests/benchmark.test.ts",
+    "deploy": "node scripts/deploy.js"
   },
   "keywords": [
     "home-assistant",
