@@ -1,4 +1,4 @@
-import { describe, it } from 'vitest';
+import { describe, it, afterAll } from 'vitest';
 import { runAntigravityCI } from '../src/ci-workflow';
 import { StyleBuilder } from '../src/style-builder';
 import { colorConverter, kelvinToRgb, lerpRgb } from '../src/color-converter';
@@ -7,10 +7,16 @@ import { SubButtonController } from '../src/controllers/sub-button-controller';
 import { InfoFormatter } from '../src/controllers/info-formatter';
 import { fadeTransitionManager } from '../src/fade-transition';
 import { EntityFilterEngine } from '../src/controllers/entity-filter-engine';
+import { BenchmarkReporter } from '../benchmarks/benchmark-reporter';
 
 describe('Antigravity Comprehensive Performance Benchmarks (Informational)', () => {
+  afterAll(() => {
+    BenchmarkReporter.printSummaryAndSave();
+  });
+
   it('1. CI Frame Render & Memory Allocation Bounds', async () => {
     const report = await runAntigravityCI();
+    BenchmarkReporter.record({ name: '1. Frame Render Math Latency', latencyMs: report.renderBenchmarkMs, unit: 'ms' });
     console.info(`\n📊 1. CI Frame & Memory Health:\n   - Render Math Latency: ${report.renderBenchmarkMs}ms/op\n   - Heap Allocation: ${report.memoryUsageMB}MB\n   - Invariant Checks: ${report.assertionsPassed}/${report.totalAssertions}`);
   });
 
@@ -29,6 +35,7 @@ describe('Antigravity Comprehensive Performance Benchmarks (Informational)', () 
     }
     const elapsed = performance.now() - t0;
     const opsPerSec = Math.round((50000 / elapsed) * 1000);
+    BenchmarkReporter.record({ name: '2. StyleBuilder Memoization', opsPerSec, unit: 'ops/s' });
     console.info(`⚡ 2. StyleBuilder Memoization: ${elapsed.toFixed(2)}ms for 50k ops (~${opsPerSec.toLocaleString()} ops/sec)`);
   });
 
@@ -42,6 +49,7 @@ describe('Antigravity Comprehensive Performance Benchmarks (Informational)', () 
     }
     const elapsed = performance.now() - t0;
     const opsPerSec = Math.round((50000 / elapsed) * 1000);
+    BenchmarkReporter.record({ name: '3. Color & Kelvin LRU Transforms', opsPerSec, unit: 'ops/s' });
     console.info(`⚡ 3. Color & Kelvin LRU Transforms: ${elapsed.toFixed(2)}ms for 50k ops (~${opsPerSec.toLocaleString()} ops/sec)`);
   });
 
@@ -56,6 +64,7 @@ describe('Antigravity Comprehensive Performance Benchmarks (Informational)', () 
     }
     const elapsed = performance.now() - t0;
     const opsPerSec = Math.round((50000 / elapsed) * 1000);
+    BenchmarkReporter.record({ name: '4. Slider Math & Clamping', opsPerSec, unit: 'ops/s' });
     console.info(`⚡ 4. Multi-Domain Slider Math & Clamping: ${elapsed.toFixed(2)}ms for 50k ops (~${opsPerSec.toLocaleString()} ops/sec)`);
   });
 
@@ -69,6 +78,7 @@ describe('Antigravity Comprehensive Performance Benchmarks (Informational)', () 
     }
     const elapsed = performance.now() - t0;
     const opsPerSec = Math.round((20000 / elapsed) * 1000);
+    BenchmarkReporter.record({ name: '5. Sub-Button Action Engine', opsPerSec, unit: 'ops/s' });
     console.info(`⚡ 5. Sub-Button Action Engine: ${elapsed.toFixed(2)}ms for 20k ops (~${opsPerSec.toLocaleString()} ops/sec)`);
   });
 
@@ -87,6 +97,7 @@ describe('Antigravity Comprehensive Performance Benchmarks (Informational)', () 
     }
     const elapsed = performance.now() - t0;
     const opsPerSec = Math.round((20000 / elapsed) * 1000);
+    BenchmarkReporter.record({ name: '6. Date & Relative Time Formatting', opsPerSec, unit: 'ops/s' });
     console.info(`⚡ 6. Date & Relative Time Formatting: ${elapsed.toFixed(2)}ms for 20k ops (~${opsPerSec.toLocaleString()} ops/sec)`);
   });
 
@@ -106,23 +117,22 @@ describe('Antigravity Comprehensive Performance Benchmarks (Informational)', () 
     }
     const elapsed = performance.now() - t0;
     const opsPerSec = Math.round((20000 / elapsed) * 1000);
+    BenchmarkReporter.record({ name: '7. Fade Decay Transition Math', opsPerSec, unit: 'ops/s' });
     console.info(`⚡ 7. Fade Decay Transition Math: ${elapsed.toFixed(2)}ms for 20k ops (~${opsPerSec.toLocaleString()} ops/sec)`);
   });
 
   it('8. High-Density Dashboard State Scan Simulation (50 cards x 500 entity updates)', () => {
-    // Simulating 50 cards monitoring 1-4 entities each
     const cards = Array.from({ length: 50 }, (_, idx) => ({
       monitored: [`light.room_${idx}`, `binary_sensor.motion_${idx}`],
     }));
 
-    // Simulating 100 WebSocket push events where an unrelated sensor updates
     const oldStates: Record<string, any> = {};
     const newStates: Record<string, any> = {};
     for (let i = 0; i < 500; i++) {
       oldStates[`sensor.temp_${i}`] = { state: '70' };
       newStates[`sensor.temp_${i}`] = { state: '70' };
     }
-    newStates['sensor.temp_42'] = { state: '71' }; // 1 entity changed out of 500
+    newStates['sensor.temp_42'] = { state: '71' };
 
     const t0 = performance.now();
     let reRenderTriggers = 0;
@@ -140,6 +150,7 @@ describe('Antigravity Comprehensive Performance Benchmarks (Informational)', () 
       }
     }
     const elapsed = performance.now() - t0;
+    BenchmarkReporter.record({ name: '8. Dashboard State Filter Latency', latencyMs: elapsed, unit: 'ms' });
     console.info(`⚡ 8. Dashboard State Filter (50,000 card checks against 500 entities): ${elapsed.toFixed(2)}ms (0 false renders triggered)`);
   });
 
@@ -173,6 +184,7 @@ describe('Antigravity Comprehensive Performance Benchmarks (Informational)', () 
     }
     const elapsed = performance.now() - t0;
     const opsPerSec = Math.round((50000 / elapsed) * 1000);
+    BenchmarkReporter.record({ name: '9. 1,000-Entity Label Filtering', opsPerSec, unit: 'ops/s' });
     console.info(`⚡ 9. 1,000-Entity Label Filtering Throughput: ${elapsed.toFixed(2)}ms for 50k ops (~${opsPerSec.toLocaleString()} ops/sec)`);
   });
 
@@ -193,6 +205,7 @@ describe('Antigravity Comprehensive Performance Benchmarks (Informational)', () 
     }
     const elapsed = performance.now() - t0;
     const opsPerSec = Math.round((20000 / elapsed) * 1000);
+    BenchmarkReporter.record({ name: '10. Memoized Sort & Ranking', opsPerSec, unit: 'ops/s' });
     console.info(`⚡ 10. Memoized Sort & Ranking: ${elapsed.toFixed(2)}ms for 20k ops (~${opsPerSec.toLocaleString()} ops/sec)`);
   });
 });

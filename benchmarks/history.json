@@ -1,0 +1,52 @@
+[
+  {
+    "name": "1. Frame Render Math Latency",
+    "latencyMs": 0.0004,
+    "unit": "ms"
+  },
+  {
+    "name": "2. StyleBuilder Memoization",
+    "opsPerSec": 9958771,
+    "unit": "ops/s"
+  },
+  {
+    "name": "3. Color & Kelvin LRU Transforms",
+    "opsPerSec": 2417094,
+    "unit": "ops/s"
+  },
+  {
+    "name": "4. Slider Math & Clamping",
+    "opsPerSec": 6908558,
+    "unit": "ops/s"
+  },
+  {
+    "name": "5. Sub-Button Action Engine",
+    "opsPerSec": 2559967,
+    "unit": "ops/s"
+  },
+  {
+    "name": "6. Date & Relative Time Formatting",
+    "opsPerSec": 1887273,
+    "unit": "ops/s"
+  },
+  {
+    "name": "7. Fade Decay Transition Math",
+    "opsPerSec": 1187233,
+    "unit": "ops/s"
+  },
+  {
+    "name": "8. Dashboard State Filter Latency",
+    "latencyMs": 5.320699999999988,
+    "unit": "ms"
+  },
+  {
+    "name": "9. 1,000-Entity Label Filtering",
+    "opsPerSec": 107202,
+    "unit": "ops/s"
+  },
+  {
+    "name": "10. Memoized Sort & Ranking",
+    "opsPerSec": 164920,
+    "unit": "ops/s"
+  }
+]
